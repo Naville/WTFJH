@@ -1,7 +1,6 @@
 #import "./Utils.h"
 #import "./SharedDefine.pch"
 @implementation Utils : NSObject
-@synthesize filterList = _filterList;
 +(id)sharedManager{
  	static Utils *sharedUtils = nil;
     static dispatch_once_t onceToken;

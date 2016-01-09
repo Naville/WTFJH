@@ -5,9 +5,10 @@ import random
 import os
 import sys
 makeFileString=""
-PathList=["./Hooks/APIHooks/","./Hooks/SDKHooks"]
+PathList=["Hooks/APIHooks/","Hooks/SDKHooks/","Hooks/Utils/"]
 global toggleString
 toggleString="void GlobalInit(){\n"
+global MakeFileListString
 MakeFileListString="_FILES = Tweak.xm CompileDefines.xm"
 def ModuleIter(Path):
 	List=listdir(Path)
@@ -39,9 +40,11 @@ def MakeFileIter(Path):
 		FileList=listdir(Path)
 		for x in FileList:
 			if(x.endswith(".mm")==False and x.endswith(".m")==False and x.endswith(".xm")==False):
-				print "AAA"
+				print "Not Code File"
 			else:	
 				string=" "+Path+x
+				print "Injecting:"+string+" Into Makefile"
+				global MakeFileListString
 				MakeFileListString+=string
 
 
@@ -55,6 +58,7 @@ def id_generator(size=15, chars=string.ascii_uppercase + string.digits):
 randomTweakName=id_generator()#Generate Random Name To Help Bypass Detection
 #os.remove("./Makefile")
 toggleModule()
+subModuleList()
 if (os.path.exists("theos")==False):
 	print "Theos Link Doesn't Exist,Creating"
 	if(os.environ.get('THEOS')!=None):
@@ -72,6 +76,7 @@ makeFileString+=randomTweakName+MakeFileListString+"\n"
 makeFileString+="ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
 makeFileString+="ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000\n"
 makeFileString+=randomTweakName+"_LIBRARIES = sqlite3 substrate\n"
+makeFileString+=randomTweakName+"_FRAMEWORKS = Foundation UIKit Security\n"
 makeFileString+="include $(THEOS_MAKE_PATH)/tweak.mk\n"
 makeFileString+="after-install::\n"
 makeFileString+="	install.exec \"killall -9 SpringBoard\""

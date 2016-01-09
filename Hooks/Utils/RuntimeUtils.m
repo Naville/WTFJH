@@ -1,8 +1,8 @@
-#import "./RuntimeUtils.h"
-@implementation Utils : NSObject
+#import "RuntimeUtils.h"
+@implementation RuntimeUtils : NSObject
 +(NSDictionary*)propertyListForObject:(id)Object{
 	unsigned pcount;
-    objc_property_t *props = class_copyPropertyList([Object class], &count);
+    objc_property_t *props = class_copyPropertyList([Object class], &pcount);
  	NSMutableDictionary *PropList = [NSMutableDictionary dictionary];
 
     unsigned i;

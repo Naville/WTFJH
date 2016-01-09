@@ -1,9 +1,7 @@
 #import <objc/runtime.h> // For convertDelegate()
-#import <UIKit/UIKit.h>
-
 #import "PlistObjectConverter.h"
 
-extern NSString *objectTypeNotSupported;
+NSString *objectTypeNotSupported = @"Introspy - Not supported";
 
 
 @implementation PlistObjectConverter

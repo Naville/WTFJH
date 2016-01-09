@@ -1,34 +1,61 @@
-/* How to Hook with Logos
-Hooks are written with syntax similar to that of an Objective-C @implementation.
-You don't need to #include <substrate.h>, it will be done automatically, as will
-the generation of a class list and an automatic constructor.
-
-%hook ClassName
-
-// Hooking a class method
-+ (id)sharedInstance {
-	return %orig;
+#import "./Hooks/SharedDefine.pch"
+SQLiteStorage *traceStorage;
+static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist";    
+// Utility function to parse the preference file
+static BOOL getBoolFromPreferences(NSMutableDictionary *preferences, NSString *preferenceValue) {
+    id value = [preferences objectForKey:preferenceValue];
+    if (value == nil) {
+        return YES; // default to YES
+    }
+    return [value boolValue];
 }
 
-// Hooking an instance method with an argument.
-- (void)messageName:(int)argument {
-	%log; // Write a message about this call, including its class, name and arguments, to the system log.
 
-	%orig; // Call through to the original function with its original arguments.
-	%orig(nil); // Call through to the original function with a custom argument.
-
-	// If you use %orig(), you MUST supply all arguments (except for self and _cmd, the automatically generated ones.)
+// Log all custom URL schemes registered
+// TODO: should we refactor this out of the main Tweak?
+static void traceURISchemes() {
+    NSArray *url_schemes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"];
+    for (id schemeBundle in url_schemes) {
+        NSString *name = [schemeBundle objectForKey:@"CFBundleURLName"];
+        NSNumber *isPrivate = [schemeBundle objectForKey:@"CFBundleURLIsPrivate"];
+        for (id scheme in [schemeBundle objectForKey:@"CFBundleURLSchemes"]) {
+        CallTracer *tracer = [[CallTracer alloc] initWithClass:@"CFBundleURLTypes" andMethod:@"CFBundleURLSchemes"];
+        [tracer addArgFromPlistObject:name withKey:@"CFBundleURLName"];
+        [tracer addArgFromPlistObject:isPrivate withKey:@"CFBundleURLIsPrivate"];
+        [tracer addArgFromPlistObject:scheme withKey:@"CFBundleURLScheme"];
+        [traceStorage saveTracedCall:tracer];
+        [tracer release];
+        }
+    }
 }
 
-// Hooking an instance method with no arguments.
-- (id)noArguments {
-	%log;
-	id awesome = %orig;
-	[awesome doSomethingElse];
+%ctor {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-	return awesome;
+    // Only hook Apps the user has selected in Introspy's settings panel
+    NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
+    // Load Introspy preferences
+    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
+    id shouldHook = [preferences objectForKey:appId];
+    if ( (shouldHook == nil) || (! [shouldHook boolValue]) ) {
+        NSLog(@"Introspy - Profiling disabled for %@", appId);
+    	[preferences release];
+        [pool drain];
+	    return;
+    }
+    if (getBoolFromPreferences(preferences, @"URLSchemesHooks")) {
+            traceURISchemes();
+     }
+	// Initialize DB storage
+    NSLog(@"Introspy - Profiling enabled for %@", appId);
+    BOOL shouldLog = getBoolFromPreferences(preferences, @"LogToTheConsole");
+	traceStorage = [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
+	if (traceStorage != nil) {
+	}
+	else {
+		NSLog(@"Introspy - DB Initialization error; disabling hooks.");
+	}
+
+    [preferences release];
+    [pool drain];
 }
-
-// Always make sure you clean up after yourself; Not doing so could have grave consequences!
-%end
-*/

@@ -1,3 +1,4 @@
-obj/
+obj
 *.[oa]
 *.dylib
+.giringore

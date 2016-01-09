@@ -1,5 +1,7 @@
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIPasteboard.h>
+#import <Security/Security.h>
+#import <Security/SecItem.h>
 
 @interface PlistObjectConverter: NSObject {
 

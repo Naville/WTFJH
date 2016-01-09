@@ -1,5 +1,5 @@
-#import "./Utils.h"
-#import "./SharedDefine.pch"
+#import "Utils.h"
+#import "../SharedDefine.pch"
 @implementation Utils : NSObject
 +(id)sharedManager{
  	static Utils *sharedUtils = nil;

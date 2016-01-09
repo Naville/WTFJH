@@ -15,7 +15,16 @@ static const char saveTracedCallStmtStr[] = "INSERT INTO tracedCalls VALUES (?1,
 // Internal stuff
 static sqlite3_stmt *saveTracedCallStmt;
 static sqlite3 *dbConnection;
++(id)sharedManager{
+    static SQLiteStorage *sharedUtils = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedUtils = [self alloc];
+    });
+    return sharedUtils;
 
+
+}
 
 - (SQLiteStorage *)initWithDefaultDBFilePathAndLogToConsole: (BOOL) shouldLog {
     NSString *DBFilePath = nil;

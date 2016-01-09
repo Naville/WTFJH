@@ -27,7 +27,7 @@ def ModuleIter(Path):
 def toggleModule():
 	for x in PathList:
 		ModuleIter(x)
-
+	global toggleString
 	toggleString+="}\n"
 	os.system("touch"+" "+"./CompileDefines.xm")
 	fileHandle=open("./CompileDefines.xm","w")
@@ -36,12 +36,13 @@ def toggleModule():
 	fileHandle.close() 
 
 def MakeFileIter(Path):
+		FileList=listdir(Path)
 		for x in FileList:
-		if(x.endswith(".mm")==False and x.endswith(".m")==False and x.endswith(".xm")==False):
-			print x+" "+"Not A Code File"
-		else:	
-			string=" "+Path+x
-			MakeFileListString+=string
+			if(x.endswith(".mm")==False and x.endswith(".m")==False and x.endswith(".xm")==False):
+				print "AAA"
+			else:	
+				string=" "+Path+x
+				MakeFileListString+=string
 
 
 
@@ -67,9 +68,10 @@ makeFileString+="include theos/makefiles/common.mk\n"
 makeFileString+="export ARCHS = armv7 armv7s arm64\n"
 makeFileString+="export TARGET = iphone:clang:7.0:7.0\n"
 makeFileString+="TWEAK_NAME = "+randomTweakName+"\n"
-makeFileString+=randomTweakName+subModuleList()+"\n"
+makeFileString+=randomTweakName+MakeFileListString+"\n"
 makeFileString+="ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
 makeFileString+="ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000\n"
+makeFileString+=randomTweakName+"_LIBRARIES = sqlite3 substrate\n"
 makeFileString+="include $(THEOS_MAKE_PATH)/tweak.mk\n"
 makeFileString+="after-install::\n"
 makeFileString+="	install.exec \"killall -9 SpringBoard\""
@@ -78,7 +80,7 @@ fileHandle = open('Makefile','w')
 fileHandle.flush() 
 fileHandle.write(makeFileString)
 fileHandle.close() 
-os.system("cp ./MinusBlock.plist ./"+randomTweakName+".plist")
+os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
 os.system("make clean")
 os.system("make package")
 os.system("rm ./"+randomTweakName+".plist")

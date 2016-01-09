@@ -1,0 +1,10 @@
+Package: naville.wtfjh
+Name: WTFJH
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Naville
+Author: Naville
+Section: Tweaks
+Version: 0.0.1-1
+Installed-Size: 164

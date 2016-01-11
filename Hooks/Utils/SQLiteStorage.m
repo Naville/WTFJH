@@ -6,8 +6,8 @@
 
 // Database settings
 static BOOL logToConsole = TRUE;
-static NSString *appstoreDBFileFormat = @"~/Library/introspy-%@.db"; // Becomes ~/Library/introspy-<appName>.db
-static NSString *systemDBFileFormat = @"~/Library/Preferences/introspy-%@.db";
+static NSString *appstoreDBFileFormat = @"~/Library/wtfjh-%@.db"; // Becomes ~/Library/introspy-<appName>.db
+static NSString *systemDBFileFormat = @"~/Library/Preferences/wtfjh-%@.db";
 static const char createTableStmtStr[] = "CREATE TABLE tracedCalls (className TEXT, methodName TEXT, argumentsAndReturnValueDict TEXT)";
 static const char saveTracedCallStmtStr[] = "INSERT INTO tracedCalls VALUES (?1, ?2, ?3)";
 
@@ -53,13 +53,13 @@ static sqlite3 *dbConnection;
 
 	// If not, create the DB file
 	if (sqlite3_open_v2([DBFilePath UTF8String], &dbConn, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
-       	 	NSLog(@"IntrospySQLiteStorage - Unable to open database!");
+       	 	NSLog(@"wtfjhSQLiteStorage - Unable to open database!");
        		return nil;
     	}
 	else {
     		// Create the tables in the DB we just created
     		if (sqlite3_exec(dbConn, createTableStmtStr, NULL, NULL, NULL) != SQLITE_OK) {
-			NSLog(@"IntrospySQLiteStorage - Unable to create tables!");
+			NSLog(@"wtfjhSQLiteStorage - Unable to create tables!");
 			return nil;
     		}
     	}
@@ -68,7 +68,7 @@ static sqlite3 *dbConnection;
     // Prepare the INSERT statement we'll use to store everything
     sqlite3_stmt *statement = nil;
     if (sqlite3_prepare_v2(dbConn, saveTracedCallStmtStr, -1, &statement, NULL) != SQLITE_OK) {
-        NSLog(@"IntrospySQLiteStorage - Unable to prepare statement!");
+        NSLog(@"wtfjhSQLiteStorage - Unable to prepare statement!");
         return nil;
     }
 
@@ -85,7 +85,7 @@ static sqlite3 *dbConnection;
     // Serialize arguments and return value to an XML plist
     NSData *argsAndReturnValueData = [tracedCall serializeArgsAndReturnValue];
     if (argsAndReturnValueData == nil) {
-        NSLog(@"IntrospySQLiteStorage::saveTraceCall: can't serialize args or return value");
+        NSLog(@"wtfjhSQLiteStorage::saveTraceCall: can't serialize args or return value");
         return NO;
     }
     NSString *argsAndReturnValueStr = [[NSString alloc] initWithData:argsAndReturnValueData encoding:NSUTF8StringEncoding];
@@ -101,13 +101,13 @@ static sqlite3 *dbConnection;
     }
 
     if (logToConsole) {
-        NSLog(@"\n-----INTROSPY-----\nCALLED %@ %@\nWITH:\n%@\n---------------", [tracedCall className], [tracedCall methodName], [tracedCall argsAndReturnValue]);
+        NSLog(@"\n-----wtfjh-----\nCALLED %@ %@\nWITH:\n%@\n---------------", [tracedCall className], [tracedCall methodName], [tracedCall argsAndReturnValue]);
     }
 
     [argsAndReturnValueStr release];
 
     if (queryResult != SQLITE_DONE) {
-        NSLog(@"IntrospySQLiteStorage - Commit Failed: %x!", queryResult);
+        NSLog(@"wtfjhSQLiteStorage - Commit Failed: %x!", queryResult);
     	return NO;
     }
     return YES;

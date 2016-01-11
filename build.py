@@ -87,8 +87,15 @@ fileHandle.write(makeFileString)
 fileHandle.close() 
 os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
 os.system("make clean")
-os.system("make package")
+os.system("make")
 os.system("rm ./"+randomTweakName+".plist")
 os.system("rm ./Makefile")
+os.system("cp ./control ./layout/DEBIAN/control")
+os.system("cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
+os.system("dpkg -b ./layout ./LatestBuild.deb")
+os.system("rm ./layout/DEBIAN/control")
+os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".dylib")
+os.system("rm -rf ./obj")
+
 
 

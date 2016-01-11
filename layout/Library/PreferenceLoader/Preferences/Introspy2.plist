@@ -1,0 +1,180 @@
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<plist version="1.0">
+   <dict>
+      <key>entry</key>
+      <dict>
+         <key>cell</key>
+         <string>PSLinkCell</string>
+         <key>icon</key>
+         <string>introspy.png</string>
+         <key>label</key>
+         <string>Introspy - Settings</string>
+      </dict>
+      <key>items</key>
+      <array>
+         <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>General Settings</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>LogToTheConsole</string>
+            <key>label</key>
+            <string>Log To The Console</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Data Storage Profiling</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>FileSystemHooks</string>
+            <key>label</key>
+            <string>File System</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>UserPreferencesHooks</string>
+            <key>label</key>
+            <string>User Preferences</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>KeyChainHooks</string>
+            <key>label</key>
+            <string>KeyChain</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Crypto Profiling</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>CommonCryptoHooks</string>
+            <key>label</key>
+            <string>Common Crypto</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>SecurityHooks</string>
+            <key>label</key>
+            <string>Security Framework</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Network Profiling</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>HTTPHooks</string>
+            <key>label</key>
+            <string>HTTP</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>IPC Profiling</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>PasteboardHooks</string>
+            <key>label</key>
+            <string>Pasteboard</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>URLSchemesHooks</string>
+            <key>label</key>
+            <string>URL Schemes</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Misc APIs Profiling</string>
+         </dict>
+         <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>default</key>
+            <true />
+            <key>defaults</key>
+            <string>naville.wtfjh</string>
+            <key>key</key>
+            <string>XMLHooks</string>
+            <key>label</key>
+            <string>XML</string>
+         </dict>
+      </array>
+      <key>title</key>
+      <string>Introspy</string>
+   </dict>
+</plist>
+

@@ -10,3 +10,5 @@
 >>>Only Made Sure Could Be Compiled.
 
 >>>Never Tested (Yet)
+
+TODO:Need PreferencesLoader PLIST AutoGenerating

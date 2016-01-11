@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from os import listdir
+import subprocess
 import string
 import random
 import os
@@ -48,7 +49,7 @@ def MakeFileIter(Path):
 		FileList=listdir(Path)
 		for x in FileList:
 			if(x.endswith(".mm")==False and x.endswith(".m")==False and x.endswith(".xm")==False):
-				print "Not Code File"
+				print x+" Not Code File"
 			else:	
 				string=" "+Path+x
 				print "Injecting:"+string+" Into Makefile"
@@ -67,7 +68,7 @@ def BuildPF():
 	#Build PreferencesLoader Script
 	Plist=plistlib.readPlist('./BasePreferences.plist')
 	for x in ModuleList:
-		Dict={"cell":"PSGroupCell","label":x}
+		Dict={"cell":"PSSwitchCell","label":x,"key":x,"default":True,"defaults":"naville.wtfjh"}
 		Plist["items"].append(Dict)
 	plistlib.writePlist(Plist,"./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 	#print Plist
@@ -103,8 +104,16 @@ fileHandle.write(makeFileString)
 fileHandle.close() 
 BuildPF()
 os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
+print "Cleaning Old Build"
 os.system("make clean")
-os.system("make")
+print "Building"
+if(len(sys.argv)>1):
+	if(sys.argv[1].upper() =="DEBUG"):
+		print "Debugging Mode"
+		os.system("make")
+else:
+	with open(os.devnull, 'wb') as devnull:
+		subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
 os.system("rm ./"+randomTweakName+".plist")
 os.system("rm ./Makefile")
 os.system("cp ./control ./layout/DEBIAN/control")

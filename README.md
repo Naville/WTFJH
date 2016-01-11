@@ -11,3 +11,10 @@
 
 >>>Never Tested (Yet)
 
+>>./Template.py (SDK|API) ModuleName
+
+>>for Generating a new Template
+
+>>./build.py for Standard Building With No Output
+
+>>./build.py DEBUG To Show Them

@@ -14,6 +14,9 @@
         if(propObject!=nil){
             [PropList setObject:propObject forKey:PropName];
                             }
+        [propObject release];
+        [PropName release];
+        free(property)
     }
 
     free(props);

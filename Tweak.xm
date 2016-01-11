@@ -33,12 +33,12 @@ static void traceURISchemes() {
 %ctor {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    // Only hook Apps the user has selected in Introspy's settings panel
+    // Only hook Apps the user has selected in WTFJH's settings panel
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
-    // Load Introspy preferences
+    // Load WTFJH preferences
     id shouldHook = [[[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath] objectForKey:appId];
     if ( (shouldHook == nil) || (! [shouldHook boolValue]) ) {
-        NSLog(@"Introspy - Profiling disabled for %@", appId);
+        NSLog(@"WTFJH - Profiling disabled for %@", appId);
         [pool drain];
 	    return;
     }
@@ -46,7 +46,7 @@ static void traceURISchemes() {
             traceURISchemes();
      }
 	// Initialize DB storage
-    NSLog(@"Introspy - Profiling enabled for %@", appId);
+    NSLog(@"WTFJH - Profiling enabled for %@", appId);
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
     [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
 	if (traceStorage != nil) {
@@ -54,7 +54,7 @@ static void traceURISchemes() {
         GlobalInit();
 	}
 	else {
-		NSLog(@"Introspy - DB Initialization error; disabling hooks.");
+		NSLog(@"WTFJH - DB Initialization error; disabling hooks.");
 	}
 
     [pool drain];

@@ -70,6 +70,10 @@ def BuildPF():
 	for x in ModuleList:
 		Dict={"cell":"PSSwitchCell","label":x,"key":x,"default":True,"defaults":"naville.wtfjh"}
 		Plist["items"].append(Dict)
+	Dict={"cell":"PSSwitchCell","label":"URLSchemesHooks","key":"URLSchemesHooks","default":True,"defaults":"naville.wtfjh"}
+	Plist["items"].append(Dict)
+	Dict={"cell":"PSSwitchCell","label":"LogToTheConsole","key":"LogToTheConsole","default":True,"defaults":"naville.wtfjh"}
+	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist,"./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 	#print Plist
 randomTweakName=id_generator()#Generate Random Name To Help Bypass Detection
@@ -113,16 +117,19 @@ if(len(sys.argv)>1):
 		os.system("make")
 else:
 	with open(os.devnull, 'wb') as devnull:
-		subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
+		x=subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
+		print "Make Exit With Status:",x
 os.system("rm ./"+randomTweakName+".plist")
 os.system("rm ./Makefile")
 os.system("cp ./control ./layout/DEBIAN/control")
 os.system("cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
+os.system("cp ./WTFJH.plist"+" ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
 os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
 os.system("rm ./layout/DEBIAN/control")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".dylib")
 os.system("rm -rf ./obj")
 os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
 print "Built With Components:",ModuleList
 
 

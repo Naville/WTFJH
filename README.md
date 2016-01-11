@@ -6,3 +6,7 @@
 
 
 >>>FULL OF (FOR NOW) UNTESTED HACKS
+
+>>>Only Made Sure Could Be Compiled.
+
+>>>Never Tested (Yet)

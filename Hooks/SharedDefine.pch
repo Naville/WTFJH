@@ -4,4 +4,8 @@
 #import "./Utils/RuntimeUtils.h"
 #import "./Utils/SQLiteStorage.h"
 #import "./Utils/Utils.h"
+#import "./Utils/DelegateProxies.h"
+#import "./Utils/NSURLConnectionDelegateProx.h"
+
 #define objectTypeNotSupported @"objectTypeNotSupported"
+#define traceStorage [SQLiteStorage sharedManager]

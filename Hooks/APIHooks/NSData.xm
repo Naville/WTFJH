@@ -19,7 +19,6 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:path withKey:@"path"];
 		[tracer addArgFromPlistObject:[NSNumber numberWithBool: flag] withKey:@"flag"];
 		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -35,7 +34,7 @@ IntrospySQLiteStorage *traceStorage;
 		// For now let's just store the pointer value of the errorPtr parameter
 		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
 		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -49,7 +48,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
 		[tracer addArgFromPlistObject:[NSNumber numberWithBool: flag] withKey:@"flag"];
 		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -64,7 +63,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
 		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
 		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -78,7 +77,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:path withKey:@"path"];
 		// origResult should be NSData* ?
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -93,7 +92,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
 		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -106,7 +105,7 @@ IntrospySQLiteStorage *traceStorage;
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"dataWithContentsOfURL:"];
 		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -121,7 +120,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
 		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -134,7 +133,7 @@ IntrospySQLiteStorage *traceStorage;
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"initWithContentsOfFile:"];
 		[tracer addArgFromPlistObject:path withKey:@"path"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -149,7 +148,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
 		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -162,7 +161,7 @@ IntrospySQLiteStorage *traceStorage;
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"initWithContentsOfURL:"];
 		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}
@@ -177,7 +176,7 @@ IntrospySQLiteStorage *traceStorage;
 		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
 		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
 		[tracer addReturnValueFromPlistObject: origResult];
-		SQLiteStorage* traceStorage=[SQLiteStorage sharedManager];
+		 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 	}

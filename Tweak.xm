@@ -1,5 +1,4 @@
 #import "./Hooks/SharedDefine.pch"
-SQLiteStorage *traceStorage;
 static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist";    
 // Utility function to parse the preference file
 static BOOL getBoolFromPreferences(NSMutableDictionary *preferences, NSString *preferenceValue) {
@@ -49,7 +48,7 @@ static void traceURISchemes() {
 	// Initialize DB storage
     NSLog(@"Introspy - Profiling enabled for %@", appId);
     BOOL shouldLog = getBoolFromPreferences(preferences, @"LogToTheConsole");
-	traceStorage = [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
+    [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
 	if (traceStorage != nil) {
 	}
 	else {

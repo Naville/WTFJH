@@ -26,7 +26,7 @@ else:
 	xmString+="extern void init_"+sys.argv[2]+"_hook(){\n"
 	xmString+="%init("+sys.argv[2]+");\n"
 	xmString+="}\n"
-	if(!os.path.isfile(outPath)):
+	if(os.path.isfile(outPath)==False):
 		os.system("touch "+outPath)
 		fileHandle=open(outPath,"w")
 		fileHandle.write(xmString)

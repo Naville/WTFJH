@@ -1,13 +1,15 @@
-#import "./Hooks/SharedDefine.pch"
-static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist";    
+#import "./Hooks/SharedDefine.pch" 
 // Utility function to parse the preference file
-static BOOL getBoolFromPreferences(NSMutableDictionary *preferences, NSString *preferenceValue) {
+BOOL getBoolFromPreferences(NSString *preferenceValue) {
+    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
     id value = [preferences objectForKey:preferenceValue];
     if (value == nil) {
         return YES; // default to YES
     }
+    [preferences release];
     return [value boolValue];
 }
+
 
 
 // Log all custom URL schemes registered
@@ -34,27 +36,26 @@ static void traceURISchemes() {
     // Only hook Apps the user has selected in Introspy's settings panel
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
     // Load Introspy preferences
-    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
-    id shouldHook = [preferences objectForKey:appId];
+    id shouldHook = [[[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath] objectForKey:appId];
     if ( (shouldHook == nil) || (! [shouldHook boolValue]) ) {
         NSLog(@"Introspy - Profiling disabled for %@", appId);
-    	[preferences release];
         [pool drain];
 	    return;
     }
-    if (getBoolFromPreferences(preferences, @"URLSchemesHooks")) {
+    if (getBoolFromPreferences(@"URLSchemesHooks")) {
             traceURISchemes();
      }
 	// Initialize DB storage
     NSLog(@"Introspy - Profiling enabled for %@", appId);
-    BOOL shouldLog = getBoolFromPreferences(preferences, @"LogToTheConsole");
+    BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
     [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
 	if (traceStorage != nil) {
+        extern void GlobalInit();
+        GlobalInit();
 	}
 	else {
 		NSLog(@"Introspy - DB Initialization error; disabling hooks.");
 	}
 
-    [preferences release];
     [pool drain];
 }

@@ -28,12 +28,15 @@ def ModuleIter(Path):
 				ModuleList.append(componentName)
 				i+=1
 			global toggleString
+			toggleString+="if(getBoolFromPreferences(@\""+componentName+"\")==YES){\n"
 			toggleString+="extern  void init_"+componentName+"_hook();\n"
 			toggleString+="init_"+componentName+"_hook();\n";
+			toggleString+="}\n";
 def toggleModule():
+	global toggleString
+	toggleString+="extern BOOL getBoolFromPreferences(NSString *preferenceValue);\n"
 	for x in PathList:
 		ModuleIter(x)
-	global toggleString
 	toggleString+="}\n"
 	os.system("touch"+" "+"./CompileDefines.xm")
 	fileHandle=open("./CompileDefines.xm","w")
@@ -103,10 +106,10 @@ os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
 os.system("make clean")
 os.system("make")
 os.system("rm ./"+randomTweakName+".plist")
-os.system("rm ./Makefile")
+#os.system("rm ./Makefile")
 os.system("cp ./control ./layout/DEBIAN/control")
 os.system("cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
-os.system("dpkg -b ./layout ./LatestBuild.deb")
+os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
 os.system("rm ./layout/DEBIAN/control")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".dylib")
 os.system("rm -rf ./obj")

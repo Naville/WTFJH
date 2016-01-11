@@ -14,17 +14,27 @@ global MakeFileListString
 MakeFileListString="_FILES = Tweak.xm CompileDefines.xm"
 global ModuleList
 ModuleList=list()
+def FixControlFile(Path):
+	file=open(Path,"a")
+	version=open('./VERSION',"r")
+	currentVersion=int(version.read())
+	file.write("\nVersion: "+str(currentVersion)+"\n")
+	version.close()
+	file.close()
+	currentVersion+=1
+	version=open('./VERSION',"w")
+	version.write(str(currentVersion))
+	version.close()
 def ModuleIter(Path):
 	List=listdir(Path)
 	for x in List:
-		if(x.endswith(".xm")==False):
-			print x+" "+"Not A Theos Code File"
-		else:
+		if(x.endswith(".xm")==True):
 			componentList=x.split(".")
 			componentName=""
 			i=0
 			while i<len(componentList[i])-1:#ModuleName
 				componentName+=componentList[i]
+				print "Injecting "+componentName+"Into Module List"
 				global ModuleList
 				ModuleList.append(componentName)
 				i+=1
@@ -108,29 +118,47 @@ fileHandle.write(makeFileString)
 fileHandle.close() 
 BuildPF()
 os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
-print "Cleaning Old Build"
-os.system("make clean")
-print "Building"
 if(len(sys.argv)>1):
 	if(sys.argv[1].upper() =="DEBUG"):
 		print "Debugging Mode"
+		print "Cleaning Old Build"
+		os.system("make clean")
+		print "Building"
 		os.system("make")
 else:
 	with open(os.devnull, 'wb') as devnull:
-		x=subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
-		print "Make Exit With Status:",x
-os.system("rm ./"+randomTweakName+".plist")
-os.system("rm ./Makefile")
+		try:
+			print "Cleaning Old Build"
+			subprocess.check_call(['make','clean'], stdout=devnull, stderr=subprocess.STDOUT)
+			print "Building"
+			x=subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
+			print "Make Exit With Status:",x
+		except:
+			print "Error During Compile,Rerun With DEBUG as Argument to See Output"
+			exit(255)
 os.system("cp ./control ./layout/DEBIAN/control")
+FixControlFile("./layout/DEBIAN/control")
 os.system("cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
 os.system("cp ./WTFJH.plist"+" ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
+#Cleaning Finder Caches ,Thanks http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
+os.system("find ./layout \( -name '.DS_Store' -or -name '._.DS_Store' -or -name '._*' -or -name '.TemporaryItems' -or -name '.apdisk' \) -exec  rm -rf {} \;")
 os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
-os.system("rm ./layout/DEBIAN/control")
+os.system("rm ./"+randomTweakName+".plist")
+#os.system("rm ./layout/DEBIAN/control")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".dylib")
 os.system("rm -rf ./obj")
+
 os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
+if(len(sys.argv)>1):
+	if(sys.argv[1].upper() =="DEBUG"):
+		print "Debugging Mode,Not Removing Inter-Compile Files"
+else:
+	os.system("rm ./Makefile")
+	os.system("rm ./CompileDefines.xm")
 print "Built With Components:",ModuleList
+print "Unlinking Theos"
+os.system("rm ./theos")
 
 
 

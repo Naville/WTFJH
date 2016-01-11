@@ -1,6 +1,7 @@
 #import "RuntimeUtils.h"
 @implementation RuntimeUtils : NSObject
 +(NSDictionary*)propertyListForObject:(id)Object{
+    NSLog(@"propertyListForObject:");
 	unsigned pcount;
     objc_property_t *props = class_copyPropertyList([Object class], &pcount);
  	NSMutableDictionary *PropList = [NSMutableDictionary dictionary];
@@ -16,7 +17,6 @@
                             }
         [propObject release];
         [PropName release];
-        free(property)
     }
 
     free(props);

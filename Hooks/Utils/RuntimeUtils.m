@@ -10,7 +10,10 @@
     {
         objc_property_t property = props[i];
         NSString *PropName = [NSString stringWithUTF8String:property_getName(property)];
-        [PropList setObject:[Object valueForKey:PropName] forKey:PropName];
+        id propObject=[Object valueForKey:PropName];
+        if(propObject!=nil){
+            [PropList setObject:propObject forKey:PropName];
+                            }
     }
 
     free(props);

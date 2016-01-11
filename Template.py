@@ -7,7 +7,7 @@ import sys
 xmString=""
 outPath="./Hooks/"
 if(len(sys.argv)<2):
-	print "generate.py ModuleType ModuleName"
+	print "Template.py ModuleType ModuleName"
 	sys.exit(-1)
 if(sys.argv[1]!="SDK" and sys.argv[1]!="API"):
 	print "Wrong Argument"
@@ -26,11 +26,14 @@ else:
 	xmString+="extern void init_"+sys.argv[2]+"_hook(){\n"
 	xmString+="%init("+sys.argv[2]+");\n"
 	xmString+="}\n"
-	os.system("touch "+outPath)
-	fileHandle=open(outPath,"w")
-	fileHandle.write(xmString)
-	fileHandle.close() 
-	print "Generated At"+outPath
+	if(!os.path.isfile(outPath)):
+		os.system("touch "+outPath)
+		fileHandle=open(outPath,"w")
+		fileHandle.write(xmString)
+		fileHandle.close() 
+		print "Generated At"+outPath
+	else:
+		print "File Already Exists At "+outPath+"!\nFor Safety Reasons,Generating Was Cancelled\nPlease Manually Remove That File"
 
 
 

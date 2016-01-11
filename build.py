@@ -144,10 +144,9 @@ os.system("cp ./WTFJH.plist"+" ./layout/Library/MobileSubstrate/DynamicLibraries
 os.system("find ./layout \( -name '.DS_Store' -or -name '._.DS_Store' -or -name '._*' -or -name '.TemporaryItems' -or -name '.apdisk' \) -exec  rm -rf {} \;")
 os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
 os.system("rm ./"+randomTweakName+".plist")
-#os.system("rm ./layout/DEBIAN/control")
+os.system("rm ./layout/DEBIAN/control")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".dylib")
 os.system("rm -rf ./obj")
-
 os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
 if(len(sys.argv)>1):
@@ -159,6 +158,7 @@ else:
 print "Built With Components:",ModuleList
 print "Unlinking Theos"
 os.system("rm ./theos")
+os.system("rm -r ./.theos")
 
 
 

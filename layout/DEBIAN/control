@@ -1,9 +1,0 @@
-Package: naville.wtfjh
-Name: WTFJH
-Depends: mobilesubstrate, applist
-Architecture: iphoneos-arm
-Description: Ongoing Replacement For Introspy
-Maintainer: Naville
-Author: Naville
-Section: Tweaks
-Version: 9

@@ -4,12 +4,15 @@ import string
 import random
 import os
 import sys
+import plistlib
 makeFileString=""
 PathList=["Hooks/APIHooks/","Hooks/SDKHooks/","Hooks/Utils/"]
 global toggleString
 toggleString="void GlobalInit(){\n"
 global MakeFileListString
 MakeFileListString="_FILES = Tweak.xm CompileDefines.xm"
+global ModuleList
+ModuleList=list()
 def ModuleIter(Path):
 	List=listdir(Path)
 	for x in List:
@@ -21,6 +24,8 @@ def ModuleIter(Path):
 			i=0
 			while i<len(componentList[i])-1:#ModuleName
 				componentName+=componentList[i]
+				global ModuleList
+				ModuleList.append(componentName)
 				i+=1
 			global toggleString
 			toggleString+="extern  void init_"+componentName+"_hook();\n"
@@ -55,6 +60,14 @@ def subModuleList():
 def id_generator(size=15, chars=string.ascii_uppercase + string.digits):
 	#Thanks to http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
 	return ''.join(random.choice(chars) for _ in range(size))
+def BuildPF():
+	#Build PreferencesLoader Script
+	Plist=plistlib.readPlist('./BasePreferences.plist')
+	for x in ModuleList:
+		Dict={"cell":"PSGroupCell","label":x}
+		Plist["items"].append(Dict)
+	plistlib.writePlist(Plist,"./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+	#print Plist
 randomTweakName=id_generator()#Generate Random Name To Help Bypass Detection
 #os.remove("./Makefile")
 toggleModule()
@@ -85,6 +98,7 @@ fileHandle = open('Makefile','w')
 fileHandle.flush() 
 fileHandle.write(makeFileString)
 fileHandle.close() 
+BuildPF()
 os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
 os.system("make clean")
 os.system("make")
@@ -96,6 +110,8 @@ os.system("dpkg -b ./layout ./LatestBuild.deb")
 os.system("rm ./layout/DEBIAN/control")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".dylib")
 os.system("rm -rf ./obj")
+os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+print "Built With Components:",ModuleList
 
 
 

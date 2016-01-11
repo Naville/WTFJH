@@ -1,12 +1,12 @@
 entry = {
   bundle = AppList;
   cell = PSLinkCell;
-  icon = "/Library/PreferenceLoader/Preferences/introspy.png";
+  icon = "/Library/PreferenceLoader/Preferences/WTFJH.png";
   isController = 1;
   label = "Introspy - Apps";
-  ALSettingsPath = "/var/mobile/Library/Preferences/com.isecpartners.introspy.plist";
+  ALSettingsPath = "/var/mobile/Library/Preferences/naville.wtfjh.plist";
   ALSettingsKeyPrefix = "";
-  ALChangeNotification = "com.isecpartners.introspy";
+  ALChangeNotification = "naville.wtfjh";
   ALAllowsSelection = 1;
   ALSectionDescriptors = (
     {

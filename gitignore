@@ -3,5 +3,6 @@ obj
 *.dylib
 .gitignore
 Makefile
-_/CompileDefines.xm
+_/
+CompileDefines.xm
 *.deb

@@ -1,4 +1,6 @@
 obj
 *.[oa]
 *.dylib
-.giringore
+.gitignore
+Makefile
+_/

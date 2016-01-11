@@ -1,8 +1,0 @@
-obj
-*.[oa]
-*.dylib
-.gitignore
-Makefile
-_/
-CompileDefines.xm
-*.deb

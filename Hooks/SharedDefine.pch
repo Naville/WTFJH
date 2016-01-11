@@ -4,3 +4,4 @@
 #import "./Utils/RuntimeUtils.h"
 #import "./Utils/SQLiteStorage.h"
 #import "./Utils/Utils.h"
+#define objectTypeNotSupported @"objectTypeNotSupported"

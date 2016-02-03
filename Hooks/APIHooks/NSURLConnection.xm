@@ -14,7 +14,6 @@
 }
 
 - (id)initWithRequest:(NSURLRequest *)request delegate:(id < NSURLConnectionDelegate >)delegate {
-
 	// Proxy the delegate so we can hook it
 	NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
 	id origResult = %orig(request, delegateProxy);

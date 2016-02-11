@@ -135,6 +135,7 @@ else:
 			print "Make Exit With Status:",x
 		except:
 			print "Error During Compile,Rerun With DEBUG as Argument to See Output"
+			os.system("rm ./"+randomTweakName+".plist")
 			exit(255)
 os.system("cp ./control ./layout/DEBIAN/control")
 FixControlFile("./layout/DEBIAN/control")

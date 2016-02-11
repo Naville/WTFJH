@@ -73,28 +73,31 @@ static NSString *serializedNilValue = @"nil";
 	if (request == nil)
 		return [NSDictionary dictionary];
 
-	NSDictionary *url_req = [NSDictionary dictionaryWithObjects:
+	NSMutableDictionary *url_req = [NSMutableDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
 					 		[PlistObjectConverter convertURL:[request URL]],
 							[request HTTPMethod],
 							[PlistObjectConverter autoConvertNil: [request HTTPBody]],
 					     	[NSNumber numberWithUnsignedInt:[request cachePolicy]],
-					     	nil]
+							nil]
 						forKeys: [NSArray arrayWithObjects:
 							@"URL",
 							@"HTTPMethod",
 							@"HTTPBody",
 							@"cachePolicy",
 							nil]];
+	if(request.allHTTPHeaderFields!=nil){
+		[url_req setObject:request.allHTTPHeaderFields forKey:@"HTTPHeaderFields"];
+	}
 	return url_req;
 }
 
 
-+ (NSDictionary *) convertNSURLResponse:(NSURLResponse *)response {
++ (NSDictionary *) convertNSURLResponse:(NSHTTPURLResponse *)response {//Should be NSURLResponse* .Do This just to silent the fucking compiler
 	if (response == nil)
 		return [NSDictionary dictionary];
 
-	NSDictionary *responseDict = [NSDictionary dictionaryWithObjects:
+	NSMutableDictionary *responseDict = [NSMutableDictionary dictionaryWithObjects:
 		[NSArray arrayWithObjects:
 			 		[PlistObjectConverter convertURL:[response URL]],
 					[PlistObjectConverter autoConvertNil: [response MIMEType]],
@@ -107,6 +110,11 @@ static NSString *serializedNilValue = @"nil";
 					@"suggestedFilename",
 					@"textEncodingName",
 					nil]];
+if([response respondsToSelector:@selector(allHeaderFields)]){
+	if(response.allHeaderFields!=nil){
+		[responseDict setObject:response.allHeaderFields forKey:@"HeaderFields"];
+	}
+}
 	return responseDict;
 }
 

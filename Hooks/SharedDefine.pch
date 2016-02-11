@@ -7,6 +7,7 @@
 #import "./Utils/DelegateProxies.h"
 #import "./Utils/NSURLConnectionDelegateProx.h"
 #import <substrate.h>
+#import <objc/runtime.h>
 #define objectTypeNotSupported @"objectTypeNotSupported"
 #define traceStorage [SQLiteStorage sharedManager]
 static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist";   

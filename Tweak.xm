@@ -35,6 +35,11 @@ static void traceURISchemes() {
 
     // Only hook Apps the user has selected in WTFJH's settings panel
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
+    if (appId == nil) {
+        appId = [[NSProcessInfo processInfo] processName];//A Fix By https://github.com/radj 
+        NSLog(@"Introspy - Process has no bundle ID, use process name instead: %@", appId);
+    }
+    
     // Load WTFJH preferences
     id shouldHook = [[[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath] objectForKey:appId];
     if ( (shouldHook == nil) || (! [shouldHook boolValue]) ) {

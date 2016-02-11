@@ -141,7 +141,7 @@ FixControlFile("./layout/DEBIAN/control")
 os.system("cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
 os.system("cp ./WTFJH.plist"+" ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
 #Cleaning Finder Caches ,Thanks http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
-os.system("find ./layout \( -name '.DS_Store' -or -name '._.DS_Store' -or -name '._*' -or -name '.TemporaryItems' -or -name '.apdisk' \) -exec  rm -rf {} \;")
+os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
 os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
 os.system("rm ./"+randomTweakName+".plist")
 os.system("rm ./layout/DEBIAN/control")

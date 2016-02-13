@@ -1,3 +1,4 @@
+#import <substrate.h>
 #import "../SharedDefine.pch"
 # define MD5_LONG unsigned int
 

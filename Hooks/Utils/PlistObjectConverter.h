@@ -1,5 +1,6 @@
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIPasteboard.h>
+#import <UIKit/UIKit.h>
 #import <Security/Security.h>
 #import <Security/SecItem.h>
 

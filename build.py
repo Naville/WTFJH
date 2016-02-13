@@ -66,8 +66,6 @@ def MakeFileIter(Path):
 				global MakeFileListString
 				MakeFileListString+=string
 
-
-
 def subModuleList():
 	for x in PathList:
 		MakeFileIter(x)
@@ -93,7 +91,7 @@ subModuleList()
 if (os.path.exists("theos")==False):
 	print "Theos Link Doesn't Exist,Creating"
 	if(os.environ.get('THEOS')!=None):
-		os.system("ln -s $THEOS theos")
+		os.system("ln -s $THEOS theos; ln -s ./.theos/obj obj")
 	else:
 		print "$THEOS ENV Not Set"
 		sys.exit(255)
@@ -137,9 +135,9 @@ else:
 			print "Error During Compile,Rerun With DEBUG as Argument to See Output"
 			os.system("rm ./"+randomTweakName+".plist")
 			exit(255)
-os.system("cp ./control ./layout/DEBIAN/control")
+os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
 FixControlFile("./layout/DEBIAN/control")
-os.system("cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
+os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/"+randomTweakName+".dylib"+" ./layout/Library/MobileSubstrate/DynamicLibraries/")
 os.system("cp ./WTFJH.plist"+" ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
 #Cleaning Finder Caches ,Thanks http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 os.system("find . -type f -name .DS_Store -delete && xattr -cr *")

@@ -96,7 +96,8 @@ void BF_ofb64_encrypt( unsigned char *in, unsigned char *out,
 extern void init_OpenSSLBlowFish_hook(){
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_set_key")),(void*)BF_set_key, (void**)&old_BF_set_key);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_ecb_encrypt")),(void*)BF_ecb_encrypt, (void**)&old_BF_ecb_encrypt);
-#if 0
+#ifdef PROTOTYPE
+#error XXX
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_encrypt")),(void*)BF_encrypt, (void**)&old_BF_encrypt);
 #endif 
 

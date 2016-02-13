@@ -15,6 +15,12 @@
 
 >>for Generating a new Template
 
->>./build.py for Standard Building With No Output
+>>./build.py FOR BUILDING
 
->>./build.py DEBUG To Show Them
+>>Args:
+
+>>>DEBUG For Displaying Building Logs
+
+>>>PROTOTYPE For Enabling Prototype Codes
+
+>>>######Write Prototype Code Between *#ifdef PROTOTYPE* and *#endif*

@@ -19,6 +19,16 @@ global DEBUG
 DEBUG=False
 global PROTOTYPE
 PROTOTYPE=False
+def LINKTHEOS():
+	if (os.path.exists("theos")==False):
+		print "Theos Link Doesn't Exist,Creating"
+		if(os.environ.get('THEOS')!=None):
+			os.system("ln -s $THEOS theos;mkdir .theos;mkdir .theos/obj;ln -s ./.theos/obj obj")
+	else:
+		print "$THEOS ENV Not Set"
+		sys.exit(255)
+else:
+	print "Theos Link Exists at"+os.getcwd()+"/theos"+",Building"
 def ParseArg():
 	for x in sys.argv:
 		if x.upper()=="DEBUG":
@@ -110,15 +120,9 @@ randomTweakName=id_generator()#Generate Random Name To Help Bypass Detection
 #os.remove("./Makefile")
 toggleModule()
 subModuleList()
-if (os.path.exists("theos")==False):
-	print "Theos Link Doesn't Exist,Creating"
-	if(os.environ.get('THEOS')!=None):
-		os.system("ln -s $THEOS theos; ln -s ./.theos/obj obj")
-	else:
-		print "$THEOS ENV Not Set"
-		sys.exit(255)
-else:
-	print "Theos Link Exists at"+os.getcwd()+"/theos"+",Building"
+LINKTHEOS()
+if(PROTOTYPE):
+	makeFileString+="export CFLAGS=\"-D PROTOTYPE\"\n"
 makeFileString+="include theos/makefiles/common.mk\n"
 makeFileString+="export ARCHS = armv7 armv7s arm64\n"
 makeFileString+="export TARGET = iphone:clang:7.0:7.0\n"

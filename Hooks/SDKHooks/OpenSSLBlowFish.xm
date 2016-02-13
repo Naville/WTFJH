@@ -66,6 +66,8 @@ void BF_encrypt(BF_LONG *data,  BF_KEY *key){
 }
 void (*old_BF_ecb_encrypt)( unsigned char *in, unsigned char *out,
                      BF_KEY *key, int enc);
+void (*old_BF_cbc_encrypt)( unsigned char *in, unsigned char *out, long length,
+                     BF_KEY *schedule, unsigned char *ivec, int enc);
 
 void BF_ecb_encrypt( unsigned char *in, unsigned char *out,
                      BF_KEY *key, int enc){
@@ -85,8 +87,28 @@ void BF_ecb_encrypt( unsigned char *in, unsigned char *out,
 		[dict release];
 
 }
-/*void BF_cbc_encrypt( unsigned char *in, unsigned char *out, long length,
-                     BF_KEY *schedule, unsigned char *ivec, int enc);
+void BF_cbc_encrypt( unsigned char *in, unsigned char *out, long length,
+                     BF_KEY *schedule, unsigned char *ivec, int enc){
+		old_BF_cbc_encrypt(in,out,length,schedule,ivec,enc);//Call Original
+		NSData* Inputdata=[NSData dataWithBytes:in length:length];
+		NSData* Outputdata=[NSData dataWithBytes:out length:length];
+		NSData* IVdata=[NSData dataWithBytes:ivec length:BF_BLOCK];
+		NSMutableDictionary* dict=ConvertBF_Key(schedule);
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_cbc_encrypt"];
+		[tracer addArgFromPlistObject:dict withKey:@"P&SBox"];
+		[tracer addArgFromPlistObject:Inputdata withKey:@"InputData"];
+		[tracer addArgFromPlistObject:Inputdata withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:IVdata withKey:@"IV"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"CryptType"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+		[Inputdata release];
+		[IVdata release];
+		[Outputdata release];
+		[dict release];
+
+}
+/*
 void BF_cfb64_encrypt( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num, int enc);
@@ -96,8 +118,8 @@ void BF_ofb64_encrypt( unsigned char *in, unsigned char *out,
 extern void init_OpenSSLBlowFish_hook(){
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_set_key")),(void*)BF_set_key, (void**)&old_BF_set_key);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_ecb_encrypt")),(void*)BF_ecb_encrypt, (void**)&old_BF_ecb_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_cbc_encrypt")),(void*)BF_cbc_encrypt, (void**)&old_BF_cbc_encrypt);
 #ifdef PROTOTYPE
-#error XXX
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_encrypt")),(void*)BF_encrypt, (void**)&old_BF_encrypt);
 #endif 
 

@@ -24,11 +24,11 @@ def LINKTHEOS():
 		print "Theos Link Doesn't Exist,Creating"
 		if(os.environ.get('THEOS')!=None):
 			os.system("ln -s $THEOS theos;mkdir .theos;mkdir .theos/obj;ln -s ./.theos/obj obj")
+		else:
+			print "$THEOS ENV Not Set"
+			sys.exit(255)
 	else:
-		print "$THEOS ENV Not Set"
-		sys.exit(255)
-else:
-	print "Theos Link Exists at"+os.getcwd()+"/theos"+",Building"
+		print "Theos Link Exists at"+os.getcwd()+"/theos"+",Building"
 def ParseArg():
 	for x in sys.argv:
 		if x.upper()=="DEBUG":

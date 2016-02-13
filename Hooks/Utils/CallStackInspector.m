@@ -22,6 +22,20 @@
 + (BOOL) wasDirectlyCalledByApp {
 	return [self wasCalledByAppAtIndex:3];
 }
++ (BOOL) wasDirectlyCalledByFunctionWithName:(NSString*)name {
+    NSArray *callStack = [NSThread callStackSymbols];
+    NSString* callerName=[callStack objectAtIndex:2];/*0:Current Method 
+                                                        1:Method Calling Current Method
+                                                        2:Method Calling 1
+                                        
+                                                        */
+    if([callerName containsString:name]){
+        return YES;
+    }
+    else{
+        return NO;
+    }
+}
 
 
 @end

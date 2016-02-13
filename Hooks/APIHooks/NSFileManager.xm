@@ -24,11 +24,10 @@
 	return origResult;
 }
 
-- (id <NSObject, NSCopying, NSCoding>)ubiquityIdentityToken {
+- (id)ubiquityIdentityToken {
 	id origResult = %orig;
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSFileManager" andMethod:@"ubiquityIdentityToken"];
-	// Not sure about the return value, let's just store the pointer for now
-	[tracer addReturnValueFromPlistObject:objectTypeNotSupported];
+	[tracer addReturnValueFromPlistObject:origResult];
 	[traceStorage saveTracedCall: tracer];
 	[tracer release];
 	return origResult;

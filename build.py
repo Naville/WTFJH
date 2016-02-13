@@ -14,6 +14,24 @@ global MakeFileListString
 MakeFileListString="_FILES = Tweak.xm CompileDefines.xm"
 global ModuleList
 ModuleList=list()
+#Global Config BOOLs
+global DEBUG
+DEBUG=False
+global PROTOTYPE
+PROTOTYPE=False
+def ParseArg():
+	for x in sys.argv:
+		if x.upper()=="DEBUG":
+			print "DEBUG MODE"
+			global DEBUG
+			DEBUG=True
+		if x.upper()=="PROTOTYPE":
+			print "Enable PROTOTYPE"
+			global PROTOTYPE
+			PROTOTYPE=True
+#end
+
+
 def FixControlFile(Path):
 	file=open(Path,"a")
 	version=open('./VERSION',"r")
@@ -86,6 +104,10 @@ def BuildPF():
 	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist,"./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 	#print Plist
+
+#Main Here
+
+ParseArg()
 randomTweakName=id_generator()#Generate Random Name To Help Bypass Detection
 #os.remove("./Makefile")
 toggleModule()
@@ -118,13 +140,13 @@ fileHandle.write(makeFileString)
 fileHandle.close() 
 BuildPF()
 os.system("cp ./WTFJH.plist ./"+randomTweakName+".plist")
-if(len(sys.argv)>1):
-	if(sys.argv[1].upper() =="DEBUG"):
-		print "Debugging Mode"
-		print "Cleaning Old Build"
-		os.system("make clean")
-		print "Building"
-		os.system("make")
+print "DEBUG:",DEBUG
+if(DEBUG==True):
+	print "Debugging Mode"
+	print "Cleaning Old Build"
+	os.system("make clean")
+	print "Building"
+	os.system("make")
 else:
 	with open(os.devnull, 'wb') as devnull:
 		try:
@@ -150,9 +172,8 @@ os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakNam
 os.system("rm -rf ./obj")
 os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/"+randomTweakName+".plist")
-if(len(sys.argv)>1):
-	if(sys.argv[1].upper() =="DEBUG"):
-		print "Debugging Mode,Not Removing Inter-Compile Files"
+if(DEBUG):
+	print "Debugging Mode,Not Removing Inter-Compile Files"
 else:
 	os.system("rm ./Makefile")
 	os.system("rm ./CompileDefines.xm")

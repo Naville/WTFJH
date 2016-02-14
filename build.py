@@ -136,17 +136,17 @@ def BuildPF():
 	}
 	Plist["items"].append(Dict)
 	Dict = {
-		"cell": "PSGroupCell",
-		"label": "Modules",
-		"isStaticText": True
+		"cell": "PSSwitchCell",
+		"label": "URL Schemes Hooks",
+		"key": "URLSchemesHooks",
+		"default": True,
+		"defaults": "naville.wtfjh"
 	}
 	Plist["items"].append(Dict)
 	Dict = {
-		"cell": "PSSwitchCell",
-		"label": "URLSchemesHooks",
-		"key": "URL Schemes Hooks",
-		"default": True,
-		"defaults": "naville.wtfjh"
+		"cell": "PSGroupCell",
+		"label": "Modules",
+		"isStaticText": True
 	}
 	Plist["items"].append(Dict)
 	for x in ModuleList:

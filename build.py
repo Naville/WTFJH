@@ -102,10 +102,16 @@ def id_generator(size=15, chars=string.ascii_uppercase + string.digits):
 	return ''.join(random.choice(chars) for _ in range(size))
 def BuildPF():
 	#Build PreferencesLoader Script
+	CustomPrefList=os.listdir("./Preferences")
 	Plist=plistlib.readPlist('./BasePreferences.plist')
 	for x in ModuleList:
-		Dict={"cell":"PSSwitchCell","label":x,"key":x,"default":True,"defaults":"naville.wtfjh"}
-		Plist["items"].append(Dict)
+		CustomPrefPath=x+".plist"
+		if(CustomPrefPath in CustomPrefList):
+			custom=plistlib.readPlist('./Preferences/'+CustomPrefPath)
+			Plist["items"].append(custom)
+		else:
+			Dict={"cell":"PSSwitchCell","label":x,"key":x,"default":True,"defaults":"naville.wtfjh"}
+			Plist["items"].append(Dict)
 	Dict={"cell":"PSSwitchCell","label":"URLSchemesHooks","key":"URLSchemesHooks","default":True,"defaults":"naville.wtfjh"}
 	Plist["items"].append(Dict)
 	Dict={"cell":"PSSwitchCell","label":"LogToTheConsole","key":"LogToTheConsole","default":True,"defaults":"naville.wtfjh"}
@@ -157,9 +163,12 @@ else:
 			print "Building"
 			x=subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
 			print "Make Exit With Status:",x
+			os.system("rm ./CompileDefines.xm")
 		except:
 			print "Error During Compile,Rerun With DEBUG as Argument to See Output"
 			os.system("rm ./"+randomTweakName+".plist")
+			os.system("rm ./Makefile")
+			os.system("rm ./CompileDefines.xm")
 			exit(255)
 os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
 FixControlFile("./layout/DEBIAN/control")

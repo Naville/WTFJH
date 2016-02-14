@@ -4,12 +4,9 @@
 
 >>Infrastructural Codes Are Copied (And Modified) From IntroSpy Project And My Own MinusBlock Project [Naville/MinusBlock](https://github.com/Naville/MinusBlock) To Save Time.
 
+>>*VERSION* is meant to be there for package version consistency's sake
 
->>>FULL OF (FOR NOW) UNTESTED HACKS
-
->>>Only Made Sure Could Be Compiled.
-
->>>Never Tested (Yet)
+>>>OpenSSL Part *Untested*
 
 >>./Template.py (SDK|API) ModuleName
 
@@ -24,3 +21,6 @@
 >>>PROTOTYPE For Enabling Prototype Codes
 
 >>>######Write Prototype Code Between *#ifdef PROTOTYPE* and *#endif*
+
+
+######Read *Preferences/README.md* for more info

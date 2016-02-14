@@ -10,7 +10,7 @@ NSString *objectTypeNotSupported = @"WTFJH - Not supported";
 // What we store in the plist if the object's pointer is nil
 static NSString *serializedNilValue = @"nil";
 
-
+//static NSArray* DirectUsableClassed=[NSMutableArray array];
 + (NSString *) getSerializedNilValue {
 	return serializedNilValue;
 }

@@ -1,13 +1,11 @@
 #import "../SharedDefine.pch"
 %group NSKeyedArchiver
-//Insert Your Hook Here
 %hook NSKeyedArchiver
-+ (BOOL)archiveRootObject:(id)rootObject toFile:(NSString *)path {
-	BOOL origResult = %orig(rootObject, path);
-	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSKeyedArchiver" andMethod:@"archiveRootObject:toFile:"];
-	[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"rootObject"];
-	[tracer addArgFromPlistObject:path withKey:@"path"];
-	[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool:origResult]];
++ (NSData *)archivedDataWithRootObject:(id)rootObject{
+	NSData* origResult = %orig;
+	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSKeyedArchiver" andMethod:@"archivedDataWithRootObject:"];
+	[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"RootObject"];
+	[tracer addReturnValueFromPlistObject:origResult];
 	[traceStorage saveTracedCall:tracer];
 	[tracer release];
 	return origResult;

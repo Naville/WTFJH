@@ -1,6 +1,5 @@
 #import "../SharedDefine.pch"
 %group NSKeyedUnarchiver
-// Insert Your Hook Here
 %hook NSKeyedUnarchiver
 + (id)unarchiveObjectWithData:(NSData *)data {
 	id origResult = %orig(data);

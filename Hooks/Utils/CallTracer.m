@@ -10,7 +10,6 @@
 @synthesize className;
 @synthesize methodName;
 @synthesize argsAndReturnValue;
-
 - (CallTracer*)initWithClass:(NSString *)clazz andMethod:(NSString *)meth {
 	/* initialize the call tracer with class and method names */
 	self = [super init];

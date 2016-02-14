@@ -85,7 +85,7 @@ static sqlite3 *dbConnection;
     // Serialize arguments and return value to an XML plist
     NSData *argsAndReturnValueData = [tracedCall serializeArgsAndReturnValue];
     if (argsAndReturnValueData == nil) {
-        NSLog(@"wtfjhSQLiteStorage::saveTraceCall: can't serialize args or return value");
+        NSLog(@"WTFJH SQLiteStorage::saveTraceCall: can't serialize args or return value");
         return NO;
     }
     NSString *argsAndReturnValueStr = [[NSString alloc] initWithData:argsAndReturnValueData encoding:NSUTF8StringEncoding];
@@ -101,13 +101,13 @@ static sqlite3 *dbConnection;
     }
 
     if (logToConsole) {
-        NSLog(@"\n-----wtfjh-----\nCALLED %@ %@\nWITH:\n%@\n---------------", [tracedCall className], [tracedCall methodName], [tracedCall argsAndReturnValue]);
+        NSLog(@"\n-----WTFJH Console-----\nCALLED %@ %@\nWITH:\n%@\n---------------", [tracedCall className], [tracedCall methodName], [tracedCall argsAndReturnValue]);
     }
 
     [argsAndReturnValueStr release];
 
     if (queryResult != SQLITE_DONE) {
-        NSLog(@"wtfjhSQLiteStorage - Commit Failed: %x!", queryResult);
+        NSLog(@"WTFJH SQLiteStorage - Commit Failed: %x!", queryResult);
     	return NO;
     }
     return YES;

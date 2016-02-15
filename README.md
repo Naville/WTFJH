@@ -27,3 +27,5 @@
 #TODO:
 
 ##Merge https://github.com/BishopFox/iSpy into WTFJH
+##Merge https://github.com/DavidGoldman/InspectiveC into WTFJH
+##Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in __DATA

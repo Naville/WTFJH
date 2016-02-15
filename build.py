@@ -166,6 +166,11 @@ def BuildPF():
 				"defaults": "naville.wtfjh"
 			}
 			Plist["items"].append(Dict)
+	Dict = {
+		"cell": "PSGroupCell",
+		"footerText": "WTFJH © 2016 Naville Inc."
+	}
+	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist, "./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 
 

@@ -579,4 +579,113 @@ if([response respondsToSelector:@selector(allHeaderFields)]){
 	return bufferData;
 }
 
++ (NSDictionary *) convertNSError:(NSError *)error {
+	if (error == nil)
+		return [NSDictionary dictionary];
+	NSDictionary *errorDict;
+	errorDict = [NSDictionary dictionaryWithObjects:
+		[NSArray arrayWithObjects:
+			[error domain],
+			[NSNumber numberWithInteger:[error code]],
+			[error userInfo],
+			[error localizedDescription],
+			//[error localizedFailureReason],
+			//[error localizedRecoverySuggestion],
+			nil]
+		forKeys:
+		[NSArray arrayWithObjects:
+			@"domain",
+			@"code",
+			@"userInfo",
+			@"localizedDescription",
+			//@"localizedFailureReason",
+			//@"localizedRecoverySuggestion",
+			nil]];
+	return errorDict;
+}
+
++ (NSDictionary *) convertNSURLSessionTask:(id)task {
+	if (task == nil)
+		return [NSDictionary dictionary];
+	NSString *state_str = nil;
+	switch ([task state]) {
+		case 0:
+			state_str = @"NSURLSessionTaskStateRunning = 0";
+			break;
+		case 1:
+			state_str = @"NSURLSessionTaskStateSuspended = 1";
+			break;
+		case 2:
+			state_str = @"NSURLSessionTaskStateCanceling = 2";
+			break;
+		case 3:
+			state_str = @"NSURLSessionTaskStateCompleted = 3";
+			break;
+		default:
+			state_str = @"NSURLSessionTaskStateUnknown";
+			break;
+	}
+	NSDictionary *taskDict;
+	taskDict = [NSDictionary dictionaryWithObjects:
+		[NSArray arrayWithObjects:
+			[NSNumber numberWithUnsignedInteger:[task taskIdentifier]],
+			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSURLRequest:[task originalRequest]]],
+			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSURLRequest:[task currentRequest]]],
+			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSURLResponse:[task response]]],
+			[NSNumber numberWithInt:[task countOfBytesReceived]],
+			[NSNumber numberWithInt:[task countOfBytesSent]],
+			[NSNumber numberWithInt:[task countOfBytesExpectedToSend]],
+			[NSNumber numberWithInt:[task countOfBytesExpectedToReceive]],
+			[task taskDescription],
+			state_str,
+			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSError:[task error]]],
+			[NSNumber numberWithFloat:[task priority]],
+			nil]
+		forKeys:
+		[NSArray arrayWithObjects:
+			@"taskIdentifier",
+			@"originalRequest",
+			@"currentRequest",
+			@"response",
+			@"countOfBytesReceived",
+			@"countOfBytesSent",
+			@"countOfBytesExpectedToSend",
+			@"countOfBytesExpectedToReceive",
+			@"taskDescription",
+			@"state",
+			@"error",
+			@"priority",
+			nil]];
+	return taskDict;
+}
+
++ (NSDictionary *) convertNSNetService:(NSNetService *)service {
+	if (service == nil)
+		return [NSDictionary dictionary];
+	NSDictionary *serviceDict;
+	serviceDict = [NSDictionary dictionaryWithObjects:
+		[NSArray arrayWithObjects:
+			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertDelegate:[service delegate] followingProtocol:@"NSNetServiceDelegate"]],
+			[NSNumber numberWithBool:[service includesPeerToPeer]],
+			[service name],
+			[service type],
+			[service domain],
+			[service hostName],
+			[service addresses],
+			[NSNumber numberWithInteger:[service port]],
+			nil]
+		forKeys:
+		[NSArray arrayWithObjects:
+			@"delegate",
+			@"includesPeerToPeer",
+			@"name",
+			@"type",
+			@"domain",
+			@"hostName",
+			@"addresses",
+			@"port",
+			nil]];
+	return serviceDict;
+}
+
 @end

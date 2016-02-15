@@ -22,6 +22,9 @@
 + (NSDictionary *) convertNSHTTPCookie: (NSHTTPCookie*) cookie;
 + (NSDictionary *) convertUIPasteboard: (UIPasteboard*) pasteboard;
 + (NSArray *) convertDelegate: (id)delegate followingProtocol: (NSString*)protocol;
++ (NSDictionary *) convertNSError:(NSError *)error;
++ (NSDictionary *) convertNSURLSessionTask:(id)task;
++ (NSDictionary *) convertNSNetService:(NSNetService *)service;
 
 // Security framework objects
 // TODO : Split PlistObjectConverter in multiple files

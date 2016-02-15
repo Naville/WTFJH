@@ -1,5 +1,4 @@
 #import "Utils.h"
-#import "../SharedDefine.pch"
 @implementation Utils : NSObject
 +(id)sharedManager{
  	static Utils *sharedUtils = nil;
@@ -36,4 +35,61 @@ if (numClasses > 0 )
 
 return returnArray;
 }
+#ifdef PROTOTYPE
+-(NSArray*)possibleClassNameFromSignature:(NSString*)className{
+    NSMutableDictionary* propDict=[RuntimeUtils propertyListForClass:className];
+    NSMutableDictionary* methodDict=[RuntimeUtils methodsForClass:className];
+    NSMutableDictionary* ivarDict=[RuntimeUtils ivarForClass:className];
+    NSMutableDictionary* protoDict=[RuntimeUtils protocalForClass:className];
+    for(int i=0;i<self.signatureDatabase.count;i++){
+    NSLog(@"");
+
+
+    }
+    [propDict release];
+    [methodDict release];
+    [ivarDict release];
+    [protoDict release];
+    return nil;
+}
+-(void)setupSignatureDatabase{
+#ifdef WTFJHTWEAKNAME
+#pragma message "Don't Change This Filename Or Setup Will Crash:" Meh(WTFJHTWEAKNAME)
+    for(int i=0;i<_dyld_image_count();i++){
+        const char * Nam=_dyld_get_image_name(i);
+        NSString* curName=[NSString stringWithUTF8String:Nam];
+        if([curName containsString:WTFJHTWEAKNAME]){
+            //We Found Ourself
+            unsigned long size=0;
+            const struct mach_header*   selfHeader=_dyld_get_image_header(i);
+            uint8_t * data=getsectiondata(selfHeader,"WTFJH","SignatureDatabase",&size);
+            NSData* SDData=[NSData dataWithBytes:data length:size];
+            //Continue Set-up Code Here
+
+
+
+
+            [SDData release];
+            free(data);
+
+        
+        }
+        [curName release];
+
+
+    }
+    /*
+    extern uint8_t *getsectiondata(
+    const struct mach_header_64 *mhp,
+    const char *segname,
+    const char *sectname,
+    unsigned long *size);
+*/
+#elif
+#error "WTFJHTWEAKNAME NOT DEFINED"
+
+#endif
+
+}
+#endif
 @end

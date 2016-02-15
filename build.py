@@ -174,8 +174,10 @@ randomTweakName = id_generator()
 toggleModule()
 subModuleList()
 LINKTHEOS()
+makeFileString += "export CFLAGS=-Wp,\"-DWTFJHTWEAKNAME="+"@\\\""+randomTweakName+"\\\""
 if(PROTOTYPE):
-	makeFileString += "export CFLAGS=\"-D PROTOTYPE\"\n"
+	makeFileString += ",-DPROTOTYPE"
+makeFileString += "\"\n"
 makeFileString += "include theos/makefiles/common.mk\n"
 makeFileString += "export ARCHS = armv7 armv7s arm64\n"
 makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
@@ -195,10 +197,11 @@ fileHandle.close()
 BuildPF()
 os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
 print "DEBUG:", DEBUG
+print "PROTOTYPE:", PROTOTYPE
 if (DEBUG == True):
 	print "DEBUG Enabled"
 	print "Cleaning build caches..."
-	os.system("make clean")
+	#os.system("make clean")
 	print "Building..."
 	os.system("make")
 else:

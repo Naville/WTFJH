@@ -3,6 +3,9 @@
 @interface RuntimeUtils : NSObject {
 
 }
-+(NSDictionary*)propertyListForObject:(id)Object;
-
++(NSMutableDictionary*)propertyListForObject:(id)Object;
++(NSMutableDictionary*)propertyListForClass:(NSString*)className;
++(NSMutableDictionary*)methodsForClass:(NSString*)className;
++(NSMutableDictionary*)protocalForClass:(NSString*)className;
++(NSMutableDictionary*)ivarForClass:(NSString*)className;
 @end

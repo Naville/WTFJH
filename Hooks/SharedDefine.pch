@@ -8,6 +8,12 @@
 #import "./Utils/NSURLConnectionDelegateProx.h"
 #import <substrate.h>
 #import <objc/runtime.h>
+#import <mach-o/getsect.h>
+#import <mach-o/dyld.h>
 #define objectTypeNotSupported @"objectTypeNotSupported"
 #define traceStorage [SQLiteStorage sharedManager]
+
 static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist";   
+
+#define Meh1(x) #x
+#define Meh(x) Meh1(x)

@@ -43,6 +43,10 @@ return returnArray;
     NSMutableDictionary* protoDict=[RuntimeUtils protocalForClass:className];
     for(int i=0;i<self.signatureDatabase.count;i++){
     NSLog(@"INSERT COMPARE ALGORITHM HERE");
+    double Confidence=0.00;
+    /*
+    We Use A Confidence Mark Based
+    */
 
 
     }

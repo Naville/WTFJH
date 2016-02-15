@@ -6,6 +6,8 @@
     NSArray *callStack = [[NSThread callStackSymbols] autorelease];
     // Not ideal: Check if the app's process name is close enough in the call stack
     NSRange callerAtIndex = [[callStack objectAtIndex:index] rangeOfString: appProcessName];
+    [appProcessName release];
+    [callStack release];
     if (callerAtIndex.location == NSNotFound) {
         return NO;
     }

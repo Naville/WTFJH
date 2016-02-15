@@ -1,0 +1,44 @@
+#import "../SharedDefine.pch"
+%group NSURLSession
+%hook NSURLSession
+- (void)finishTasksAndInvalidate;
+- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request;
+
+/* Creates a data task to retrieve the contents of the given URL. */
+- (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url;
+
+/* Creates an upload task with the given request.  The body of the request will be created from the file referenced by fileURL */
+- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL;
+
+/* Creates an upload task with the given request.  The body of the request is provided from the bodyData. */
+- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData;
+
+/* Creates an upload task with the given request.  The previously set body stream of the request (if any) is ignored and the URLSession:task:needNewBodyStream: delegate will be called when the body payload is required. */
+- (NSURLSessionUploadTask *)uploadTaskWithStreamedRequest:(NSURLRequest *)request;
+
+/* Creates a download task with the given request. */
+- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request;
+
+/* Creates a download task to download the contents of the given URL. */
+- (NSURLSessionDownloadTask *)downloadTaskWithURL:(NSURL *)url;
+
+/* Creates a download task with the resume data.  If the download cannot be successfully resumed, URLSession:task:didCompleteWithError: will be called. */
+- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(NSData *)resumeData;
+
+/* Creates a bidirectional stream task to a given host and port.
+ */
+- (NSURLSessionStreamTask *)streamTaskWithHostName:(NSString *)hostname port:(NSInteger)port NS_AVAILABLE(10_11, 9_0);
+
+/* Creates a bidirectional stream task with an NSNetService to identify the endpoint.
+ * The NSNetService will be resolved before any IO completes.
+ */
+- (NSURLSessionStreamTask *)streamTaskWithNetService:(NSNetService *)service NS_AVAILABLE(10_11, 9_0);
+- (void)invalidateAndCancel;
+%end
+
+
+
+%end
+extern void init_NSURLSession_hook() {
+    %init(NSURLSession);
+}

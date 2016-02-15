@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ADBannerViewObserver</key>
+	<dict>
+		<key>Ivar</key>
+		<dict>
+			<key>visible</key>
+			<dict>
+				<key>Name</key>
+				<string>visible</string>
+				<key>Offset</key>
+				<string>8</string>
+				<key>TypeEncoding</key>
+				<string>B</string>
+			</dict>
+		</dict>
+		<key>Methods</key>
+		<dict>
+			<key>initWithADView:</key>
+			<dict>
+				<key>ArgumentType</key>
+				<array>
+					<string>@</string>
+					<string>:</string>
+					<string>^{iPhoneADBannerView=@@Bi}</string>
+				</array>
+				<key>ReturnType</key>
+				<string>@</string>
+				<key>TypeEncoding</key>
+				<string>@12@0:4^{iPhoneADBannerView=@@Bi}8</string>
+			</dict>
+		</dict>
+		<key>Properties</key>
+		<dict/>
+		<key>Protocal</key>
+		
+		<array/>
+		<key>SuperClass</key>
+		<string>NSObject</string>
+	</dict>
+</dict>
+</plist>

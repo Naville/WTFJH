@@ -42,7 +42,7 @@ return returnArray;
     NSMutableDictionary* ivarDict=[RuntimeUtils ivarForClass:className];
     NSMutableDictionary* protoDict=[RuntimeUtils protocalForClass:className];
     for(int i=0;i<self.signatureDatabase.count;i++){
-    NSLog(@"");
+    NSLog(@"INSERT COMPARE ALGORITHM HERE");
 
 
     }
@@ -62,9 +62,11 @@ return returnArray;
             //We Found Ourself
             unsigned long size=0;
             const struct mach_header*   selfHeader=_dyld_get_image_header(i);
-            uint8_t * data=getsectiondata(selfHeader,"WTFJH","SignatureDatabase",&size);
+            uint8_t * data=getsectiondata(selfHeader,"WTFJH","SIGDB",&size);
             NSData* SDData=[NSData dataWithBytes:data length:size];
-            //Continue Set-up Code Here
+            self.signatureDatabase = [NSJSONSerialization JSONObjectWithData:SDData
+                                                             options:NSJSONReadingAllowFragments
+                                                               error:nil];
 
 
 
@@ -72,19 +74,12 @@ return returnArray;
             [SDData release];
             free(data);
 
-        
+        break;
         }
         [curName release];
 
 
     }
-    /*
-    extern uint8_t *getsectiondata(
-    const struct mach_header_64 *mhp,
-    const char *segname,
-    const char *sectname,
-    unsigned long *size);
-*/
 #elif
 #error "WTFJHTWEAKNAME NOT DEFINED"
 

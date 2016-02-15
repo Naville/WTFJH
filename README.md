@@ -24,6 +24,8 @@
 
 >>>######Write Prototype Code Between *#ifdef PROTOTYPE* and *#endif*
 
+>>>######SignatureDatabase.plist is the code signature database we'll use to defeat Method/Name Obfuscations. Detailed Structs are to be determined
+
 ######Read *Preferences/README.md* for more info
 
 #TODO:

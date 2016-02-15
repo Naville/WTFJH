@@ -2,41 +2,85 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ADBannerViewObserver</key>
+	<key>PPFacebook</key>
 	<dict>
+		<key>Description</key>
+		<string>This Class Is A Demo Class.</string>
+		<key>DataConst</key>
+		<array>
+			<data>We'll check if this data exists in The Segment.(You Need To Convert String to NSData in the real Database)</data>
+		</array>	
 		<key>Ivar</key>
 		<dict>
-			<key>visible</key>
+			<key>_accessToken</key>
 			<dict>
 				<key>Name</key>
-				<string>visible</string>
+				<string>_accessToken</string>
 				<key>Offset</key>
-				<string>8</string>
+				<string>4</string>
 				<key>TypeEncoding</key>
-				<string>B</string>
+				<string>@"NSString"</string>
+			</dict>
+			<key>_requests</key>
+			<dict>
+				<key>Name</key>
+				<string>_requests</string>
+				<key>Offset</key>
+				<string>16</string>
+				<key>TypeEncoding</key>
+				<string>@"NSMutableSet"</string>
+			</dict>
+			<key>_urlSchemeSuffix</key>
+			<dict>
+				<key>Name</key>
+				<string>_urlSchemeSuffix</string>
+				<key>Offset</key>
+				<string>32</string>
+				<key>TypeEncoding</key>
+				<string>@"NSString"</string>
 			</dict>
 		</dict>
 		<key>Methods</key>
 		<dict>
-			<key>initWithADView:</key>
+			<key>accessToken</key>
 			<dict>
 				<key>ArgumentType</key>
 				<array>
 					<string>@</string>
 					<string>:</string>
-					<string>^{iPhoneADBannerView=@@Bi}</string>
 				</array>
 				<key>ReturnType</key>
 				<string>@</string>
 				<key>TypeEncoding</key>
-				<string>@12@0:4^{iPhoneADBannerView=@@Bi}8</string>
+				<string>@8@0:4</string>
+			</dict>
+			<key>appId</key>
+			<dict>
+				<key>ArgumentType</key>
+				<array>
+					<string>@</string>
+					<string>:</string>
+				</array>
+				<key>ReturnType</key>
+				<string>@</string>
+				<key>TypeEncoding</key>
+				<string>@8@0:4</string>
 			</dict>
 		</dict>
 		<key>Properties</key>
-		<dict/>
+		<dict>
+			<key>accessToken</key>
+			<string>TCNV</string>
+			<key>appId</key>
+			<string>TCNV</string>
+			<key>expirationDate</key>
+			<string>TCNV</string>
+		</dict>
 		<key>Protocal</key>
-		
-		<array/>
+		<array>
+			<string>PPFBLoginDialogDelegate</string>
+			<string>PPFBRequestDelegate</string>
+		</array>
 		<key>SuperClass</key>
 		<string>NSObject</string>
 	</dict>

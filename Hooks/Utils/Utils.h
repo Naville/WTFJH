@@ -8,5 +8,5 @@
 #ifdef PROTOTYPE
 -(NSArray*)possibleClassNameFromSignature:(NSString*)className;
 #endif
-@property(nonatomic,strong) NSArray *signatureDatabase;
+@property(nonatomic,strong) NSDictionary *signatureDatabase;
 @end

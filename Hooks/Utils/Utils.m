@@ -41,14 +41,17 @@ return returnArray;
     NSMutableDictionary* methodDict=[RuntimeUtils methodsForClass:className];
     NSMutableDictionary* ivarDict=[RuntimeUtils ivarForClass:className];
     NSMutableDictionary* protoDict=[RuntimeUtils protocalForClass:className];
-    for(int i=0;i<self.signatureDatabase.count;i++){
-    NSLog(@"INSERT COMPARE ALGORITHM HERE");
-    double Confidence=0.00;
+    for(id key in self.signatureDatabase){
+    NSDictionary* currentSig=[self.signatureDatabase objectForKey:key];
+    //double Confidence=0.00;
     /*
-    We Use A Confidence Mark Based
+    We Use A Mark Based Algorithm To Measure Confidence 
+    Super Class:10%
+    Protocals:15%
+    Methods,Properties,IVARS:25% EACH
     */
 
-
+    [currentSig release];
     }
     [propDict release];
     [methodDict release];
@@ -65,7 +68,7 @@ return returnArray;
         if([curName containsString:WTFJHTWEAKNAME]){
             //We Found Ourself
             unsigned long size=0;
-            const struct mach_header*   selfHeader=_dyld_get_image_header(i);
+            const struct mach_header*   selfHeader=(const struct mach_header*)_dyld_get_image_header(i);
             uint8_t * data=getsectiondata(selfHeader,"WTFJH","SIGDB",&size);
             NSData* SDData=[NSData dataWithBytes:data length:size];
             self.signatureDatabase = [NSJSONSerialization JSONObjectWithData:SDData

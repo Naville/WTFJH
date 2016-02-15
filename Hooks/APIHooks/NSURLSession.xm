@@ -22,7 +22,7 @@
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"dataTaskWithRequest:"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -30,9 +30,9 @@
 - (NSURLSessionDataTask *)dataTaskWithURL:(NSURL *)url {
     NSURLSessionDataTask *origResult = %orig(url);
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"dataTaskWithURL:"];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURL:url] withKey:@"url"];
+    [tracer addArgFromPlistObject:[PlistObjectConverter convertURL:url] withKey:@"url"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -41,9 +41,9 @@
     NSURLSessionUploadTask *origResult = %orig(request, fileURL);
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"uploadTaskWithRequest:fromFile:"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURL:fileURL] withKey:@"fileURL"];
+    [tracer addArgFromPlistObject:[PlistObjectConverter convertURL:fileURL] withKey:@"fileURL"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -54,7 +54,7 @@
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addArgFromPlistObject:bodyData withKey:@"bodyData"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -64,7 +64,7 @@
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"uploadTaskWithStreamedRequest:"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -74,7 +74,7 @@
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"downloadTaskWithRequest:"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -82,9 +82,9 @@
 - (NSURLSessionDownloadTask *)downloadTaskWithURL:(NSURL *)url {
     NSURLSessionDownloadTask *origResult = %orig(url);
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"downloadTaskWithURL:"];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURL:url] withKey:@"url"];
+    [tracer addArgFromPlistObject:[PlistObjectConverter convertURL:url] withKey:@"url"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -94,7 +94,7 @@
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"downloadTaskWithResumeData:"];
     [tracer addArgFromPlistObject:resumeData withKey:@"resumeData"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -105,7 +105,7 @@
     [tracer addArgFromPlistObject:hostname withKey:@"hostname"];
     [tracer addArgFromPlistObject:[NSNumber numberWithInteger:port] withKey:@"port"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }
@@ -115,7 +115,7 @@
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"streamTaskWithNetService:"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSNetService:service] withKey:@"service"];
     [tracer addReturnValueFromPlistObject:[PlistObjectConverter convertNSURLSessionTask:origResult]];
-    [tracerStorage saveTracedCall:tracer];
+    [traceStorage saveTracedCall:tracer];
     [tracer release];
     return origResult;
 }

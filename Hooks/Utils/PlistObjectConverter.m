@@ -28,9 +28,8 @@ static NSString *serializedNilValue = @"nil";
 
 
 + (NSDictionary *) convertURL:(NSURL *)aURL {
-	if (aURL == nil) {
+	if (aURL == nil)
 		return [NSDictionary dictionary];
-	}
 
 	NSDictionary *url_dict = nil;
 	NSString *scheme = [aURL scheme];

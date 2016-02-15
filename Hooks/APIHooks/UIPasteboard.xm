@@ -90,7 +90,7 @@
 	id origResult = %orig(pasteboardType);
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"UIPasteboard" andMethod:@"valueForPasteboardType:"];
 	[tracer addArgFromPlistObject:pasteboardType withKey:@"pasteboardType"];
-	[tracer addReturnValueFromPlistObject:origResult];
+	[tracer addReturnValueFromPlistObject:objectTypeNotSupported];
 	[traceStorage saveTracedCall:tracer];
 	[tracer release];
 	return origResult;
@@ -100,7 +100,7 @@
 	NSArray *origResult = %orig(pasteboardType, itemSet);
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"UIPasteboard" andMethod:@"valuesForPasteboardType:itemSet:"];
 	[tracer addArgFromPlistObject:pasteboardType withKey:@"pasteboardType"];
-	[tracer addArgFromPlistObject:@"introspy - not implemented" withKey:@"itemSet"];
+	[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"itemSet"];
 	[tracer addReturnValueFromPlistObject:origResult];
 	[traceStorage saveTracedCall:tracer];
 	[tracer release];

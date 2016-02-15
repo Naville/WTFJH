@@ -134,7 +134,7 @@ def BuildPF():
 		"cell": "PSSwitchCell",
 		"label": "Log To The Console",
 		"key": "LogToTheConsole",
-		"default": True,
+		"default": False,
 		"defaults": "naville.wtfjh"
 	}
 	Plist["items"].append(Dict)
@@ -142,7 +142,7 @@ def BuildPF():
 		"cell": "PSSwitchCell",
 		"label": "URL Schemes Hooks",
 		"key": "URLSchemesHooks",
-		"default": True,
+		"default": False,
 		"defaults": "naville.wtfjh"
 	}
 	Plist["items"].append(Dict)
@@ -162,7 +162,7 @@ def BuildPF():
 				"cell": "PSSwitchCell",
 				"label": x,
 				"key": x,
-				"default": True,
+				"default": False,
 				"defaults": "naville.wtfjh"
 			}
 			Plist["items"].append(Dict)

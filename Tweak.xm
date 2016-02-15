@@ -4,7 +4,7 @@ BOOL getBoolFromPreferences(NSString *preferenceValue) {
     NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
     id value = [preferences objectForKey:preferenceValue];
     if (value == nil) {
-        return YES; // default to YES
+        return NO; // default to YES
     }
     [preferences release];
     return [value boolValue];

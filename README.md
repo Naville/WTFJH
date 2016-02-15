@@ -1,37 +1,31 @@
->What The Fuck Just Happened
+# What The Fuck Just Happened
+> A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]
+> Feel Free To Send Us Pull Requests. It's a project too big for two part-time developers
+> Infrastructural Codes Are Copied (And Modified) From IntroSpy Project And My Own MinusBlock Project [Naville/MinusBlock][2] To Save Time.
+> *VERSION* is meant to be there for package version consistency's sake
+## Usage
+> ./Template.py (SDK|API) ModuleName
+for Generating a new Template
+> ./build.py FOR BUILDING
+- DEBUG For Displaying Building Logs
+- PROTOTYPE For Enabling Prototype Codes
+- CLEAN For "make clean"
 
->>A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS](https://github.com/iSECPartners/Introspy-iOS)
+> ###### Write Prototype Code Between *\#ifdef PROTOTYPE* and *\#endif*
 
->>Feel Free To Send Us Pull Requests. It's a project too big for two part-time developers
+> ###### SignatureDatabase.plist is the code signature database we'll use to defeat Method/Name Obfuscations. Detailed Structs are to be determined
 
->>Infrastructural Codes Are Copied (And Modified) From IntroSpy Project And My Own MinusBlock Project [Naville/MinusBlock](https://github.com/Naville/MinusBlock) To Save Time.
+Read *Preferences/README.md* for more info
+# Issues
+- Memory Leak (SSL part in NSURLConnection module)
+- Too many calls to dladdr
+- Strange initialization for OpenSSLSHA512 module
+# TODOs
+- Merge [https://github.com/BishopFox/iSpy][3] into WTFJH
+- Merge [https://github.com/DavidGoldman/InspectiveC][4] into WTFJH
+- Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in *\_\_DATA*
 
->>*VERSION* is meant to be there for package version consistency's sake
-
->>>OpenSSL Part *Untested*
-
->>./Template.py (SDK|API) ModuleName
-
->>for Generating a new Template
-
->>./build.py FOR BUILDING
-
->>Args:
-
->>>DEBUG For Displaying Building Logs
-
->>>PROTOTYPE For Enabling Prototype Codes
-
->>>CLEAN For "make clean"
-
->>>######Write Prototype Code Between *#ifdef PROTOTYPE* and *#endif*
-
->>>######SignatureDatabase.plist is the code signature database we'll use to defeat Method/Name Obfuscations. Detailed Structs are to be determined
-
-######Read *Preferences/README.md* for more info
-
-#TODO:
-
-##Merge https://github.com/BishopFox/iSpy into WTFJH
-##Merge https://github.com/DavidGoldman/InspectiveC into WTFJH
-##Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in __DATA
+[1]:	https://github.com/iSECPartners/Introspy-iOS
+[2]:	https://github.com/Naville/MinusBlock
+[3]:	https://github.com/BishopFox/iSpy "iSpy"
+[4]:	https://github.com/DavidGoldman/InspectiveC "InspectiveC"

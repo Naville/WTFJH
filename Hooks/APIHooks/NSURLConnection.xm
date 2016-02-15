@@ -5,13 +5,13 @@
 
 + (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
     NSData *origResult = %orig(request, response, error);
-    CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"sendSynchronousRequest:returningResponse:error:"];
+    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"sendSynchronousRequest:returningResponse:error:"] autorelease];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addArgFromPlistObject:[RuntimeUtils propertyListForObject:*response] withKey:@"response"];
     [tracer addArgFromPlistObject:[RuntimeUtils propertyListForObject:*error] withKey:@"error"];
     [tracer addReturnValueFromPlistObject:origResult];
     [traceStorage saveTracedCall:tracer];
-    [tracer release];
+    
     return origResult;
 }
 
@@ -20,12 +20,12 @@
     NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
     id origResult = %orig(request, delegateProxy);
 
-    CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"initWithRequest:delegate:"];
+    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"initWithRequest:delegate:"] autorelease];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"] withKey:@"delegate"];
     [tracer addReturnValueFromPlistObject: objectTypeNotSupported];
     [traceStorage saveTracedCall:tracer];
-    [tracer release];
+    
     return origResult;
 }
 
@@ -35,13 +35,13 @@
     NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
     id origResult = %orig(request, delegateProxy, startImmediately);
 
-    CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"initWithRequest:delegate:startImmediately:"];
+    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"initWithRequest:delegate:startImmediately:"] autorelease];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"] withKey:@"delegate"];
     [tracer addArgFromPlistObject:[NSNumber numberWithBool:startImmediately] withKey:@"startImmediately"];
     [tracer addReturnValueFromPlistObject: objectTypeNotSupported];
     [traceStorage saveTracedCall:tracer];
-    [tracer release];
+    
     return origResult;
 }
 
@@ -55,20 +55,20 @@
 // The usual way of disabling SSL cert validation
 - (void)continueWithoutCredentialForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     %orig(challenge);
-    CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"continueWithoutCredentialForAuthenticationChallenge:"];
+    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"continueWithoutCredentialForAuthenticationChallenge:"] autorelease];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLAuthenticationChallenge: challenge] withKey:@"challenge"];
     [traceStorage saveTracedCall:tracer];
-    [tracer release];
+    
 }
 
 // Might indicate client certificates or cert pinning. TODO: Investigate
 - (void)useCredential:(NSURLCredential *)credential forAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     %orig(credential, challenge);
-    CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"useCredential:forAuthenticationChallenge:"];
+    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"useCredential:forAuthenticationChallenge:"] autorelease];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLCredential:credential] withKey:@"credential"];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLAuthenticationChallenge: challenge] withKey:@"challenge"];
     [traceStorage saveTracedCall:tracer];
-    [tracer release];
+    
 }
 
 %end

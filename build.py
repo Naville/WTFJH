@@ -47,6 +47,9 @@ def ParseArg():
 			print "PROTOTYPE Enabled"
 			global PROTOTYPE
 			PROTOTYPE = True
+		if x.upper() == "CLEAN":
+			print "Cleaning build caches..."
+			os.system("make clean")
 
 
 def FixControlFile(Path):
@@ -199,16 +202,11 @@ os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
 print "DEBUG:", DEBUG
 print "PROTOTYPE:", PROTOTYPE
 if (DEBUG == True):
-	print "DEBUG Enabled"
-	print "Cleaning build caches..."
-	#os.system("make clean")
 	print "Building..."
 	os.system("make")
 else:
 	with open(os.devnull, 'wb') as devnull:
 		try:
-			print "Cleaning build caches..."
-			subprocess.check_call(['make', 'clean'], stdout=devnull, stderr=subprocess.STDOUT)
 			print "Building..."
 			x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
 			print "Make Exit With Status: ",x

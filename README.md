@@ -22,6 +22,8 @@
 
 >>>PROTOTYPE For Enabling Prototype Codes
 
+>>>CLEAN For "make clean"
+
 >>>######Write Prototype Code Between *#ifdef PROTOTYPE* and *#endif*
 
 >>>######SignatureDatabase.plist is the code signature database we'll use to defeat Method/Name Obfuscations. Detailed Structs are to be determined

@@ -38,11 +38,23 @@ int MGSetAnswer(CFStringRef question, CFTypeRef answer){
 
 
 }
+static void MobileGestaltdyldCallBack(const struct mach_header* mh, intptr_t vmaddr_slide){
+	Dl_info image_info;
+	dladdr(mh, &image_info);//Will This Trigger Our Hook in DLFCN?
+	const char *image_name = image_info.dli_fname;
+	NSString* name=[NSString stringWithUTF8String:image_name];
+	if([name containsString:@"MobileGestalt"]){
+		MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyAnswer")),(void*)MGCopyAnswer, (void**)&old_MGCopyAnswer);
+		MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyMultipleAnswers")),(void*)MGCopyMultipleAnswers, (void**)&old_MGCopyMultipleAnswers);
+		MSHookFunction(((void*)MSFindSymbol(NULL, "_MGSetAnswer")),(void*)MGSetAnswer, (void**)&old_MGSetAnswer);
+	
+	}
 
-extern void init_libMobileGestalt_hook(){
-MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyAnswer")),(void*)MGCopyAnswer, (void**)&old_MGCopyAnswer);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyMultipleAnswers")),(void*)MGCopyMultipleAnswers, (void**)&old_MGCopyMultipleAnswers);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_MGSetAnswer")),(void*)MGSetAnswer, (void**)&old_MGSetAnswer);
 }
 
-//Shall We Check Entitlement com.apple.private.MobileGestalt.AllowedProtectedKeys
+
+extern void init_libMobileGestalt_hook(){
+_dyld_register_func_for_add_image(&MobileGestaltdyldCallBack);
+}
+
+//Shall We Check Entitlement com.apple.private.MobileGestalt.AllowedProtectedKeys ,which is needed for certain keys?

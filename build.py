@@ -154,18 +154,17 @@ def BuildPF():
 		if (CustomPrefPath in CustomPrefList):
 			custom = plistlib.readPlist('./Preferences/' + CustomPrefPath)
 			Plist["items"].append(custom)
-		else:
-			Dict = {
-				"cell": "PSSwitchCell",
-				"label": x,
-				"key": x,
-				"default": False,
-				"defaults": "naville.wtfjh"
-			}
-			Plist["items"].append(Dict)
+		Dict = {
+			"cell": "PSSwitchCell",
+			"label": x,
+			"key": x,
+			"default": False,
+			"defaults": "naville.wtfjh"
+		}
+		Plist["items"].append(Dict)
 	Dict = {
 		"cell": "PSGroupCell",
-		"footerText": "WTFJH (C) 2016 Naville Inc."
+		"footerText": "https://github.com/Naville/WTFJH"
 	}
 	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist, "./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")

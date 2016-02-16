@@ -8,7 +8,9 @@ import string
 import random
 import plistlib
 from os import listdir
-
+from colorama import init
+from colorama import Fore, Back, Style
+init(autoreset=True)
 
 # Global config
 makeFileString = ""
@@ -99,10 +101,10 @@ def MakeFileIter(Path):
 		FileList = listdir(Path)
 		for x in FileList:
 			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False):
-				print x + " has been ignored."
+				print (Fore.RED +x + " has been ignored.")
 			else:	
 				string = " " + Path + x
-				print "Injecting" + string + " into Makefile..."
+				print (Fore.GREEN +"Injecting" + string + " into Makefile...")
 				global MakeFileListString
 				MakeFileListString += string
 
@@ -169,7 +171,6 @@ def BuildPF():
 	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist, "./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 
-
 # Main Here
 ParseArg()
 # Generate random Name to bypass detection
@@ -200,8 +201,8 @@ fileHandle.write(makeFileString)
 fileHandle.close() 
 BuildPF()
 os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
-print "DEBUG:", DEBUG
-print "PROTOTYPE:", PROTOTYPE
+print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
+print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
 if (DEBUG == True):
 	print "Building..."
 	os.system("make")
@@ -213,7 +214,7 @@ else:
 			print "Make Exit With Status: ",x
 			os.system("rm ./CompileDefines.xm")
 		except:
-			print "Error During Compile,Rerun With DEBUG as Argument to See Output"
+			print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
 			os.system("rm ./" + randomTweakName + ".plist")
 			os.system("rm ./Makefile")
 			os.system("rm ./CompileDefines.xm")
@@ -232,13 +233,13 @@ os.system("rm -rf ./obj")
 os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 if (DEBUG):
-	print "Debugging mode, without removing Inter-compile files."
+	print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
 else:
 	os.system("rm ./Makefile")
 	os.system("rm ./CompileDefines.xm")
-print "Built with components: \n"
+print (Fore.YELLOW +"Built with components: \n")
 for x in ModuleList:
-	print x
+	print (Fore.YELLOW +x)
 print "Unlinking TheOS..."
 os.system("rm ./theos")
 os.system("rm -r ./.theos")

@@ -10,18 +10,12 @@ for Generating a new Template
 > ./build.py FOR BUILDING
 - DEBUG For Displaying Building Logs
 - PROTOTYPE For Enabling Prototype Codes
-- CLEAN For "make clean"
 
 > Write Prototype Code Between *\#ifdef PROTOTYPE* and *\#endif*
 
 > SignatureDatabase.plist is the code signature database we'll use to defeat Method/Name Obfuscations. Detailed Structs are to be determined
 
 Read *Preferences/README.md* for more info
-
-# Issues
-- Memory Leak (SSL part in NSURLConnection module)
-- Too many calls to dladdr
-- Strange initialization for OpenSSLSHA512 module
 
 # TODOs
 - Merge [https://github.com/BishopFox/iSpy][3] into WTFJH

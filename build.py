@@ -47,9 +47,6 @@ def ParseArg():
 			print "PROTOTYPE Enabled"
 			global PROTOTYPE
 			PROTOTYPE = True
-		if x.upper() == "CLEAN":
-			print "Cleaning build caches..."
-			os.system("make clean")
 
 
 def FixControlFile(Path):
@@ -240,7 +237,9 @@ if (DEBUG):
 else:
 	os.system("rm ./Makefile")
 	os.system("rm ./CompileDefines.xm")
-print "Built with components: ", ModuleList
+print "Built with components: \n"
+for x in ModuleList:
+	print x
 print "Unlinking TheOS..."
 os.system("rm ./theos")
 os.system("rm -r ./.theos")

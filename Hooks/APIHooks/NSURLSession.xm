@@ -1,8 +1,18 @@
 #import "../SharedDefine.pch"
-
+#import "../Utils/NSURLSessionDelegateProxy.h"
 %group NSURLSession
 %hook NSURLSession
++ (NSURLSession *)sessionWithConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id)delegate delegateQueue:(NSOperationQueue *)queue{
+    CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"sessionWithConfiguration:delegate:delegateQueue:"];
+    [tracer addArgFromPlistObject:[PlistObjectConverter convertURLSessionConfiguration:configuration] withKey:@"configuration"];
+    [tracer addReturnValueFromPlistObject:objectTypeNotSupported];
+    [traceStorage saveTracedCall:tracer];
+    [tracer release];
+    id NewDelegate=[[NSURLSessionDelegateProxy alloc]  initWithOriginalDelegate:delegate];
+    return %orig(configuration,NewDelegate,queue);
 
+
+}
 - (void)finishTasksAndInvalidate {
     %orig;
     CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLSession" andMethod:@"finishTasksAndInvalidate"];

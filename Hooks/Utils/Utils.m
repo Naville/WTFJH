@@ -67,14 +67,20 @@ return returnArray;
         NSString* curName=[NSString stringWithUTF8String:Nam];
         if([curName containsString:WTFJHTWEAKNAME]){
             //We Found Ourself
-            unsigned long size=0;
+#ifndef _____LP64_____
+            uint32_t size=0;
             const struct mach_header*   selfHeader=(const struct mach_header*)_dyld_get_image_header(i);
-            uint8_t * data=getsectiondata(selfHeader,"WTFJH","SIGDB",&size);
+            char * data=getsectdatafromheader(selfHeader,"WTFJH","SIGDB",&size);
+
+#elif 
+            uint64_t size=0;
+            const struct mach_header_64*   selfHeader=(const struct mach_header_64*)_dyld_get_image_header(i);
+            char * data=getsectdatafromheader_64(selfHeader,"WTFJH","SIGDB",&size);
+#endif
             NSData* SDData=[NSData dataWithBytes:data length:size];
             self.signatureDatabase = [NSJSONSerialization JSONObjectWithData:SDData
                                                              options:NSJSONReadingAllowFragments
-                                                               error:nil];
-
+                                                              error:nil]; 
 
 
 

@@ -25,6 +25,7 @@
 + (NSDictionary *) convertNSError:(NSError *)error;
 + (NSDictionary *) convertNSURLSessionTask:(id)task;
 + (NSDictionary *) convertNSNetService:(NSNetService *)service;
++ (NSDictionary *) convertURLSessionConfiguration:(NSURLSessionConfiguration *)USC;
 
 // Security framework objects
 // TODO : Split PlistObjectConverter in multiple files

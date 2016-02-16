@@ -25,7 +25,20 @@ static NSString *serializedNilValue = @"nil";
 		return pointer;
 	}
 }
++ (NSDictionary *) convertURLSessionConfiguration:(NSURLSessionConfiguration *)USC {
+	if (USC == nil){
+		return [NSDictionary dictionary];
+	}
+	else{
+		NSMutableDictionary* retDict=[NSMutableDictionary dictionary];
+		[retDict setObject:USC.HTTPAdditionalHeaders forKey:@"HTTPAdditionalHeaders"];
+		[retDict setObject:USC.connectionProxyDictionary forKey:@"connectionProxyDictionary"];
+		[retDict setObject:[NSNumber numberWithInt:USC.networkServiceType] forKey:@"networkServiceType"];
+		return retDict;
+	}
 
+
+}
 
 + (NSDictionary *) convertURL:(NSURL *)aURL {
 	if (aURL == nil)

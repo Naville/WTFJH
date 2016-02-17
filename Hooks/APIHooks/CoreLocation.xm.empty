@@ -1,0 +1,82 @@
+#import "../SharedDefine.pch"
+
+typedef double CLLocationDegrees;
+
+/*
+ *  CLLocationAccuracy
+ *  
+ *  Discussion:
+ *    Type used to represent a location accuracy level in meters. The lower the value in meters, the
+ *    more physically precise the location is. A negative accuracy value indicates an invalid location.
+ */
+typedef double CLLocationAccuracy;
+
+/*
+ *  CLLocationSpeed
+ *  
+ *  Discussion:
+ *    Type used to represent the speed in meters per second.
+ */
+typedef double CLLocationSpeed;
+
+/*
+ *  CLLocationDirection
+ *  
+ *  Discussion:
+ *    Type used to represent the direction in degrees from 0 to 359.9. A negative value indicates an
+ *    invalid direction.
+ */
+typedef double CLLocationDirection;
+
+%group CoreLocation
+%hook CLLocationManager
+- (void)startUpdatingLocation;
+- (void)stopMonitoringSignificantLocationChanges
+- (void)startMonitoringSignificantLocationChanges 
+- (void)stopUpdatingLocation;
+- (void)stopUpdatingHeading
+- (void)stopMonitoringForRegion:(CLRegion *)region __OSX_AVAILABLE_STARTING(__MAC_10_8,__IPHONE_4_0);
+- (void)startMonitoringForRegion:(CLRegion *)region
+- (void)startUpdatingHeading
+- (void)requestStateForRegion:(CLRegion *)region
+#if TARGET_OS_IPHONE
+- (void)stopRangingBeaconsInRegion:(CLBeaconRegion *)region __OSX_AVAILABLE_STARTING(__MAC_NA,__IPHONE_7_0){
+
+}
+#endif
+#if TARGET_OS_IPHONE
+- (void)startRangingBeaconsInRegion:(CLBeaconRegion *)region __OSX_AVAILABLE_STARTING(__MAC_NA,__IPHONE_7_0){
+
+}
+#endif
+
+%end
+
+%hook CLLocation
+- (id)initWithLatitude:(CLLocationDegrees)latitude
+	longitude:(CLLocationDegrees)longitude{
+
+	}
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
+	altitude:(CLLocationDistance)altitude
+	horizontalAccuracy:(CLLocationAccuracy)hAccuracy
+	verticalAccuracy:(CLLocationAccuracy)vAccuracy
+	timestamp:(NSDate *)timestamp;
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
+    altitude:(CLLocationDistance)altitude
+    horizontalAccuracy:(CLLocationAccuracy)hAccuracy
+    verticalAccuracy:(CLLocationAccuracy)vAccuracy
+    course:(CLLocationDirection)course
+    speed:(CLLocationSpeed)speed
+    timestamp:(NSDate *)timestamp
+- (double)distanceFromLocation:(const CLLocation *)location{
+
+
+}
+%end
+
+
+%end
+extern void init_CoreLocation_hook() {
+    %init(CoreLocation);
+}

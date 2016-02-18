@@ -5,11 +5,8 @@
     NSString *appProcessName = [[[NSProcessInfo processInfo] processName] autorelease];
     NSArray *callStack = [[NSThread callStackSymbols] autorelease];
     // Not ideal: Check if the app's process name is close enough in the call stack
-    NSRange callerAtIndex = [[callStack objectAtIndex:index] rangeOfString: appProcessName];
-    [appProcessName release];
-    [callStack release];
-    if (callerAtIndex.location == NSNotFound) {
-        return NO;
+    if ([[callStack objectAtIndex:index] containsString:appProcessName]) {
+        return YES;
     }
     return YES;
 }
@@ -22,8 +19,12 @@
     NSArray *callStack = [[NSThread callStackSymbols] autorelease];
     NSString* callerName = [[callStack objectAtIndex:2] autorelease];
     if ([callerName containsString:name]) {
+        [callStack release];
+        [callerName release];
         return YES;
     } else {
+        [callStack release];
+        [callerName release];
         return NO;
     }
 }

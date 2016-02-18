@@ -79,6 +79,8 @@ def ModuleIter(Path):
 				i += 1
 			global toggleString
 			toggleString += "if (getBoolFromPreferences(@\""+componentName+"\") == YES) {\n"
+			if DEBUG==True:
+				toggleString += "NSLog(@\""+componentName+"Init\");\n"
 			toggleString += "extern void init_"+componentName+"_hook();\n"
 			toggleString += "    init_"+componentName+"_hook();\n";
 			toggleString += "}\n";
@@ -89,6 +91,8 @@ def toggleModule():
 	toggleString += "extern BOOL getBoolFromPreferences(NSString *preferenceValue);\n"
 	for x in PathList:
 		ModuleIter(x)
+	if DEBUG==True:
+		toggleString += "NSLog(@\"Finished Init Modules\");\n"
 	toggleString += "}\n"
 	os.system("touch ./CompileDefines.xm")
 	fileHandle = open("./CompileDefines.xm","w")
@@ -112,6 +116,7 @@ def MakeFileIter(Path):
 def subModuleList():
 	for x in PathList:
 		MakeFileIter(x)
+
 
 
 # Thanks to http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python

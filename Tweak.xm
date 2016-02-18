@@ -7,7 +7,9 @@ BOOL getBoolFromPreferences(NSString *preferenceValue) {
         return NO; // default to YES
     }
     [preferences release];
-    return [value boolValue];
+    BOOL retVal=[value boolValue];
+    [value release];
+    return retVal;
 }
 
 
@@ -55,6 +57,7 @@ static void traceURISchemes() {
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
     [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
 	if (traceStorage != nil) {
+        NSLog(@"WTFJH - Enabling Hooks");
         extern void GlobalInit();
         GlobalInit();
 	}

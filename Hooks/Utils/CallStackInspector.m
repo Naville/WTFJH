@@ -19,12 +19,10 @@
     NSArray *callStack = [[NSThread callStackSymbols] autorelease];
     NSString* callerName = [[callStack objectAtIndex:2] autorelease];
     if ([callerName containsString:name]) {
-        [callStack release];
-        [callerName release];
+
         return YES;
     } else {
-        [callStack release];
-        [callerName release];
+
         return NO;
     }
 }

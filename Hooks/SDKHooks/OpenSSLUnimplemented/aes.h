@@ -89,9 +89,6 @@ void AES_encrypt(const unsigned char *in, unsigned char *out,
                  const AES_KEY *key);
 void AES_decrypt(const unsigned char *in, unsigned char *out,
                  const AES_KEY *key);
-void AES_cbc_encrypt(const unsigned char *in, unsigned char *out,
-                     size_t length, const AES_KEY *key,
-                     unsigned char *ivec, const int enc);
 void AES_cfb128_encrypt(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         unsigned char *ivec, int *num, const int enc);

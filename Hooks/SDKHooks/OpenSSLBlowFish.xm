@@ -4,7 +4,7 @@
 
 # define BF_ROUNDS       16
 # define BF_BLOCK        8
-NSArray* Methods=@[@"BF_DECRYPT",@"BF_ENCRYPT"];
+static NSArray* Methods=@[@"BF_DECRYPT",@"BF_ENCRYPT"];
 
 typedef struct bf_key_st {
     BF_LONG P[BF_ROUNDS + 2];
@@ -32,15 +32,13 @@ static NSMutableDictionary* ConvertBF_Key(BF_KEY* Key){
 }
 void (*old_BF_set_key)( BF_KEY *key, int len,  unsigned char *data);
 void BF_set_key(BF_KEY *key, int len,  unsigned char *data){
-		NSData* keyData=[NSData dataWithBytes:data length:len];
-		old_BF_set_key(key,len,data);
 		//NSMutableDictionary* dict=ConvertBF_Key(key);
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_set_key"];
-		[tracer addArgFromPlistObject:keyData withKey:@"Key"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:data length:len] withKey:@"Key"];
 
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
-		[keyData release];
+		old_BF_set_key(key,len,data);
 
 }
 //void BF_decrypt(BF_LONG *data,  BF_KEY *key);
@@ -96,86 +94,56 @@ void (*old_BF_ofb64_encrypt)( unsigned char *in, unsigned char *out,
 void BF_ecb_encrypt( unsigned char *in, unsigned char *out,
                      BF_KEY *key, int enc){
 		old_BF_ecb_encrypt(in,out,key,enc);//Call Original
-		NSData* Inputdata=[NSData dataWithBytes:in length:BF_BLOCK];
-		NSData* Outputdata=[NSData dataWithBytes:out length:BF_BLOCK];
-		NSMutableDictionary* dict=ConvertBF_Key(key);
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_ecb_encrypt"];
-		[tracer addArgFromPlistObject:dict withKey:@"P&SBox"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"InputData"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:ConvertBF_Key(key) withKey:@"P&SBox"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:BF_BLOCK] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:BF_BLOCK] withKey:@"OutputData"];
 		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"CryptType"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
-		[Inputdata release];
-		[Outputdata release];
-		[dict release];
 
 }
 void BF_cbc_encrypt( unsigned char *in, unsigned char *out, long length,
                      BF_KEY *schedule, unsigned char *ivec, int enc){
 		old_BF_cbc_encrypt(in,out,length,schedule,ivec,enc);//Call Original
-		NSData* Inputdata=[NSData dataWithBytes:in length:length];
-		NSData* Outputdata=[NSData dataWithBytes:out length:length];
-		NSData* IVdata=[NSData dataWithBytes:ivec length:BF_BLOCK];
-		NSMutableDictionary* dict=ConvertBF_Key(schedule);
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_cbc_encrypt"];
-		[tracer addArgFromPlistObject:dict withKey:@"P&SBox"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"InputData"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"OutputData"];
-		[tracer addArgFromPlistObject:IVdata withKey:@"IV"];
+		[tracer addArgFromPlistObject:ConvertBF_Key(schedule) withKey:@"P&SBox"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:BF_BLOCK] withKey:@"IV"];
 		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"CryptType"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
-		[Inputdata release];
-		[IVdata release];
-		[Outputdata release];
-		[dict release];
 
 }
 void BF_cfb64_encrypt( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num, int enc){
 		old_BF_cfb64_encrypt(in,out,length,schedule,ivec,num,enc);//Call Original
-		NSData* Inputdata=[NSData dataWithBytes:in length:length];
-		NSData* Outputdata=[NSData dataWithBytes:out length:length];
-		NSData* IVdata=[NSData dataWithBytes:ivec length:BF_BLOCK];
-		NSMutableDictionary* dict=ConvertBF_Key(schedule);
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_cfb64_encrypt"];
-		[tracer addArgFromPlistObject:dict withKey:@"P&SBox"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"InputData"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"OutputData"];
-		[tracer addArgFromPlistObject:IVdata withKey:@"IV"];
+		[tracer addArgFromPlistObject:ConvertBF_Key(schedule) withKey:@"P&SBox"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:BF_BLOCK] withKey:@"IV"];
 		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
 		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"CryptType"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
-		[Inputdata release];
-		[IVdata release];
-		[Outputdata release];
-		[dict release];
 
 }
 void BF_ofb64_encrypt( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num){
 		old_BF_ofb64_encrypt(in,out,length,schedule,ivec,num);//Call Original
-		NSData* Inputdata=[NSData dataWithBytes:in length:length];
-		NSData* Outputdata=[NSData dataWithBytes:out length:length];
-		NSData* IVdata=[NSData dataWithBytes:ivec length:BF_BLOCK];
-		NSMutableDictionary* dict=ConvertBF_Key(schedule);
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_ofb64_encrypt"];
-		[tracer addArgFromPlistObject:dict withKey:@"P&SBox"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"InputData"];
-		[tracer addArgFromPlistObject:Inputdata withKey:@"OutputData"];
-		[tracer addArgFromPlistObject:IVdata withKey:@"IV"];
+		[tracer addArgFromPlistObject:ConvertBF_Key(schedule) withKey:@"P&SBox"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:BF_BLOCK] withKey:@"IV"];
 		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
 		//[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"CryptType"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
-		[Inputdata release];
-		[IVdata release];
-		[Outputdata release];
-		[dict release];
 
 }
 extern void init_OpenSSLBlowFish_hook(){

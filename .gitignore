@@ -1,0 +1,5 @@
+obj/
+CompileDefines.xm
+theos/
+.theos/
+.DS_Store

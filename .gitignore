@@ -4,3 +4,4 @@ theos/
 .theos/
 .DS_Store
 *.deb
+Makefile

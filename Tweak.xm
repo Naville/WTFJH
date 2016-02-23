@@ -39,7 +39,7 @@ static void traceURISchemes() {
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
     if (appId == nil) {
         appId = [[NSProcessInfo processInfo] processName];//A Fix By https://github.com/radj 
-        NSLog(@"Introspy - Process has no bundle ID, use process name instead: %@", appId);
+        NSLog(@"WTFJH - Process has no bundle ID, use process name instead: %@", appId);
     }
     
     // Load WTFJH preferences

@@ -7,7 +7,6 @@ import subprocess
 import string
 import random
 import plistlib
-import argparse
 from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
@@ -168,15 +167,15 @@ def BuildPF():
 	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist, "./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 def ParseArgs():
-	parser = argparse.ArgumentParser()
-	parser.add_argument("mode", nargs='?')
-	args = parser.parse_args()
-	if args.mode == "DEBUG":
-		global DEBUG
-		DEBUG = True
-	elif args.mode == "PROTOTYPE":
-		global PROTOTYPE
-		PROTOTYPE = True
+	for x in sys.argv:
+		if x.upper() == "DEBUG":
+			print "DEBUG Enabled"
+			global DEBUG
+			DEBUG = True
+		if x.upper() == "PROTOTYPE":
+			print "PROTOTYPE Enabled"
+			global PROTOTYPE
+			PROTOTYPE = True
 
 def main():
 	ParseArgs()

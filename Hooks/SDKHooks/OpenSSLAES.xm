@@ -1,8 +1,9 @@
 #import "../SharedDefine.pch"
 #import "string.h"
+
 # define AES_ENCRYPT     1
 # define AES_DECRYPT     0
-
+NSArray* Methods=@[@"AES_DECRYPT",@"AES_ENCRYPT"];
 /*
  * Because array size can't be a const in C, the following two are macros.
  * Both sizes are in bytes.
@@ -48,9 +49,10 @@ int AES_set_decrypt_key(const unsigned char *userKey, const int bits,AES_KEY *ke
 void AES_ecb_encrypt(const unsigned char *in, unsigned char *out,
                      const AES_KEY *key, const int enc){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_ecb_encrypt"];
-		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:enc] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:AES_BLOCK_SIZE] withKey:@"InputData"];
 		old_AES_ecb_encrypt(in,out,key,enc);//Call Original
-		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:enc] withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:AES_BLOCK_SIZE] withKey:@"OutputData"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 

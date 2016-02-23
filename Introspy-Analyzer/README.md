@@ -47,6 +47,9 @@ For iOS, databases can be fetched directly by Introspy-Analyzer over SSH:
 
     python -m introspy -p ios -o output -f 192.168.1.12
 
+If using [libusbmuxd iproxy](https://github.com/libimobiledevice/libusbmuxd) port on localhost, you may use `-P` or `--port` parameter to specify the port:
+
+    python -m introspy -p ios -o output -f localhost -P 2200
 
 ### With Introspy-Android
 

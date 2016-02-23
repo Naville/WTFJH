@@ -3,3 +3,4 @@ CompileDefines.xm
 theos/
 .theos/
 .DS_Store
+*.deb

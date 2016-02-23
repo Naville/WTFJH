@@ -100,7 +100,7 @@ void _CTServerConnectionCellMonitorGetCellInfo(CFMachPortRef port,CTServerConnec
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"CTAsciiAddress" andMethod:@"_CTServerConnectionCellMonitorGetCellInfo"];
 	[tracer addArgFromPlistObject:[NSNumber numberWithInt:cellinfo_number] withKey:@"cellinfo_number"];
 	struct __CellInfo* info=*ref;
-	NSDictionary* CI=@{@"servingmnc":[NSNumber numberWithInt:info->servingmnc],
+	[tracer addArgFromPlistObject:@{@"servingmnc":[NSNumber numberWithInt:info->servingmnc],
 					@"location":[NSNumber numberWithInt:info->location],
 					@"cellid":[NSNumber numberWithInt:info->cellid],
 					@"station":[NSNumber numberWithInt:info->station],
@@ -109,11 +109,10 @@ void _CTServerConnectionCellMonitorGetCellInfo(CFMachPortRef port,CTServerConnec
 					@"c1":[NSNumber numberWithInt:info->c1],
 					@"c2":[NSNumber numberWithInt:info->c2],
 					@"network":[NSNumber numberWithInt:info->network]
-					};
-	[tracer addArgFromPlistObject:CI withKey:@"CellInfo"];
+					} 
+					withKey:@"CellInfo"];
 	[traceStorage saveTracedCall: tracer];
 	[tracer release];
-	[CI release];
 }
 /*
 typedef void (*CTServerConnectionCallback)(CTServerConnectionRef, CFStringRef, CFDictionaryRef, void *);
@@ -132,6 +131,7 @@ static void CTdyldCallBack(const struct mach_header* mh, intptr_t vmaddr_slide){
 	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellInfo")),(void*)_CTServerConnectionCellMonitorGetCellInfo, (void**)&old_CTServerConnectionCellMonitorGetCellInfo);
 	
 	}
+	[name release];
 
 }
 

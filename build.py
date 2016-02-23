@@ -73,7 +73,8 @@ def ModuleIter(Path):
 			i = 0
 			while i < len(componentList[i]) - 1: #ModuleName
 				componentName += componentList[i]
-				print "Injecting " + componentName + " into module list..."
+				if DEBUG==True:
+					print (Fore.GREEN +"Injecting " + componentName + " into module list...")
 				global ModuleList
 				ModuleList.append(componentName)
 				i += 1
@@ -105,10 +106,12 @@ def MakeFileIter(Path):
 		FileList = listdir(Path)
 		for x in FileList:
 			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False):
-				print (Fore.RED +x + " has been ignored.")
+				if DEBUG==True:
+					print (Fore.RED +x + " has been ignored.")
 			else:	
 				string = " " + Path + x
-				print (Fore.GREEN +"Injecting" + string + " into Makefile...")
+				if DEBUG==True:
+					print (Fore.GREEN +"Injecting" + string + " into Makefile...")
 				global MakeFileListString
 				MakeFileListString += string
 
@@ -242,6 +245,7 @@ if (DEBUG):
 else:
 	os.system("rm ./Makefile")
 	os.system("rm ./CompileDefines.xm")
+print (Fore.YELLOW +"TweakName:"+randomTweakName)	
 print (Fore.YELLOW +"Built with components: \n")
 for x in ModuleList:
 	print (Fore.YELLOW +x)

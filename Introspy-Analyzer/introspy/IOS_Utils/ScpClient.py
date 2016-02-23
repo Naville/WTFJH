@@ -9,11 +9,15 @@ class ScpClient:
     the localhost for analysis.
     """
 
-    def __init__(self, ip=None):
-        self.cnx_str = "mobile@%s" % ip
+    def __init__(self, ip=None, user="root", port=None):
+        self.cnx_str = "%s@%s" % (user, ip)
+        self.port    = port
 
     def select_db(self):
         cmd = "ssh %s find /var/mobile/Containers/Data -iname 'wtfjh-*.db'" % self.cnx_str
+        if self.port != None:
+            cmd = cmd[:4] + ("-p %s " % self.port) + cmd[4:]
+
         proc = subprocess.Popen(cmd.split(),
             stdout=subprocess.PIPE,
     	    stderr=subprocess.PIPE)
@@ -34,7 +38,9 @@ class ScpClient:
 
     def select_and_fetch_db(self):
         remote_db_path = self.select_db()
-        cmd = "scp %s:./%s ./" % (self.cnx_str, remote_db_path)
+        cmd = "scp %s:%s ./" % (self.cnx_str, remote_db_path)
+        if self.port != None:
+            cmd = cmd[:4] + ("-P %s " % self.port) + cmd[4:]
 
         proc = subprocess.Popen(cmd.split(),
      	    stdout=subprocess.PIPE,
@@ -49,6 +55,9 @@ class ScpClient:
 
     def delete_remote_dbs(self):
         cmd = "ssh %s find . -iname 'introspy-*.db' -print | xargs rm" % self.cnx_str
+        if self.port != None:
+            cmd = cmd[:4] + ("-p %s " % self.port) + cmd[4:]
+
         proc = subprocess.Popen(cmd.split(),
             stdout=subprocess.PIPE,
     	    stderr=subprocess.PIPE)

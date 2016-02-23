@@ -23,7 +23,9 @@
         <div id="call{{this.callId}}{{../tabId}}" class="accordion-body collapse">
           <div class="accordion-inner">
             Arguments: <pre>{{printArguments this.argsAndReturnValue}}</pre>
+            {{#if this.argsAndReturnValue.returnValue}}
             Return Value: <pre>{{printReturnValue this.argsAndReturnValue}}</pre>
+            {{/if}}
           </div>
         </div>
       </div>

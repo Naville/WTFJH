@@ -7,6 +7,7 @@ import subprocess
 import string
 import random
 import plistlib
+import argparse
 from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
@@ -37,18 +38,6 @@ def LINKTHEOS():
 			sys.exit(255)
 	else:
 		print "TheOS link exists at " + os.getcwd() + "/theos" + ", building..."
-
-
-def ParseArg():
-	for x in sys.argv:
-		if x.upper() == "DEBUG":
-			print "DEBUG Enabled"
-			global DEBUG
-			DEBUG = True
-		if x.upper() == "PROTOTYPE":
-			print "PROTOTYPE Enabled"
-			global PROTOTYPE
-			PROTOTYPE = True
 
 
 def FixControlFile(Path):
@@ -176,76 +165,92 @@ def BuildPF():
 	Plist["items"].append(Dict)
 	plistlib.writePlist(Plist, "./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 
-# Main Here
-ParseArg()
-# Generate random Name to bypass detection
-# os.remove("./Makefile")
-randomTweakName = id_generator()
-toggleModule()
-subModuleList()
-LINKTHEOS()
-makeFileString += "export CFLAGS=-Wp,\"-DWTFJHTWEAKNAME="+"@\\\""+randomTweakName+"\\\""
-if(PROTOTYPE):
-	makeFileString += ",-DPROTOTYPE"
-makeFileString += "\"\n"
-makeFileString += "include theos/makefiles/common.mk\n"
-makeFileString += "export ARCHS = armv7 armv7s arm64\n"
-makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
-makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
-makeFileString += randomTweakName + MakeFileListString + "\n"
-makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
-makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist\n"
-makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate\n"
-makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security\n"
-makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
-makeFileString += "after-install::\n"
-makeFileString += "	install.exec \"killall -9 SpringBoard\""
-fileHandle = open('Makefile', 'w')
-fileHandle.flush() 
-fileHandle.write(makeFileString)
-fileHandle.close() 
-BuildPF()
-os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
-print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
-print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
-if (DEBUG == True):
-	print "Building..."
-	os.system("make")
-else:
-	with open(os.devnull, 'wb') as devnull:
-		try:
-			print "Building..."
-			x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
-			print "Make Exit With Status: ",x
-			os.system("rm ./CompileDefines.xm")
-		except:
-			print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
-			os.system("rm ./" + randomTweakName + ".plist")
-			os.system("rm ./Makefile")
-			os.system("rm ./CompileDefines.xm")
-			exit(255)
-os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
-FixControlFile("./layout/DEBIAN/control")
-os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
-os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
-# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
-os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
-os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
-os.system("rm ./" + randomTweakName + ".plist")
-os.system("rm ./layout/DEBIAN/control")
-os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
-os.system("rm -rf ./obj")
-os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
-os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
-if (DEBUG):
-	print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
-else:
-	os.system("rm ./Makefile")
-	os.system("rm ./CompileDefines.xm")
-print (Fore.YELLOW +"Built with components: \n")
-for x in ModuleList:
-	print (Fore.YELLOW +x)
-print "Unlinking TheOS..."
-os.system("rm ./theos")
-os.system("rm -r ./.theos")
-print "Finished."
+def ParseArgs():
+	parser = argparse.ArgumentParser()
+	parser.add_argument("mode", nargs='?')
+	args = parser.parse_args()
+	if args.mode == "DEBUG":
+		global DEBUG
+		DEBUG = True
+	elif args.mode == "PROTOTYPE":
+		global PROTOTYPE
+		PROTOTYPE = True
+
+def main():
+	ParseArgs()
+
+	# Generate random Name to bypass detection
+	# os.remove("./Makefile")
+	randomTweakName = id_generator()
+	toggleModule()
+	subModuleList()
+	LINKTHEOS()
+	global makeFileString
+	makeFileString += "export CFLAGS=-Wp,\"-DWTFJHTWEAKNAME="+"@\\\""+randomTweakName+"\\\""
+	if(PROTOTYPE):
+		makeFileString += ",-DPROTOTYPE"
+	makeFileString += "\"\n"
+	makeFileString += "include theos/makefiles/common.mk\n"
+	makeFileString += "export ARCHS = armv7 armv7s arm64\n"
+	makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
+	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
+	makeFileString += randomTweakName + MakeFileListString + "\n"
+	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
+	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist\n"
+	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate\n"
+	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security\n"
+	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
+	makeFileString += "after-install::\n"
+	makeFileString += "	install.exec \"killall -9 SpringBoard\""
+	fileHandle = open('Makefile', 'w')
+	fileHandle.flush() 
+	fileHandle.write(makeFileString)
+	fileHandle.close() 
+	BuildPF()
+	os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
+	print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
+	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
+	if (DEBUG == True):
+		print "Building..."
+		os.system("make")
+	else:
+		with open(os.devnull, 'wb') as devnull:
+			try:
+				print "Building..."
+				x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
+				print "Make Exit With Status: ",x
+				os.system("rm ./CompileDefines.xm")
+			except:
+				print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
+				os.system("rm ./" + randomTweakName + ".plist")
+				os.system("rm ./Makefile")
+				os.system("rm ./CompileDefines.xm")
+				exit(255)
+	os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
+	FixControlFile("./layout/DEBIAN/control")
+	os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
+	os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
+	# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
+	os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
+	os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
+	os.system("rm ./" + randomTweakName + ".plist")
+	os.system("rm ./layout/DEBIAN/control")
+	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
+	os.system("rm -rf ./obj")
+	os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
+	if (DEBUG):
+		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
+	else:
+		os.system("rm ./Makefile")
+		os.system("rm ./CompileDefines.xm")
+	print (Fore.YELLOW +"Built with components: \n")
+	for x in ModuleList:
+		print (Fore.YELLOW +x)
+	print "Unlinking TheOS..."
+	os.system("rm ./theos")
+	os.system("rm -r ./.theos")
+	print "Finished."
+
+if __name__ == "__main__":
+    main()

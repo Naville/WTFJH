@@ -31,6 +31,9 @@ void (*old_AES_ecb_encrypt)(const unsigned char *in, unsigned char *out,
 void (*old_AES_cbc_encrypt)(const unsigned char *in, unsigned char *out,
                      size_t length, const AES_KEY *key,
                      unsigned char *ivec, const int enc);
+void (*old_AES_cfb128_encrypt)(const unsigned char *in, unsigned char *out,
+                        size_t length, const AES_KEY *key,
+                        unsigned char *ivec, int *num, const int enc);
 int AES_set_encrypt_key(const unsigned char *userKey, const int bits,AES_KEY *key){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_set_encrypt_key"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:userKey length:bits] withKey:@"Key"];
@@ -75,11 +78,30 @@ void AES_cbc_encrypt(const unsigned char *in, unsigned char *out,
 
 
 }
+void AES_cfb128_encrypt(const unsigned char *in, unsigned char *out,
+                        size_t length, const AES_KEY *key,
+                        unsigned char *ivec, int *num, const int enc){
+	old_AES_cfb128_encrypt(in,out,length,key,ivec,num,enc);//Call Original
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_cfb128_encrypt"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:AES_BLOCK_SIZE] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:AES_BLOCK_SIZE] withKey:@"IV"];
+
+
+		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:AES_BLOCK_SIZE] withKey:@"OutputData"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+
+
+
+}
 extern void init_OpenSSLAES_hook() {
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_set_encrypt_key")),(void*)AES_set_encrypt_key, (void**)&old_AES_set_encrypt_key);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_set_decrypt_key")),(void*)AES_set_decrypt_key, (void**)&old_AES_set_decrypt_key);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ecb_encrypt")),(void*)AES_ecb_encrypt, (void**)&old_AES_ecb_encrypt);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cbc_encrypt")),(void*)AES_cbc_encrypt, (void**)&old_AES_cbc_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb128_encrypt")),(void*)AES_cfb128_encrypt, (void**)&old_AES_cfb128_encrypt);
 #ifdef PROTOTYPE
 
 #endif

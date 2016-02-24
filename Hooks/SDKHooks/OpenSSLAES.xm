@@ -34,6 +34,25 @@ void (*old_AES_cbc_encrypt)(const unsigned char *in, unsigned char *out,
 void (*old_AES_cfb128_encrypt)(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         unsigned char *ivec, int *num, const int enc);
+void (*old_AES_cfb1_encrypt)(const unsigned char *in, unsigned char *out,
+                      size_t length, const AES_KEY *key,
+                      unsigned char *ivec, int *num, const int enc);
+void (*old_AES_cfb8_encrypt)(const unsigned char *in, unsigned char *out,
+                      size_t length, const AES_KEY *key,
+                      unsigned char *ivec, int *num, const int enc);
+void (*old_AES_ofb128_encrypt)(const unsigned char *in, unsigned char *out,
+                        size_t length, const AES_KEY *key,
+                        unsigned char *ivec, int *num);
+void (*old_AES_ige_encrypt)(const unsigned char *in, unsigned char *out,
+                     size_t length, const AES_KEY *key,
+                     unsigned char *ivec, const int enc);
+void (*old_AES_bi_ige_encrypt)(const unsigned char *in, unsigned char *out,
+                        size_t length, const AES_KEY *key,
+                        const AES_KEY *key2, const unsigned char *ivec,
+                        const int enc);
+
+
+
 int AES_set_encrypt_key(const unsigned char *userKey, const int bits,AES_KEY *key){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_set_encrypt_key"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:userKey length:bits] withKey:@"Key"];
@@ -68,11 +87,11 @@ void AES_cbc_encrypt(const unsigned char *in, unsigned char *out,
                      unsigned char *ivec, const int enc){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_cbc_encrypt"];
 		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
-		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:AES_BLOCK_SIZE] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:AES_BLOCK_SIZE] withKey:@"IV"];
 
 		old_AES_cbc_encrypt(in,out,length,key,ivec,enc);//Call Original
-		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:AES_BLOCK_SIZE] withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
 
@@ -84,14 +103,93 @@ void AES_cfb128_encrypt(const unsigned char *in, unsigned char *out,
 	old_AES_cfb128_encrypt(in,out,length,key,ivec,num,enc);//Call Original
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_cfb128_encrypt"];
 		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
-		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:AES_BLOCK_SIZE] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:AES_BLOCK_SIZE] withKey:@"IV"];
 
 
 		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
-		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:AES_BLOCK_SIZE] withKey:@"OutputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
 		[traceStorage saveTracedCall: tracer];
 		[tracer release];
+
+
+
+}
+void AES_cfb1_encrypt(const unsigned char *in, unsigned char *out,
+                      size_t length, const AES_KEY *key,
+                      unsigned char *ivec, int *num, const int enc){
+		old_AES_cfb1_encrypt(in,out,length,key,ivec,num,enc);//Call Original
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_cfb1_encrypt"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:AES_BLOCK_SIZE] withKey:@"IV"];
+
+
+		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+
+
+}
+void AES_cfb8_encrypt(const unsigned char *in, unsigned char *out,
+                      size_t length, const AES_KEY *key,
+                      unsigned char *ivec, int *num, const int enc){
+		old_AES_cfb8_encrypt(in,out,length,key,ivec,num,enc);//Call Original
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_cfb8_encrypt"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:AES_BLOCK_SIZE] withKey:@"IV"];
+
+
+		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+
+
+}
+void AES_ofb128_encrypt(const unsigned char *in, unsigned char *out,
+                        size_t length, const AES_KEY *key,
+                        unsigned char *ivec, int *num){
+		old_AES_ofb128_encrypt(in,out,length,key,ivec,num);//Call Original
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_ofb128_encrypt"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:AES_BLOCK_SIZE] withKey:@"IV"];
+
+		[tracer addArgFromPlistObject:[NSNumber numberWithInt:*num] withKey:@"num"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+
+
+}
+void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
+                     size_t length, const AES_KEY *key,
+                     unsigned char *ivec, const int enc){
+		old_AES_ige_encrypt(in,out,length,key,ivec,enc);//Call Original
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_ige_encrypt"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:2*AES_BLOCK_SIZE] withKey:@"IV"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+
+}
+void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
+                        size_t length, const AES_KEY *key,
+                        const AES_KEY *key2, const unsigned char *ivec,
+                        const int enc){
+		old_AES_bi_ige_encrypt(in,out,length,key,key2,ivec,enc);
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_bi_ige_encrypt"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:in length:length] withKey:@"InputData"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:ivec length:4*AES_BLOCK_SIZE] withKey:@"IV"];
+		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
+		[tracer addArgFromPlistObject:[NSData dataWithBytes:out length:length] withKey:@"OutputData"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+
 
 
 
@@ -102,6 +200,11 @@ MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_set_decrypt_key")),(void*)AES_se
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ecb_encrypt")),(void*)AES_ecb_encrypt, (void**)&old_AES_ecb_encrypt);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cbc_encrypt")),(void*)AES_cbc_encrypt, (void**)&old_AES_cbc_encrypt);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb128_encrypt")),(void*)AES_cfb128_encrypt, (void**)&old_AES_cfb128_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb1_encrypt")),(void*)AES_cfb1_encrypt, (void**)&old_AES_cfb1_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb8_encrypt")),(void*)AES_cfb8_encrypt, (void**)&old_AES_cfb8_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ofb128_encrypt")),(void*)AES_ofb128_encrypt, (void**)&old_AES_ofb128_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ige_encrypt")),(void*)AES_ige_encrypt, (void**)&old_AES_ige_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_bi_ige_encrypt")),(void*)AES_bi_ige_encrypt, (void**)&old_AES_bi_ige_encrypt);
 #ifdef PROTOTYPE
 
 #endif

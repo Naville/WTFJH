@@ -17,7 +17,7 @@ init(autoreset=True)
 makeFileString = ""
 PathList = ["Hooks/APIHooks/", "Hooks/SDKHooks/", "Hooks/Utils/"]
 global toggleString
-toggleString = "void GlobalInit() {\n"
+toggleString = "#import \"./Hooks/Obfuscation.h\"\nvoid GlobalInit() {\n"
 global MakeFileListString
 MakeFileListString = "_FILES = Tweak.xm CompileDefines.xm"
 global ModuleList
@@ -26,6 +26,10 @@ global DEBUG
 DEBUG = False
 global PROTOTYPE
 PROTOTYPE = False
+global OBFUSCATION
+OBFUSCATION=False
+global ObfDict
+ObfDict=dict()
 
 
 def LINKTHEOS():
@@ -177,10 +181,23 @@ def ParseArgs():
  			print "PROTOTYPE Enabled"
  			global PROTOTYPE
  			PROTOTYPE = True
-
+ 		if x.upper() == "OBFUSCATION":
+ 			print "Obfuscation Enabled"
+ 			global OBFUSCATION
+ 			OBFUSCATION=True
+def Obfuscation():
+	if OBFUSCATION==False:
+		print "No Obfuscation"
+	else:
+		obf=open("./Hooks/Obfuscation.h","w")
+		for name in ModuleList:
+			randname=id_generator(chars=string.ascii_uppercase +string.ascii_lowercase)
+			defineString="#define init_"+name+"_hook "+randname+"\n"
+			ObfDict[name]=randname
+			obf.write(defineString)
+		obf.close()
 def main():
 	ParseArgs()
-
 	# Generate random Name to bypass detection
 	# os.remove("./Makefile")
 	randomTweakName = id_generator()
@@ -209,9 +226,11 @@ def main():
 	fileHandle.write(makeFileString)
 	fileHandle.close() 
 	BuildPF()
+	Obfuscation()
 	os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
 	print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
 	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
+	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
 	if (DEBUG == True):
 		print "Building..."
 		os.system("make")
@@ -245,10 +264,14 @@ def main():
 		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
 	else:
 		os.system("rm ./Makefile")
+		os.system("rm ./Hooks/Obfuscation.h")
 		os.system("rm ./CompileDefines.xm")
 	print (Fore.YELLOW +"Built with components: \n")
 	for x in ModuleList:
 		print (Fore.YELLOW +x)
+	if OBFUSCATION==True:
+		for x in ObfDict.keys():
+			print (Fore.CYAN +x+"Hook Obfuscated To: "+ObfDict[x]+"\n")#Separate Lines For Readablity
 	print "Unlinking TheOS..."
 	os.system("rm ./theos")
 	os.system("rm -r ./.theos")

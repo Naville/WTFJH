@@ -188,6 +188,7 @@ def ParseArgs():
 def Obfuscation():
 	if OBFUSCATION==False:
 		print "No Obfuscation"
+		os.system("echo \" \" >./Hooks/Obfuscation.h")
 	else:
 		obf=open("./Hooks/Obfuscation.h","w")
 		for name in ModuleList:
@@ -195,6 +196,8 @@ def Obfuscation():
 			defineString="#define init_"+name+"_hook "+randname+"\n"
 			ObfDict[name]=randname
 			obf.write(defineString)
+		obf.write("#define GlobalInit "+id_generator()+"\n")
+		obf.write("#define getBoolFromPreferences "+id_generator()+"\n")
 		obf.close()
 def main():
 	ParseArgs()

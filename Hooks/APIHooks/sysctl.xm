@@ -55,7 +55,7 @@ int new_sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *newp
 	if([CallStackInspector wasDirectlyCalledByApp]){
 	NSMutableArray* names=[NSMutableArray array];
 	for(int x=0;x<namelen-1;x++){
-		[names addObject:HWArgs[x]];
+		[names addObject:HWArgs[name[x]]];
 
 	}
 	int ret= old_sysctl(name,namelen,oldp,oldlenp,newp,newlen);

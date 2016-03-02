@@ -8,7 +8,7 @@
     if ([[callStack objectAtIndex:index] containsString:appProcessName]) {
         return YES;
     }
-    return YES;
+    return NO;
 }
 
 + (BOOL) wasDirectlyCalledByApp {

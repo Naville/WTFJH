@@ -11,11 +11,6 @@ BOOL getBoolFromPreferences(NSString *preferenceValue) {
     [value release];
     return retVal;
 }
-
-
-
-// Log all custom URL schemes registered
-// TODO: should we refactor this out of the main Tweak?
 static void traceURISchemes() {
     NSArray *url_schemes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"];
     for (id schemeBundle in url_schemes) {

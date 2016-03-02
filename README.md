@@ -6,11 +6,12 @@
 
 # Usage
 > ./Template.py (SDK|API) ModuleName
-for Generating a new Template
+	for Generating a new Template
 >Probably Need A substrate.h on device if you encounter compile errors
 > ./build.py FOR BUILDING
 - DEBUG For Displaying Building Logs
 - PROTOTYPE For Enabling Prototype Codes
+- OBFUSCATION For Obfuscating The Tweak
 
 > Write Prototype Code Between *\#ifdef PROTOTYPE* and *\#endif*
 

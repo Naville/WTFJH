@@ -5,3 +5,4 @@ theos/
 .DS_Store
 *.deb
 Makefile
+*.pyc

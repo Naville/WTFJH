@@ -8,14 +8,17 @@ import string
 import random
 import plistlib
 import argparse
+import re
 from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
+import ManualObfuscation
 init(autoreset=True)
 
 # Global config
 makeFileString = ""
 PathList = ["Hooks/APIHooks/", "Hooks/SDKHooks/", "Hooks/Utils/"]
+ManualObflist=ManualObfuscation.ManualList
 global toggleString
 toggleString = "#import \"./Hooks/Obfuscation.h\"\nvoid GlobalInit() {\n"
 global MakeFileListString
@@ -61,6 +64,28 @@ def ModuleIter(Path):
 	List = listdir(Path)
 	for x in List:
 		if (x.endswith(".xm") == True):
+		#Obfuscate C++ Hooks
+			if OBFUSCATION==True:
+				pattern = re.compile(r'MSHookFunction\(.*;')
+				rawcontent=open(Path+x,"r").read()
+				result = pattern.findall(rawcontent)
+				if result!=None:
+					for z in result:
+						#print z
+						Splitlist=z.split(",")
+						lengthSplit=len(Splitlist)
+						newfunction=Splitlist[lengthSplit-2]
+						oldpointer=Splitlist[lengthSplit-1]
+						#Hacky Method To Get Function Names
+						newfunction=newfunction.replace(" ","").replace("&","").replace("*","").replace("(","").replace(")","").replace(";","").replace("void","")
+						oldpointer=oldpointer.replace(" ","").replace("&","").replace("*","").replace("(","").replace(")","").replace(";","").replace("void","")
+						print "newfunction"+newfunction
+						print "oldpointer"+oldpointer
+						ManualObflist.append(newfunction)
+						ManualObflist.append(oldpointer)
+				else:
+					print z+" has no Match"
+			#End CPP Obfuscation
 			componentList = x.split(".")
 			componentName = ""
 			i = 0
@@ -194,10 +219,12 @@ def Obfuscation():
 		for name in ModuleList:
 			randname=id_generator(chars=string.ascii_uppercase +string.ascii_lowercase)
 			defineString="#define init_"+name+"_hook "+randname+"\n"
-			ObfDict[name]=randname
+			ObfDict["init_"+name+"_hook"]=randname
 			obf.write(defineString)
-		obf.write("#define GlobalInit "+id_generator()+"\n")
-		obf.write("#define getBoolFromPreferences "+id_generator()+"\n")
+		for name2 in ManualObflist:
+			randname=id_generator(chars=string.ascii_uppercase +string.ascii_lowercase)
+			obf.write("#define "+name2+" "+randname+"\n")
+			ObfDict[name2]=randname
 		obf.close()
 def main():
 	ParseArgs()
@@ -234,9 +261,14 @@ def main():
 	print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
 	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
 	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
+	buildSuccess=True
 	if (DEBUG == True):
 		print "Building..."
-		os.system("make")
+		x=os.system("make")
+		print "Make Exit With Status: ",x
+		if x!=0:
+			buildSuccess=False
+			print (Fore.RED+"Error Occured.Quit")
 	else:
 		with open(os.devnull, 'wb') as devnull:
 			try:
@@ -245,38 +277,43 @@ def main():
 				print "Make Exit With Status: ",x
 				os.system("rm ./CompileDefines.xm")
 			except:
+				buildSuccess=False
 				print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
 				os.system("rm ./" + randomTweakName + ".plist")
 				os.system("rm ./Makefile")
 				os.system("rm ./CompileDefines.xm")
-				exit(255)
-	os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
-	FixControlFile("./layout/DEBIAN/control")
-	os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
-	os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
-	# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
-	os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
-	os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
+	if buildSuccess==True:
+		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
+		FixControlFile("./layout/DEBIAN/control")
+		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
+		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
+		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
+		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
+		os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
+		os.system("rm ./layout/DEBIAN/control")
+		os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
+		os.system("rm -rf ./obj")
+		os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+		os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 	os.system("rm ./" + randomTweakName + ".plist")
-	os.system("rm ./layout/DEBIAN/control")
-	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
-	os.system("rm -rf ./obj")
-	os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
-	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 	if (DEBUG):
 		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
+		if OBFUSCATION==False:
+			os.system("rm ./Hooks/Obfuscation.h")
 	else:
 		os.system("rm ./Makefile")
 		os.system("rm ./Hooks/Obfuscation.h")
 		os.system("rm ./CompileDefines.xm")
-	print (Fore.YELLOW +"Built with components: \n")
-	for x in ModuleList:
-		print (Fore.YELLOW +x)
-	if OBFUSCATION==True:
-		for x in ObfDict.keys():
-			print (Fore.CYAN +x+"Hook Obfuscated To: "+ObfDict[x]+"\n")#Separate Lines For Readablity
+	if buildSuccess==True:
+		print (Fore.YELLOW +"Built with components: \n")
+		for x in ModuleList:
+			print (Fore.YELLOW +x)
+		if OBFUSCATION==True:
+			for x in ObfDict.keys():
+				print (Fore.CYAN +x+" Obfuscated To: "+ObfDict[x]+"\n")#Separate Lines For Readablity
 	print "Unlinking TheOS..."
 	os.system("rm ./theos")
+	os.system("rm ./ManualObfuscation.pyc")
 	os.system("rm -r ./.theos")
 	print "Finished."
 

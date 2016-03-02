@@ -29,7 +29,7 @@ static NSArray* HWArgs=@[
 @"HW_AVAILCPU",
 @"HW_MAXID"];
 /*
-int	sysctlnametomib(const char *, int *, size_t *);
+int	sysctlnametomib(const char *, int *, size_t *);//Probably Pointless To Hook
 */
 int (*old_sysctl)(int *, u_int, void *, size_t *, void *, size_t);
 int	(*old_sysctlbyname)(const char *, void *, size_t *, void *, size_t);

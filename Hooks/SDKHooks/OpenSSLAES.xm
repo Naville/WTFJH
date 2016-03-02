@@ -22,38 +22,38 @@ struct aes_key_st {
 typedef struct aes_key_st AES_KEY;
 
 
-int (*old_AES_set_encrypt_key)(const unsigned char *userKey, const int bits,
+static int (*old_AES_set_encrypt_key)(const unsigned char *userKey, const int bits,
                         AES_KEY *key);
-int (*old_AES_set_decrypt_key)(const unsigned char *userKey, const int bits,
+static int (*old_AES_set_decrypt_key)(const unsigned char *userKey, const int bits,
                         AES_KEY *key);
-void (*old_AES_ecb_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_ecb_encrypt)(const unsigned char *in, unsigned char *out,
                      const AES_KEY *key, const int enc);
-void (*old_AES_cbc_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_cbc_encrypt)(const unsigned char *in, unsigned char *out,
                      size_t length, const AES_KEY *key,
                      unsigned char *ivec, const int enc);
-void (*old_AES_cfb128_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_cfb128_encrypt)(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         unsigned char *ivec, int *num, const int enc);
-void (*old_AES_cfb1_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_cfb1_encrypt)(const unsigned char *in, unsigned char *out,
                       size_t length, const AES_KEY *key,
                       unsigned char *ivec, int *num, const int enc);
-void (*old_AES_cfb8_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_cfb8_encrypt)(const unsigned char *in, unsigned char *out,
                       size_t length, const AES_KEY *key,
                       unsigned char *ivec, int *num, const int enc);
-void (*old_AES_ofb128_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_ofb128_encrypt)(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         unsigned char *ivec, int *num);
-void (*old_AES_ige_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_ige_encrypt)(const unsigned char *in, unsigned char *out,
                      size_t length, const AES_KEY *key,
                      unsigned char *ivec, const int enc);
-void (*old_AES_bi_ige_encrypt)(const unsigned char *in, unsigned char *out,
+static void (*old_AES_bi_ige_encrypt)(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         const AES_KEY *key2, const unsigned char *ivec,
                         const int enc);
 
 
 
-int AES_set_encrypt_key(const unsigned char *userKey, const int bits,AES_KEY *key){
+static int AES_set_encrypt_key(const unsigned char *userKey, const int bits,AES_KEY *key){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_set_encrypt_key"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:userKey length:bits] withKey:@"Key"];
 		[traceStorage saveTracedCall: tracer];
@@ -62,7 +62,7 @@ int AES_set_encrypt_key(const unsigned char *userKey, const int bits,AES_KEY *ke
 
 
 }
-int AES_set_decrypt_key(const unsigned char *userKey, const int bits,AES_KEY *key){
+static int AES_set_decrypt_key(const unsigned char *userKey, const int bits,AES_KEY *key){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_set_decrypt_key"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:userKey length:bits] withKey:@"Key"];
 		[traceStorage saveTracedCall: tracer];
@@ -71,7 +71,7 @@ int AES_set_decrypt_key(const unsigned char *userKey, const int bits,AES_KEY *ke
 
 
 }
-void AES_ecb_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_ecb_encrypt(const unsigned char *in, unsigned char *out,
                      const AES_KEY *key, const int enc){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_ecb_encrypt"];
 		[tracer addArgFromPlistObject:[Methods objectAtIndex:enc] withKey:@"Method"];
@@ -82,7 +82,7 @@ void AES_ecb_encrypt(const unsigned char *in, unsigned char *out,
 		[tracer release];
 
 }
-void AES_cbc_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_cbc_encrypt(const unsigned char *in, unsigned char *out,
                      size_t length, const AES_KEY *key,
                      unsigned char *ivec, const int enc){
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/AES" andMethod:@"AES_cbc_encrypt"];
@@ -97,7 +97,7 @@ void AES_cbc_encrypt(const unsigned char *in, unsigned char *out,
 
 
 }
-void AES_cfb128_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_cfb128_encrypt(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         unsigned char *ivec, int *num, const int enc){
 	old_AES_cfb128_encrypt(in,out,length,key,ivec,num,enc);//Call Original
@@ -115,7 +115,7 @@ void AES_cfb128_encrypt(const unsigned char *in, unsigned char *out,
 
 
 }
-void AES_cfb1_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_cfb1_encrypt(const unsigned char *in, unsigned char *out,
                       size_t length, const AES_KEY *key,
                       unsigned char *ivec, int *num, const int enc){
 		old_AES_cfb1_encrypt(in,out,length,key,ivec,num,enc);//Call Original
@@ -132,7 +132,7 @@ void AES_cfb1_encrypt(const unsigned char *in, unsigned char *out,
 
 
 }
-void AES_cfb8_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_cfb8_encrypt(const unsigned char *in, unsigned char *out,
                       size_t length, const AES_KEY *key,
                       unsigned char *ivec, int *num, const int enc){
 		old_AES_cfb8_encrypt(in,out,length,key,ivec,num,enc);//Call Original
@@ -149,7 +149,7 @@ void AES_cfb8_encrypt(const unsigned char *in, unsigned char *out,
 
 
 }
-void AES_ofb128_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_ofb128_encrypt(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         unsigned char *ivec, int *num){
 		old_AES_ofb128_encrypt(in,out,length,key,ivec,num);//Call Original
@@ -164,7 +164,7 @@ void AES_ofb128_encrypt(const unsigned char *in, unsigned char *out,
 
 
 }
-void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
                      size_t length, const AES_KEY *key,
                      unsigned char *ivec, const int enc){
 		old_AES_ige_encrypt(in,out,length,key,ivec,enc);//Call Original
@@ -177,7 +177,7 @@ void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
 		[tracer release];
 
 }
-void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
+static void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
                         size_t length, const AES_KEY *key,
                         const AES_KEY *key2, const unsigned char *ivec,
                         const int enc){

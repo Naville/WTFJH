@@ -4,13 +4,13 @@
 
 # define BF_ROUNDS       16
 # define BF_BLOCK        8
-static NSArray* Methods=@[@"BF_DECRYPT",@"BF_ENCRYPT"];
+ NSArray* Methods=@[@"BF_DECRYPT",@"BF_ENCRYPT"];
 
 typedef struct bf_key_st {
     BF_LONG P[BF_ROUNDS + 2];
     BF_LONG S[4 * 256];
 } BF_KEY;
-static NSMutableDictionary* ConvertBF_Key(BF_KEY* Key){
+ static NSMutableDictionary* ConvertBF_Key(BF_KEY* Key){
 	NSMutableArray* PBoxarray=[NSMutableArray array];
 	NSMutableArray* SBoxarray=[NSMutableArray array];
 	NSMutableDictionary* RetValue=[NSMutableDictionary dictionary];
@@ -30,8 +30,8 @@ static NSMutableDictionary* ConvertBF_Key(BF_KEY* Key){
 	[SBoxarray release];
 	return RetValue;
 }
-void (*old_BF_set_key)( BF_KEY *key, int len,  unsigned char *data);
-void BF_set_key(BF_KEY *key, int len,  unsigned char *data){
+ void (*old_BF_set_key)( BF_KEY *key, int len,  unsigned char *data);
+ void BF_set_key(BF_KEY *key, int len,  unsigned char *data){
 		//NSMutableDictionary* dict=ConvertBF_Key(key);
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_set_key"];
 		[tracer addArgFromPlistObject:[NSData dataWithBytes:data length:len] withKey:@"Key"];
@@ -81,17 +81,17 @@ void BF_decrypt(BF_LONG *data,  BF_KEY *key){
 		old_BF_decrypt(data,key);
 
 }
-void (*old_BF_ecb_encrypt)( unsigned char *in, unsigned char *out,
+ void (*old_BF_ecb_encrypt)( unsigned char *in, unsigned char *out,
                      BF_KEY *key, int enc);
-void (*old_BF_cbc_encrypt)( unsigned char *in, unsigned char *out, long length,
+ void (*old_BF_cbc_encrypt)( unsigned char *in, unsigned char *out, long length,
                      BF_KEY *schedule, unsigned char *ivec, int enc);
-void (*old_BF_cfb64_encrypt)( unsigned char *in, unsigned char *out,
+ void (*old_BF_cfb64_encrypt)( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num, int enc);
-void (*old_BF_ofb64_encrypt)( unsigned char *in, unsigned char *out,
+ void (*old_BF_ofb64_encrypt)( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num);
-void BF_ecb_encrypt( unsigned char *in, unsigned char *out,
+ void BF_ecb_encrypt( unsigned char *in, unsigned char *out,
                      BF_KEY *key, int enc){
 		old_BF_ecb_encrypt(in,out,key,enc);//Call Original
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_ecb_encrypt"];
@@ -103,7 +103,7 @@ void BF_ecb_encrypt( unsigned char *in, unsigned char *out,
 		[tracer release];
 
 }
-void BF_cbc_encrypt( unsigned char *in, unsigned char *out, long length,
+ void BF_cbc_encrypt( unsigned char *in, unsigned char *out, long length,
                      BF_KEY *schedule, unsigned char *ivec, int enc){
 		old_BF_cbc_encrypt(in,out,length,schedule,ivec,enc);//Call Original
 		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"OpenSSL/BlowFish" andMethod:@"BF_cbc_encrypt"];
@@ -116,7 +116,7 @@ void BF_cbc_encrypt( unsigned char *in, unsigned char *out, long length,
 		[tracer release];
 
 }
-void BF_cfb64_encrypt( unsigned char *in, unsigned char *out,
+ void BF_cfb64_encrypt( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num, int enc){
 		old_BF_cfb64_encrypt(in,out,length,schedule,ivec,num,enc);//Call Original
@@ -131,7 +131,7 @@ void BF_cfb64_encrypt( unsigned char *in, unsigned char *out,
 		[tracer release];
 
 }
-void BF_ofb64_encrypt( unsigned char *in, unsigned char *out,
+ void BF_ofb64_encrypt( unsigned char *in, unsigned char *out,
                       long length,  BF_KEY *schedule,
                       unsigned char *ivec, int *num){
 		old_BF_ofb64_encrypt(in,out,length,schedule,ivec,num);//Call Original
@@ -151,7 +151,9 @@ MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_set_key")),(void*)BF_set_key, (vo
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_ecb_encrypt")),(void*)BF_ecb_encrypt, (void**)&old_BF_ecb_encrypt);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_cbc_encrypt")),(void*)BF_cbc_encrypt, (void**)&old_BF_cbc_encrypt);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_cfb64_encrypt")),(void*)BF_cfb64_encrypt, (void**)&old_BF_cfb64_encrypt);
+MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_ofb64_encrypt")),(void*)BF_ofb64_encrypt, (void**)&old_BF_ofb64_encrypt);
 #ifdef PROTOTYPE
+MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_decrypt")),(void*)BF_decrypt, (void**)&old_BF_decrypt);
 MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_encrypt")),(void*)BF_encrypt, (void**)&old_BF_encrypt);
 #endif 
 

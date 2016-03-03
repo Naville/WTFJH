@@ -79,8 +79,8 @@ def ModuleIter(Path):
 						#Hacky Method To Get Function Names
 						newfunction=newfunction.replace(" ","").replace("&","").replace("*","").replace("(","").replace(")","").replace(";","").replace("void","")
 						oldpointer=oldpointer.replace(" ","").replace("&","").replace("*","").replace("(","").replace(")","").replace(";","").replace("void","")
-						print "newfunction"+newfunction
-						print "oldpointer"+oldpointer
+						#print "newfunction"+newfunction
+						#print "oldpointer"+oldpointer
 						ManualObflist.append(newfunction)
 						ManualObflist.append(oldpointer)
 				else:

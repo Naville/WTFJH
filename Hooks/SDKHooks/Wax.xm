@@ -1,23 +1,18 @@
 #import "../SharedDefine.pch"
-/*void json_parseString(lua_State *L, const char *input);
-
+//Maybe Pointless hooking these
+/*
 void wax_startWithNil();
-
-//setup lua, and load wax stdlib
-void wax_start(char *initScript, lua_CFunction extensionFunctions, ...);
 
 //start with wax server
 void wax_startWithServer();
-
-//setup lua
-void wax_setup();
-int wax_runLuaString(const char *script);
-
 */
 void (*old_wax_xml_parseString)(void *L, const char *input);
 int (*old_wax_runLuaFile)(const char *filePath);
 int (*old_wax_runLuaByteCode)(NSData *data, NSString *name);
 int (*old_wax_runLuaString)(const char *script);
+void (*old_wax_setup)();
+void (*old_json_parseString)(void *L, const char *input);
+static void (*old_wax_start)(char *initScript, void* extensionFunctions, ...)=NULL;
 
 void _wax_xml_parseString(void *L, const char *input){
 		NSString* NSinput=[NSString stringWithUTF8String:input];
@@ -57,11 +52,46 @@ int _wax_runLuaString(const char *script){
 		[tracer release];
 		return old_wax_runLuaString(script);
 }
+void _wax_setup(){
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"wax" andMethod:@"wax_setup"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+		old_wax_setup();
+
+}
+void _json_parseString(void *L, const char *input){
+		NSString* NSinput=[NSString stringWithUTF8String:input];
+		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"wax" andMethod:@"json_parseString"];
+		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"L"];
+		[tracer addArgFromPlistObject:NSinput withKey:@"input"];
+		[traceStorage saveTracedCall: tracer];
+		[tracer release];
+		[NSinput release];
+		old_json_parseString(L,input);
+}
+void _wax_start(char *initScript, void* extensionFunctions, ...){
+    va_list arg;
+    va_start(arg,extensionFunctions);
+    NSString* NSinput=[NSString stringWithUTF8String:initScript];
+	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"wax" andMethod:@"json_parseString"];
+	[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"L"];
+	[tracer addArgFromPlistObject:NSinput withKey:@"input"];
+	[traceStorage saveTracedCall: tracer];
+	[tracer release];
+	[NSinput release];
+
+    old_wax_start(initScript,extensionFunctions, arg);
+    
+    va_end(arg);
+}
 extern void init_Wax_hook() {
 	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_xml_parseString")),(void*)_wax_xml_parseString, (void**)&old_wax_xml_parseString);
 	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_runLuaFile")),(void*)_wax_runLuaFile, (void**)&old_wax_runLuaFile);
 	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_runLuaByteCode")),(void*)_wax_runLuaByteCode, (void**)&old_wax_runLuaByteCode);
 	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_runLuaString")),(void*)_wax_runLuaString, (void**)&old_wax_runLuaString);
+	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_setup")),(void*)_wax_setup, (void**)&old_wax_setup);
+	MSHookFunction(((void*)MSFindSymbol(NULL, "_json_parseString")),(void*)_json_parseString, (void**)&old_json_parseString);
+	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_start")),(void*)_wax_start, (void**)&old_wax_start);
 }
 
 

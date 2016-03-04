@@ -21,7 +21,7 @@ Read *Preferences/README.md* for more info
 
 # TODOs
 - Merge [https://github.com/BishopFox/iSpy][3] into WTFJH
-- Merge [https://github.com/DavidGoldman/InspectiveC][4] into WTFJH
+- ~~Merge [https://github.com/DavidGoldman/InspectiveC][4] into WTFJH~~ Check ThirdPartyTools/InspectiveC
 - Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in *\_\_DATA*
 
 [1]:	https://github.com/iSECPartners/Introspy-iOS

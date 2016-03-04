@@ -6,3 +6,4 @@ theos/
 *.deb
 Makefile
 *.pyc
+wax.txt

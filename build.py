@@ -17,7 +17,7 @@ init(autoreset=True)
 
 # Global config
 makeFileString = ""
-PathList = ["Hooks/APIHooks/", "Hooks/SDKHooks/", "Hooks/Utils/"]
+PathList = ["Hooks/APIHooks/", "Hooks/SDKHooks/", "Hooks/Utils/","Hooks/ThirdPartyTools/"]
 ManualObflist=ManualObfuscation.ManualList
 global toggleString
 toggleString = "#import \"./Hooks/Obfuscation.h\"\nvoid GlobalInit() {\n"
@@ -33,9 +33,33 @@ global OBFUSCATION
 OBFUSCATION=False
 global ObfDict
 ObfDict=dict()
-
-
-def LINKTHEOS():
+global LinkerString
+LinkerString=""
+def BuildMakeFile():
+	global randomTweakName
+	global makeFileString
+	makeFileString += "export CFLAGS=-Wp,\"-DWTFJHTWEAKNAME="+"@\\\""+randomTweakName+"\\\""
+	if(PROTOTYPE):
+		makeFileString += ",-DPROTOTYPE"
+	makeFileString += "\"\n"
+	makeFileString += "include theos/makefiles/common.mk\n"
+	makeFileString += "export ARCHS = armv7 armv7s arm64\n"
+	makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
+	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
+	makeFileString += randomTweakName + MakeFileListString + "\n"
+	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
+	global LinkerString
+	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+"\n"
+	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate\n"
+	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security\n"
+	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
+	makeFileString += "after-install::\n"
+	makeFileString += "	install.exec \"killall -9 SpringBoard\""
+	fileHandle = open('Makefile', 'w')
+	fileHandle.flush() 
+	fileHandle.write(makeFileString)
+	fileHandle.close() 
+def LINKTHEOS():#For God's Sake. Keep Your Codes Clean is IMPORTANT. We'll Remove It Later
 	if (os.path.exists("theos") == False):
 		print "TheOS link doesn't exist, creating..."
 		if (os.environ.get('THEOS') != None):
@@ -47,7 +71,7 @@ def LINKTHEOS():
 		print "TheOS link exists at " + os.getcwd() + "/theos" + ", building..."
 
 
-def FixControlFile(Path):
+def FixControlFile(Path):#BuildVersion Stuff
 	file = open(Path,"a")
 	version = open('./VERSION', "r")
 	currentVersion = int(version.read())
@@ -60,7 +84,7 @@ def FixControlFile(Path):
 	version.close()
 
 
-def ModuleIter(Path):
+def ModuleIter(Path):#A List of Core Modules
 	List = listdir(Path)
 	for x in List:
 		if (x.endswith(".xm") == True):
@@ -120,7 +144,7 @@ def toggleModule():
 	fileHandle.close() 
 
 
-def MakeFileIter(Path):
+def MakeFileIter(Path):#Iterate All Code Files
 		FileList = listdir(Path)
 		for x in FileList:
 			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False):
@@ -134,7 +158,7 @@ def MakeFileIter(Path):
 				MakeFileListString += string
 
 
-def subModuleList():
+def subModuleList():#Core Module Iterator Wrapper So We Support Iterating Different Paths
 	for x in PathList:
 		MakeFileIter(x)
 
@@ -162,7 +186,7 @@ def BuildPF():
 		"default": False,
 		"defaults": "naville.wtfjh"
 	}
-	Plist["items"].append(Dict)#Deobfuscation Confidence
+	Plist["items"].append(Dict)#Code-Signature Based Objc-Deobfuscation Confidence
 	Dict = {
 		"cell": "PSEditTextCell",
 		"keyboard": "numbers",
@@ -222,7 +246,7 @@ def ParseArgs():
 def Obfuscation():
 	if OBFUSCATION==False:
 		print "No Obfuscation"
-		os.system("echo \" \" >./Hooks/Obfuscation.h")
+		os.system("echo \" \" >./Hooks/Obfuscation.h")#Clean Up Previous Obfuscation Defines
 	else:
 		obf=open("./Hooks/Obfuscation.h","w")
 		for name in ModuleList:
@@ -235,62 +259,66 @@ def Obfuscation():
 			obf.write("#define "+name2+" "+randname+"\n")
 			ObfDict[name2]=randname
 		obf.close()
+def buildThirdPartyComponents():
+	os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
+	for x in listdir("./ThirdPartyTools"):
+		if os.path.isdir("./ThirdPartyTools/"+x)==False:
+			pass
+		else:
+			print "ThirdPartyTools---Building:",x
+			if (DEBUG):
+				os.system("cd ./ThirdPartyTools/"+x+"/ &&make")
+				os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
+			else:
+				try:
+					subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && make"], stdout=open("ThirdPartyLog.log", 'wb'), stderr=subprocess.STDOUT, shell=True)
+
+					os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
+				except Exception as inst:
+					print inst
+					print  (Fore.RED +"Build "+x+"Went Wrong. Rerun With DEBUG to see output")
+			global LinkerString
+			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
 def main():
 	ParseArgs()
 	# Generate random Name to bypass detection
 	# os.remove("./Makefile")
+	global randomTweakName
 	randomTweakName = id_generator()
 	toggleModule()
 	subModuleList()
 	LINKTHEOS()
-	global makeFileString
-	makeFileString += "export CFLAGS=-Wp,\"-DWTFJHTWEAKNAME="+"@\\\""+randomTweakName+"\\\""
-	if(PROTOTYPE):
-		makeFileString += ",-DPROTOTYPE"
-	makeFileString += "\"\n"
-	makeFileString += "include theos/makefiles/common.mk\n"
-	makeFileString += "export ARCHS = armv7 armv7s arm64\n"
-	makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
-	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
-	makeFileString += randomTweakName + MakeFileListString + "\n"
-	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
-	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist\n"
-	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate\n"
-	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security\n"
-	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
-	makeFileString += "after-install::\n"
-	makeFileString += "	install.exec \"killall -9 SpringBoard\""
-	fileHandle = open('Makefile', 'w')
-	fileHandle.flush() 
-	fileHandle.write(makeFileString)
-	fileHandle.close() 
+	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags
 	BuildPF()
 	Obfuscation()
+	BuildMakeFile()
 	os.system("cp ./WTFJH.plist ./" + randomTweakName + ".plist")
 	print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
 	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
 	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
 	buildSuccess=True
 	if (DEBUG == True):
-		print "Building..."
+		print "Building... Main"
 		x=os.system("make")
 		print "Make Exit With Status: ",x
 		if x!=0:
 			buildSuccess=False
 			print (Fore.RED+"Error Occured.Quit")
 	else:
-		with open(os.devnull, 'wb') as devnull:
+		with open("MainLog.log", 'wb') as devnull:
 			try:
-				print "Building..."
+				print "Building... Main"
 				x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
 				print "Make Exit With Status: ",x
 				os.system("rm ./CompileDefines.xm")
-			except:
+			except Exception as inst:
 				buildSuccess=False
+				print inst
 				print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
 				os.system("rm ./" + randomTweakName + ".plist")
 				os.system("rm ./Makefile")
 				os.system("rm ./CompileDefines.xm")
+#Packaging
 	if buildSuccess==True:
 		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
 		FixControlFile("./layout/DEBIAN/control")
@@ -299,12 +327,17 @@ def main():
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
 		os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
+
+#Clean-Up
 		os.system("rm ./layout/DEBIAN/control")
 		os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
 		os.system("rm -rf ./obj")
 		os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 		os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 	os.system("rm ./" + randomTweakName + ".plist")
+	for x in listdir("./ThirdPartyTools"):
+		os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")
+		os.system("rm -rf ./"+x+".dylib")
 	if (DEBUG):
 		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
 		if OBFUSCATION==False:

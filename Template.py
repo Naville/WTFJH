@@ -6,22 +6,20 @@ import sys
 import string
 import random
 from os import listdir
-
+ValidType=["SDK","API","Utils","ThirdPartyTools"]
 xmString = ""
 outPath = "./Hooks/"
 if (len(sys.argv) < 2):
 	print "Template.py ModuleType ModuleName"
 	sys.exit(-1)
-if (sys.argv[1] != "SDK" and sys.argv[1] != "API"):
+if (sys.argv[1] not in ValidType):
 	print "Wrong argument #1"
+	print "Valid Arguments:"
+	for x in ValidType:
+		print x
+	sys.exit(-1)
 else:
-	if (sys.argv[1] == "SDK"):
-		outPath = outPath + "SDKHooks/" + sys.argv[2] + ".xm"
-	elif (sys.argv[1] == "API"):
-		outPath = outPath + "APIHooks/" + sys.argv[2] + ".xm"
-	else:
-		print "Unknown Module Type"
-		sys.exit(-1)
+	outPath = outPath + sys.argv[1]+"/" + sys.argv[2] + ".xm"
 	xmString += "#import \"../SharedDefine.pch\"\n"
 	xmString += "%group " + sys.argv[2] + "\n"
 	xmString += "    // Insert Your Hooks Here\n"

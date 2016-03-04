@@ -7,3 +7,4 @@ theos/
 Makefile
 *.pyc
 wax.txt
+*.log

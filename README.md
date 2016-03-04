@@ -9,7 +9,7 @@
 	for Generating a new Template
 >Probably Need A substrate.h on device if you encounter compile errors
 > ./build.py FOR BUILDING
-- DEBUG For Displaying Building Logs
+- DEBUG For Displaying Building Logs (When It's Not Set. Logs are saved in *.log in Project Root)
 - PROTOTYPE For Enabling Prototype Codes
 - OBFUSCATION For Obfuscating The Tweak
 

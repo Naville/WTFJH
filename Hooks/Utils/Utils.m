@@ -111,6 +111,9 @@ return returnArray;
 -(void)setupSignatureDatabase{
 #ifdef WTFJHTWEAKNAME
 #pragma message "Don't Change This Filename Or Setup Will Crash:" Meh(WTFJHTWEAKNAME)
+    NSDictionary* prefs=[[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
+    self.MinimumMatchConfidence=[prefs objectForKey:@"MinimumMatchConfidence"];
+    [prefs release];
     for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);
         NSString* curName=[NSString stringWithUTF8String:Nam];

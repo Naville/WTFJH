@@ -162,6 +162,15 @@ def BuildPF():
 		"default": False,
 		"defaults": "naville.wtfjh"
 	}
+	Plist["items"].append(Dict)#Deobfuscation Confidence
+	Dict = {
+		"cell": "PSEditTextCell",
+		"keyboard": "numbers",
+		"placeholder": 0.8,
+		"bestGuess":0.8,
+		"isNumeric": True,
+		"defaults": "naville.wtfjh"
+	}
 	Plist["items"].append(Dict)
 	Dict = {
 		"cell": "PSSwitchCell",

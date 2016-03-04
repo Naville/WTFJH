@@ -51,25 +51,42 @@ int	new_sysctlbyname(const char *name, void *oldp, size_t *oldlenp, void *newp, 
 	}
 
 }
-int new_sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *newp, size_t newlen){
+int new_sysctl(int *name, u_int namelen,struct kinfo_proc* info, size_t *oldlenp, void *newp, size_t newlen){
+	/*if(*name[0]==1&&*name[1]==14){
+        int RetVal=oldsysctl(A,B,info,C,&D,E);
+        info->kp_proc.p_flag=0;
+        return RetVal;
+    }*/
+
+
 	if([CallStackInspector wasDirectlyCalledByApp]){
 	NSMutableArray* names=[NSMutableArray array];
 	for(int x=0;x<namelen-1;x++){
 		[names addObject:HWArgs[name[x]]];
 
 	}
-	int ret= old_sysctl(name,namelen,oldp,oldlenp,newp,newlen);
+	int ret= old_sysctl(name,namelen,info,oldlenp,newp,newlen);
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"sysctl" andMethod:@"sysctl"];
 	[tracer addArgFromPlistObject:names withKey:@"name"];
 	[tracer addReturnValueFromPlistObject:[NSNumber numberWithInt:ret]];
 	[traceStorage saveTracedCall: tracer];
 	[tracer release];
 	[names release];
+//Anti-Anti-Debugging
+	extern BOOL getBoolFromPreferences(NSString *preferenceValue);
+	if(getBoolFromPreferences(@"AntiAntiDebugging")==YES){
+		if(name[0]==CTL_KERN &&name[1]==KERN_PROC && name[2]==KERN_PROC_PID){
+			NSLog(@"WTFJH-----Detected sysctl AntiDebugging");
+			info->kp_proc.p_flag=0;
+				}
+
+	}
+//end
 	return ret;
 		}
 else{
 
-	return old_sysctl(name,namelen,oldp,oldlenp,newp,newlen);
+	return old_sysctl(name,namelen,info,oldlenp,newp,newlen);
 }
 }
 

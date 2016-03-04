@@ -9,7 +9,7 @@
 
 >>Methods:25%:
 
->>Properties:20%
+>>Properties:25%
 
 >>IVARS:20%
 
@@ -23,6 +23,8 @@
 
 >>>>For Each Complete Match. 35%/9 is rewarded. Please Note That The Number Of Subject is Used instead of number in database.
 
->>>>TypeCoding Match:40% ReturnTypeMatch:40% SEL Name Match:20%
+>>>>Methods :TypeCoding Match:40% ReturnTypeMatch:40% SEL Name Match:20%
+
+>>>>Properties: Offset Match:20% NameMatch 40%  Signature Match 40%
 
 >>>>>So if this method has matching TC and SEL Name,but wrong RT, it will gain (35%/9)*(40%+20%)Point

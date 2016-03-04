@@ -46,7 +46,7 @@
     }
     
     free(properties);
-    NSLog(@"Properties %@",returnDictionary);
+    //NSLog(@"Properties %@",returnDictionary);
     return returnDictionary;
 }
 +(NSMutableDictionary*)ivarForClass:(NSString*)className{
@@ -57,7 +57,7 @@
         Ivar currentIvar=IvarList[i];
         NSString* IvarName=[NSString stringWithFormat:@"%s",ivar_getName(currentIvar)];
         NSString* IvarOffset=[NSString stringWithFormat:@"%lu",(unsigned long)ivar_getOffset(currentIvar)];
-        NSLog(@"Pffset:%@",IvarOffset);
+        //NSLog(@"Offset:%@",IvarOffset);
         NSDictionary* ivarInfoDict=[NSDictionary dictionaryWithObjectsAndKeys:IvarName,@"Name", IvarOffset,@"Offset",[NSString stringWithUTF8String:ivar_getTypeEncoding(currentIvar)],@"TypeEncoding",nil];
         //NSLog(@"iVARinfo:%@",ivarInfoDict);
         [returnDict setObject:ivarInfoDict forKey:[NSString stringWithUTF8String:ivar_getName(currentIvar)]];

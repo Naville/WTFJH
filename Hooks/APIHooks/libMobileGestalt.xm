@@ -49,7 +49,7 @@ static void MobileGestaltdyldCallBack(const struct mach_header* mh, intptr_t vma
 		MSHookFunction(((void*)MSFindSymbol(NULL, "_MGSetAnswer")),(void*)MGSetAnswer, (void**)&old_MGSetAnswer);
 	
 	}
-
+	[name release];
 }
 
 

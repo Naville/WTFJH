@@ -33,8 +33,36 @@ global OBFUSCATION
 OBFUSCATION=False
 global ObfDict
 ObfDict=dict()
+global LoaderList
+LoaderList=list()
 global LinkerString
 LinkerString=""
+
+#Clean-Up
+def cleanUp():
+	print (Fore.YELLOW +"Cleaning Misc Files")
+	os.system("rm ./layout/DEBIAN/control")
+	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
+	os.system("rm -rf ./obj")
+	os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
+	os.system("rm ./" + randomTweakName + ".plist")
+	for x in listdir("./ThirdPartyTools"):
+		if os.path.isdir("./ThirdPartyTools/"+x):
+			os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")
+			os.system("rm -rf ./"+x+".dylib")
+	for x in LoaderList:
+		#Clean-Up Auto-Generated Loaders
+		print (Fore.YELLOW +"Cleaning:"+x+"Loader")
+		os.system("rm ./Hooks/ThirdPartyTools/"+x+".xm")
+	if (DEBUG):
+		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
+		if OBFUSCATION==False:
+			os.system("rm ./Hooks/Obfuscation.h")
+	else:
+		os.system("rm ./Makefile")
+		os.system("rm ./Hooks/Obfuscation.h")
+		os.system("rm ./CompileDefines.xm")
 def BuildMakeFile():
 	global randomTweakName
 	global makeFileString
@@ -272,11 +300,14 @@ def buildThirdPartyComponents():
 		else:
 			print "ThirdPartyTools---Building:",x
 			if len(x)>16:
-				print "Name Length Must Be Smaller Than 16"
-				print "Error Would Occur During Linking"
+				print (Fore.RED +"Name Length Must Be Smaller Than 16")
+				print (Fore.RED +"Error Would Occur During Linking")
+				cleanUp()
+				sys.exit(255)
 			if os.path.isfile("./Hooks/ThirdPartyTools/"+x+".xm")==False:
-				print "Loader For"+x+"Doesn't Exist. Creating"
+				print (Fore.RED +"Loader For"+x+" Doesn't Exist. Creating")
 				BuildLoader(x)
+				LoaderList.append(x)
 			if (DEBUG):
 				os.system("cd ./ThirdPartyTools/"+x+"/ &&make")
 				os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
@@ -308,6 +339,16 @@ def main():
 	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
 	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
 	buildSuccess=True
+	#Start Sanity Check
+	for name in listdir("./Hooks/ThirdPartyTools"):
+		name=name.replace(".xm","")
+		if os.path.isfile("./Hooks/ThirdPartyTools/"+name+".xm")==False:
+			print "File Missing At:"+"./Hooks/ThirdPartyTools/"+name
+			print name+"Loader Exists. But Binary Missing"
+			cleanUp()
+			sys.exit(0)
+
+	#end
 	if (DEBUG == True):
 		print "Building... Main"
 		x=os.system("make")
@@ -338,25 +379,7 @@ def main():
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
 		os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
-
-#Clean-Up
-		os.system("rm ./layout/DEBIAN/control")
-		os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
-		os.system("rm -rf ./obj")
-		os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
-		os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
-	os.system("rm ./" + randomTweakName + ".plist")
-	for x in listdir("./ThirdPartyTools"):
-		os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")
-		os.system("rm -rf ./"+x+".dylib")
-	if (DEBUG):
-		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
-		if OBFUSCATION==False:
-			os.system("rm ./Hooks/Obfuscation.h")
-	else:
-		os.system("rm ./Makefile")
-		os.system("rm ./Hooks/Obfuscation.h")
-		os.system("rm ./CompileDefines.xm")
+	cleanUp()
 	if buildSuccess==True:
 		print (Fore.YELLOW +"Built with components: \n")
 		for x in ModuleList:

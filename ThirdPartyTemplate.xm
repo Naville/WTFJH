@@ -12,7 +12,7 @@ for (NSUInteger i = 0; i < 9; i++) {
 }
 return s;
 }
-extern void init_InspectiveC_hook(){
+extern void init_TEMPLATENAME_hook(){
 	 for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);
         NSString* curName=[[NSString stringWithUTF8String:Nam] autorelease];
@@ -21,12 +21,12 @@ extern void init_InspectiveC_hook(){
 #ifndef _____LP64_____
             uint32_t size=0;
             const struct mach_header*   selfHeader=(const struct mach_header*)_dyld_get_image_header(i);
-            char * data=getsectdatafromheader(selfHeader,"WTFJH","InspectiveC",&size);
+            char * data=getsectdatafromheader(selfHeader,"WTFJH","TEMPLATENAME",&size);
 
 #elif 
             uint64_t size=0;
             const struct mach_header_64*   selfHeader=(const struct mach_header_64*)_dyld_get_image_header(i);
-            char * data=getsectdatafromheader_64(selfHeader,"WTFJH","InspectiveC",&size);
+            char * data=getsectdatafromheader_64(selfHeader,"WTFJH","TEMPLATENAME",&size);
 #endif
             NSData* SDData=[NSData dataWithBytes:data length:size];
             NSString* randomPath=[NSString stringWithFormat:@"%@/Documents/%@",NSHomeDirectory(),RandomString()];
@@ -36,7 +36,7 @@ extern void init_InspectiveC_hook(){
             CallTracer *tracer = [[CallTracer alloc] initWithClass:@"WTFJH" andMethod:@"LoadThirdPartyTools"];
         	[tracer addArgFromPlistObject:@"dlopen" withKey:@"Type"];
         	[tracer addArgFromPlistObject:randomPath withKey:@"Path"];
-            [tracer addArgFromPlistObject:@"InspectiveC" withKey:@"ModuleName"];
+            [tracer addArgFromPlistObject:@"TEMPLATENAME" withKey:@"ModuleName"];
         	[traceStorage saveTracedCall: tracer];
         	[tracer release];
         	//End

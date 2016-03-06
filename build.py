@@ -259,6 +259,11 @@ def Obfuscation():
 			obf.write("#define "+name2+" "+randname+"\n")
 			ObfDict[name2]=randname
 		obf.close()
+def BuildLoader(ModuleName):
+	Template=open("ThirdPartyTemplate.xm","r").read().replace("TEMPLATENAME",ModuleName)
+	f=open("./Hooks/ThirdPartyTools/"+ModuleName+".xm","w")
+	f.write(Template)
+	f.close()
 def buildThirdPartyComponents():
 	os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
 	for x in listdir("./ThirdPartyTools"):
@@ -266,6 +271,12 @@ def buildThirdPartyComponents():
 			pass
 		else:
 			print "ThirdPartyTools---Building:",x
+			if len(x)>16:
+				print "Name Length Must Be Smaller Than 16"
+				print "Error Would Occur During Linking"
+			if os.path.isfile("./Hooks/ThirdPartyTools/"+x+".xm")==False:
+				print "Loader For"+x+"Doesn't Exist. Creating"
+				BuildLoader(x)
 			if (DEBUG):
 				os.system("cd ./ThirdPartyTools/"+x+"/ &&make")
 				os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")

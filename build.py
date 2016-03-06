@@ -325,12 +325,14 @@ def main():
 	ParseArgs()
 	# Generate random Name to bypass detection
 	# os.remove("./Makefile")
+
 	global randomTweakName
 	randomTweakName = id_generator()
+	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags.
+	#Call buildThirdPartyComponents() before generating Makefile. Or else the loaders won't be injected
 	toggleModule()
 	subModuleList()
 	LINKTHEOS()
-	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags
 	BuildPF()
 	Obfuscation()
 	BuildMakeFile()
@@ -341,12 +343,15 @@ def main():
 	buildSuccess=True
 	#Start Sanity Check
 	for name in listdir("./Hooks/ThirdPartyTools"):
-		name=name.replace(".xm","")
-		if os.path.isfile("./Hooks/ThirdPartyTools/"+name+".xm")==False:
-			print "File Missing At:"+"./Hooks/ThirdPartyTools/"+name
-			print name+"Loader Exists. But Binary Missing"
-			cleanUp()
-			sys.exit(0)
+		if name.endswith(".xm")==False:
+			pass
+		else:
+			name=name.replace(".xm","")
+			if os.path.isfile("./Hooks/ThirdPartyTools/"+name+".xm")==False:
+				print "File Missing At:"+"./Hooks/ThirdPartyTools/"+name
+				print name+"Loader Exists. But Binary Missing"
+				cleanUp()
+				sys.exit(0)
 
 	#end
 	if (DEBUG == True):

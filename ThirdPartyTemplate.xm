@@ -17,6 +17,7 @@ extern void init_TEMPLATENAME_hook(){
         const char * Nam=_dyld_get_image_name(i);
         NSString* curName=[[NSString stringWithUTF8String:Nam] autorelease];
         if([curName containsString:WTFJHTWEAKNAME]){
+            intptr_t ASLROffset=_dyld_get_image_vmaddr_slide(i);
             //We Found Ourself
 #ifndef _____LP64_____
             uint32_t size=0;
@@ -28,6 +29,7 @@ extern void init_TEMPLATENAME_hook(){
             const struct mach_header_64*   selfHeader=(const struct mach_header_64*)_dyld_get_image_header(i);
             char * data=getsectdatafromheader_64(selfHeader,"WTFJH","TEMPLATENAME",&size);
 #endif
+            data=ASLROffset+data;//Add ASLR Offset To Pointer And Fix Address
             NSData* SDData=[NSData dataWithBytes:data length:size];
             NSString* randomPath=[NSString stringWithFormat:@"%@/Documents/%@",NSHomeDirectory(),RandomString()];
             [SDData writeToFile:randomPath atomically:YES];

@@ -2,16 +2,7 @@
 #import "../SharedDefine.pch"
 #import <mach-o/getsect.h>
 #import <dlfcn.h>
-static NSString* RandomString(){
-NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
-NSMutableString *s = [NSMutableString stringWithCapacity:9];
-for (NSUInteger i = 0; i < 9; i++) {
-    u_int32_t r = arc4random() % [alphabet length];
-    unichar c = [alphabet characterAtIndex:r];
-    [s appendFormat:@"%C", c];
-}
-return s;
-}
+extern NSString* RandomString();
 extern void init_TEMPLATENAME_hook(){
 	 for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);

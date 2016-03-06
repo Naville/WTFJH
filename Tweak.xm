@@ -11,6 +11,16 @@ BOOL getBoolFromPreferences(NSString *preferenceValue) {
     [value release];
     return retVal;
 }
+NSString* RandomString(){
+NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
+NSMutableString *s = [NSMutableString stringWithCapacity:9];
+for (NSUInteger i = 0; i < 9; i++) {
+    u_int32_t r = arc4random() % [alphabet length];
+    unichar c = [alphabet characterAtIndex:r];
+    [s appendFormat:@"%C", c];
+}
+return s;
+}
 static void traceURISchemes() {
     NSArray *url_schemes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"];
     for (id schemeBundle in url_schemes) {

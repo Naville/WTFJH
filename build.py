@@ -37,6 +37,8 @@ global LoaderList
 LoaderList=list()
 global LinkerString
 LinkerString=""
+global currentVersion
+currentVersion=0
 
 #Clean-Up
 def cleanUp():
@@ -100,15 +102,15 @@ def LINKTHEOS():#For God's Sake. Keep Your Codes Clean is IMPORTANT. We'll Remov
 
 
 def FixControlFile(Path):#BuildVersion Stuff
+	global currentVersion
 	file = open(Path,"a")
 	version = open('./VERSION', "r")
 	currentVersion = int(version.read())
 	file.write("\nVersion: " + str(currentVersion) + "\n")
 	version.close()
 	file.close()
-	currentVersion += 1
 	version = open('./VERSION', "w")
-	version.write(str(currentVersion))
+	version.write(str(currentVersion+1))
 	version.close()
 
 
@@ -305,7 +307,7 @@ def buildThirdPartyComponents():
 				cleanUp()
 				sys.exit(255)
 			if os.path.isfile("./Hooks/ThirdPartyTools/"+x+".xm")==False:
-				print (Fore.RED +"Loader For"+x+" Doesn't Exist. Creating")
+				print (Fore.RED +"Loader For "+x+" Doesn't Exist. Creating")
 				BuildLoader(x)
 				LoaderList.append(x)
 			if (DEBUG):
@@ -383,7 +385,7 @@ def main():
 		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
-		os.system("dpkg-deb -Zgzip -b ./layout ./LatestBuild.deb")
+		os.system("dpkg-deb -Zgzip -b ./layout ./Build-"+str(currentVersion)+".deb")
 	cleanUp()
 	if buildSuccess==True:
 		print (Fore.YELLOW +"Built with components: \n")

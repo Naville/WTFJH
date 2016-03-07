@@ -80,6 +80,7 @@ Other Arguments(Upper/Lower Case Doesn't Matter):
 1.	DEBUG. Show Compiling Info Inside Terminal. When Not Set. Logs Are Saved In **MainLog.log** and **ThirdPartyLog.log**
 2.	OBFUSCATION OBFUSCATION SYMBOLS (NOT ALL. NEED CONTRIBUTIONS)
 3.	PROTOTYPE *Enable Codes Flagged As Prototype*
+4.	DISABLE=ModuleName1,ModuleName2,.........   *DISABLE UNWANTED MODULES*
 
 
 

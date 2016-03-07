@@ -40,17 +40,6 @@ LinkerString=""
 global currentVersion
 currentVersion=0
 
-global SkippedList
-SkippedList=list()
-
-def buildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
-	fileList=listdir(path)
-	for x in SkippedList:
-		for y in fileList:
-			if y.endswith(x+".xm"):#Only Remove Module Files
-				fileList.remove(y)
-				print y+" Removed"
-	return fileList
 #Clean-Up
 def cleanUp():
 	print (Fore.YELLOW +"Cleaning Misc Files")
@@ -60,7 +49,7 @@ def cleanUp():
 	os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 	os.system("rm ./" + randomTweakName + ".plist")
-	for x in buildlistdir("./ThirdPartyTools"):
+	for x in listdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x):
 			os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")
 			os.system("rm -rf ./"+x+".dylib")
@@ -126,7 +115,7 @@ def FixControlFile(Path):#BuildVersion Stuff
 
 
 def ModuleIter(Path):#A List of Core Modules
-	List = buildlistdir(Path)
+	List = listdir(Path)
 	for x in List:
 		if (x.endswith(".xm") == True):
 		#Obfuscate C++ Hooks
@@ -186,7 +175,7 @@ def toggleModule():
 
 
 def MakeFileIter(Path):#Iterate All Code Files
-		FileList = buildlistdir(Path)
+		FileList = listdir(Path)
 		for x in FileList:
 			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False):
 				if DEBUG==True:
@@ -212,7 +201,7 @@ def id_generator(size=15, chars=string.ascii_uppercase + string.digits):
 
 # Build PreferencesLoader Script
 def BuildPF():
-	CustomPrefList = buildlistdir("./Preferences")
+	CustomPrefList = os.listdir("./Preferences")
 	Plist = plistlib.readPlist('./BasePreferences.plist')
 	Dict = {
 		"cell": "PSGroupCell",
@@ -284,10 +273,6 @@ def ParseArgs():
  			print "Obfuscation Enabled"
  			global OBFUSCATION
  			OBFUSCATION=True
- 		if x.upper().startswith("DISABLE="):
- 			tempList=x[8:].split(",")
- 			for z in tempList:
- 				SkippedList.append(z)
 def Obfuscation():
 	if OBFUSCATION==False:
 		print "No Obfuscation"
@@ -311,7 +296,7 @@ def BuildLoader(ModuleName):
 	f.close()
 def buildThirdPartyComponents():
 	os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
-	for x in buildlistdir("./ThirdPartyTools"):
+	for x in listdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x)==False:
 			pass
 		else:
@@ -362,7 +347,7 @@ def main():
 	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
 	buildSuccess=True
 	#Start Sanity Check
-	for name in buildlistdir("./Hooks/ThirdPartyTools"):
+	for name in listdir("./Hooks/ThirdPartyTools"):
 		if name.endswith(".xm")==False:
 			pass
 		else:

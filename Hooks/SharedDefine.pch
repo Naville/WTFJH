@@ -18,3 +18,9 @@ static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/
 
 #define Meh1(x) #x
 #define Meh(x) Meh1(x)
+#define WTInit(CLASSNAME,ARGUMENTNAME) CallTracer *tracer = [[CallTracer alloc] initWithClass:CLASSNAME andMethod:ARGUMENTNAME]
+#define WTAdd(Argument,Name) [tracer addArgFromPlistObject:Argument withKey:Name]
+#define WTReturn(Return) [tracer addReturnValueFromPlistObject:Return]
+#define WTSave [traceStorage saveTracedCall: tracer]
+#define WTRelease [tracer release];
+#define WTShouldLog [CallStackInspector wasDirectlyCalledByApp]

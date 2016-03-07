@@ -3,15 +3,28 @@
 %hook LSApplicationProxy
 + (id)applicationProxyForBundleURL:(id)arg1{
 	id ret=%orig;
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"LSApplication" andMethod:@"applicationProxyForBundleURL"];
-        [tracer addArgFromPlistObject:arg1 withKey:@"URL"];
-        [traceStorage saveTracedCall: tracer];
-        [tracer release];
+	if (WTShouldLog) {
+		WTInit(@"LSApplicationProxy",@"applicationProxyForBundleURL:");
+		WTAdd(arg1,@"BundleURL");
+		WTReturn(ret);
+		WTSave;
+		WTRelease;
 	}
 	return ret;
 }
-+ (id)applicationProxyForIdentifier:(id)arg1;
++ (id)applicationProxyForIdentifier:(id)arg1{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"applicationProxyForIdentifier:");
+	WTAdd(arg1,@"Identifier");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+}
+/*
 + (id)applicationProxyForItemID:(id)arg1;
 + (id)applicationProxyWithBundleUnitID:(unsigned long)arg1;
 - (id)VPNPlugins;
@@ -108,7 +121,6 @@
 - (void)removeInstallProgressForBundleID:(id)arg1;
 - (void)removeObserver:(id)arg1;
 - (BOOL)uninstallApplication:(id)arg1 withOptions:(id)arg2;
-- (BOOL)uninstallApplication:(id)arg1 withOptions:(id)arg2 usingBlock:(id /* block */)arg3;
 - (BOOL)unregisterApplication:(id)arg1;
 - (BOOL)unregisterPlugin:(id)arg1;
 - (id)unrestrictedApplications;
@@ -136,7 +148,7 @@
 - (id)machOUUIDs;
 - (unsigned int)sequenceNumber;
 - (void)setLocalizedShortName:(NSString *)arg1;
-- (id)signerIdentity;
+- (id)signerIdentity;*/
 %end
 
 

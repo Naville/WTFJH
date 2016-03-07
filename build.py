@@ -65,6 +65,9 @@ def cleanUp():
 		os.system("rm ./Makefile")
 		os.system("rm ./Hooks/Obfuscation.h")
 		os.system("rm ./CompileDefines.xm")
+	if DEBUG!=True:
+			os.system("echo '' >ThirdPartyLog.log")
+			os.system("echo '' >MainLog.log")
 def BuildMakeFile():
 	global randomTweakName
 	global makeFileString
@@ -315,7 +318,7 @@ def buildThirdPartyComponents():
 				os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
 			else:
 				try:
-					subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && make"], stdout=open("ThirdPartyLog.log", 'wb'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && make"], stdout=open("ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
 
 					os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
 				except Exception as inst:
@@ -364,7 +367,7 @@ def main():
 			buildSuccess=False
 			print (Fore.RED+"Error Occured.Quit")
 	else:
-		with open("MainLog.log", 'wb') as devnull:
+		with open("MainLog.log", 'a') as devnull:
 			try:
 				print "Building... Main"
 				x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)

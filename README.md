@@ -1,26 +1,20 @@
 # What The Fuck Just Happened
 > A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]
 
-> Feel Free To Send Us Pull Requests. It's a project too big for two part-time developers
+> Feel Free To Send Us Pull Requests. 
+
+> It's a project too big for two part-time developers
 
 > Infrastructural Codes Are Copied (And Modified) From IntroSpy Project And My Own MinusBlock Project [Naville/MinusBlock][2] To Save Time.
 
-> *VERSION* is meant to be there for package version consistency's sake. Also make VERSION changes easy-trackable by reviewing history of **VERSION**
+> *VERSION* is meant to be there for package version consistency's sake
+
+> Also make VERSION changes easy-trackable by reviewing history of **VERSION**
 
 # Usage
-> ./Template.py (SDK|API) ModuleName
-	for Generating a new Template
->Probably Need A substrate.h on device if you encounter compile errors
-> ./build.py FOR BUILDING
-- DEBUG For Displaying Building Logs (When It's Not Set. Logs are saved in *.log in Project Root)
-- PROTOTYPE For Enabling Prototype Codes
-- OBFUSCATION For Obfuscating The Tweak
+>Standard User: *./build.py*
 
-> Write Prototype Code Between *\#ifdef PROTOTYPE* and *\#endif*
-
-> SignatureDatabase.plist is the code signature database we'll use to defeat Method/Name Obfuscations. Detailed Structs are to be determined
-
-Read *Preferences/README.md* for more info
+>HackingGuide.md Contains Detailed Explanation
 
 # TODOs
 - Merge [https://github.com/BishopFox/iSpy][3] into WTFJH

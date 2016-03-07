@@ -22,8 +22,8 @@ Also.There is a init_XXX_hook function inside each module,which XXX in your modu
 
 The main tweak will call that to init your hook.Check below for details
 
-###Names
-####For Modules. 
+####Names
+#####For Modules. 
 All these must be the same.
 
 1.	Module File Name
@@ -33,6 +33,14 @@ All these must be the same.
 
 ####For Third Party Components
 **Read ThirdPartyTools/README.md for detailed info **
+
+
+####Prototype Codes
+Some codes, you might not want to expose them directly. Either because they have bugs, or, they are incomplete.
+
+Put These Codes Inside **#ifdef PROTOTYPE** and **#endif**
+
+These codes will be enabled only when PROTOTYPE Flag for build.py is *Implicitly* turned on.(See Below)
 
 
 ####Custom Preferences
@@ -62,6 +70,18 @@ Please Note:
 3.	Add Semicolons Yourself
 4.	Don't add semicolon to WTCallBack
 5.	Only One Set Of **dyld CallBack** Marcos Can Be Called In A Module
+
+####Building
+You Probably Need The Latest Substrate Header. Check [Issues#1](https://github.com/Naville/WTFJH/issues/1) In Case Something Went Wrong.
+
+Usually. Simple run **./build.py** is enough
+Other Arguments(Upper/Lower Case Doesn't Matter):
+
+1.	DEBUG. Show Compiling Info Inside Terminal. When Not Set. Logs Are Saved In **MainLog.log** and **ThirdPartyLog.log**
+2.	OBFUSCATION OBFUSCATION SYMBOLS (NOT ALL. NEED CONTRIBUTIONS)
+3.	PROTOTYPE *Enable Codes Flagged As Prototype*
+
+
 
 ####Misc
 Some functions don't come with the binary and you'll have to wait the related library to be loaded 

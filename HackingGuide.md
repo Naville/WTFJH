@@ -41,21 +41,27 @@ Add Your Own Preferences in **Preferences/** With Filename **MODULENAME.plist**
 They will be injected into the *items* of the final Preferences Loader PLIST file
 
 ####Marcos
-Six Marcos Has Been Created For Logging Purposes.
+Two Groups Of Marcos Has Been Created For Logging Purposes.
 Please Call Exactly In The Following Sequence
-
+#####Common Logging
 1.	WTInit(ClassName,methodName)  **(For C Functions. Change ClassName to Library Name. For Example dlopen corresponds to dlfcn because it's in dlfcn.h)**
 2.	WTAdd(Argument,Name) **The First is the argument itself. The second is the argument name**
 3.	WTReturn(Return) **Return is the return value to add**
-4.	WTSave	**No Arguments. It save the log to database.**
+4.	WTSave	**No Arguments. It saves the log to database.**
 5.	WTRelease **Release The Memory Of The Logger**
 6.	WTShouldLog **if(WTShouldLog){} to check if it's called by the app itself**
+
+#####dyld CallBack
+1.	WTCallBack(LibraryName,FunctionToCall) **Generate A Function That Call FunctionToCall() when an image which path containing LibraryName is loaded. You Can Init Hooks inside FunctionToCall**
+2.	WTAddCallBack **Register the callback with dyld**
 
 Please Note:
 
 1.	WTAdd can be called for many times. That's for adding Arguments
 2.	WTInit,WTSave,WTRelease Must Be Called Under any circumstances
 3.	Add Semicolons Yourself
+4.	Don't add semicolon to WTCallBack
+5.	Only One Set Of **dyld CallBack** Marcos Can Be Called In A Module
 
 ####Misc
 Some functions don't come with the binary and you'll have to wait the related library to be loaded 
@@ -64,6 +70,6 @@ Some functions don't come with the binary and you'll have to wait the related li
 
 I personally use a dyldCallBack for that.
 
-You might want to dlopen() that library itself
+You might want to dlopen() that library itself.However that will also cause performance issues
 
 

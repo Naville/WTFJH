@@ -154,6 +154,12 @@
 
 
 %end
+static void Loader(){
+%init(LSApplication);
+
+}
+WTCallBack(@"MobileCoreServices",Loader)
 extern void init_LSApplication_hook() {
-    %init(LSApplication);
+WTAddCallBack;
+  
 }

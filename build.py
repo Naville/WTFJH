@@ -65,9 +65,6 @@ def cleanUp():
 		os.system("rm ./Makefile")
 		os.system("rm ./Hooks/Obfuscation.h")
 		os.system("rm ./CompileDefines.xm")
-	if DEBUG!=True:
-			os.system("echo '' >ThirdPartyLog.log")
-			os.system("echo '' >MainLog.log")
 def BuildMakeFile():
 	global randomTweakName
 	global makeFileString
@@ -332,7 +329,8 @@ def main():
 	ParseArgs()
 	# Generate random Name to bypass detection
 	# os.remove("./Makefile")
-
+	os.system("echo \' \' >./MainLog.log")
+	os.system("echo \' \' >./ThirdPartyLog.log")
 	global randomTweakName
 	randomTweakName = id_generator()
 	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags.

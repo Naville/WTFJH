@@ -31,8 +31,11 @@ static NSArray* HWArgs=@[
 /*
 int	sysctlnametomib(const char *, int *, size_t *);//Probably Pointless To Hook
 */
+extern BOOL getBoolFromPreferences(NSString *preferenceValue);
+static int (*oldsyscall)(long request, long pid, long addr, long data);
 int (*old_sysctl)(int *, u_int, void *, size_t *, void *, size_t);
 int	(*old_sysctlbyname)(const char *, void *, size_t *, void *, size_t);
+static int (*oldptrace)(int _request, pid_t _pid, caddr_t _addr, int _data);
 int	new_sysctlbyname(const char *name, void *oldp, size_t *oldlenp, void *newp, size_t newlen){
 	if([CallStackInspector wasDirectlyCalledByApp]){
 
@@ -90,7 +93,47 @@ else{
 }
 }
 
+static int newsyscall(long request, long pid, long addr, long data) {
+int ret=0;
+if (getBoolFromPreferences(@"AntiAntiDebugging")==YES && request == 26) {//Index For Anti-Debugging
+ret=0;
+}
+else{
+ret= oldsyscall(request,pid,addr,data);
+}
+
+WTInit(@"syscall",@"syscall");
+WTAdd([NSNumber numberWithLong:request],@"request");
+WTAdd([NSNumber numberWithLong:pid],@"pid");
+WTAdd([NSNumber numberWithLong:addr],@"addr");
+WTAdd([NSNumber numberWithLong:data],@"data");
+WTReturn([NSNumber numberWithInt:ret]);
+WTSave;
+WTRelease;
+return ret;
+}
+
+
+static int newptrace(int _request, pid_t _pid, caddr_t _addr, int _data){
+
+if (getBoolFromPreferences(@"AntiAntiDebugging")==YES && _request == 31) {
+	_request = 1;
+}
+int ret=oldptrace(_request,_pid,_addr,_data);
+WTInit(@"ptrace",@"ptrace");
+WTAdd([NSNumber numberWithLong:_request],@"request");
+WTAdd([NSNumber numberWithLong:_pid],@"pid");
+WTAdd(objectTypeNotSupported,@"addr");
+WTAdd([NSNumber numberWithLong:_data],@"data");
+WTReturn([NSNumber numberWithInt:ret]);
+WTSave;
+WTRelease;
+return ret;
+
+}
 extern void init_sysctl_hook() {
    MSHookFunction((void *) sysctlbyname,(void *)new_sysctlbyname,(void **) &old_sysctlbyname);
    MSHookFunction((void *) sysctl,(void *)new_sysctl,(void **) &old_sysctl);
+   MSHookFunction((void *)MSFindSymbol(NULL,"_syscall"),(void *)newsyscall,(void **)&oldsyscall);
+   MSHookFunction((void *)MSFindSymbol(NULL,"_ptrace"), (void *)newptrace, (void **)&oldptrace);
 }

@@ -1,12 +1,12 @@
 #import "../SharedDefine.pch"
 #import <CoreFoundation/CoreFoundation.h>
- CFPropertyListRef (*old_MGCopyAnswer)(CFStringRef property);
- CFPropertyListRef (*old_MGCopyMultipleAnswers)(CFArrayRef questions, int __unknown0);
+ CFTypeRef (*old_MGCopyAnswer)(CFStringRef property);
+ CFTypeRef (*old_MGCopyMultipleAnswers)(CFArrayRef questions, int __unknown0);
  int (*old_MGSetAnswer)(CFStringRef question, CFTypeRef answer);
 
 
- CFPropertyListRef MGCopyAnswer(CFStringRef property){
-	CFPropertyListRef ReturnVal=old_MGCopyAnswer(property);
+ CFTypeRef MGCopyAnswer(CFStringRef property){
+	CFTypeRef ReturnVal=old_MGCopyAnswer(property);
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"libMobileGestalt" andMethod:@"MGCopyAnswer"];
 	[tracer addArgFromPlistObject:(__bridge NSString*)property withKey:@"QueryPropertyName"];
 	[tracer addReturnValueFromPlistObject:(__bridge NSArray*)ReturnVal];
@@ -14,11 +14,11 @@
 	[tracer release];
 	 return ReturnVal;
  }
-CFPropertyListRef MGCopyMultipleAnswers(CFArrayRef questions, int __unknown0){
+CFTypeRef MGCopyMultipleAnswers(CFArrayRef questions, int __unknown0){
 	CallTracer *tracer = [[CallTracer alloc] initWithClass:@"libMobileGestalt" andMethod:@"MGCopyMultipleAnswers"];
 	[tracer addArgFromPlistObject:(__bridge NSArray*)questions withKey:@"QueryPropertyNames"];
 	[tracer addArgFromPlistObject:[NSNumber numberWithInt:__unknown0] withKey:@"UsageUnknown"];
-	CFPropertyListRef ReturnVal=old_MGCopyMultipleAnswers(questions,__unknown0);
+	CFTypeRef ReturnVal=old_MGCopyMultipleAnswers(questions,__unknown0);
 	[tracer addReturnValueFromPlistObject:(__bridge NSArray*)ReturnVal];
 	[traceStorage saveTracedCall: tracer];
 	[tracer release];

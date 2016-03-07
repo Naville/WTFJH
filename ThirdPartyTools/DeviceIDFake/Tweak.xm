@@ -1,24 +1,16 @@
-#define PrefListPath @"/var/mobile/Preferences/naville.DeviceIDFake.plist"
-static BOOL getBoolFromPreferences(NSString *preferenceValue) {
-    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:PrefListPath];
-    if(preferences==nil){
-    	preferences=[NSMutableDictionary dictionary];
-    	[preferences setObject:[NSNumber numberWithBool:YES] forKey:preferenceValue];
-    	[preferences writeToFile:PrefListPath atomically:YES];
-    	return YES;
-
-    }
-    else{
-    id value = [preferences objectForKey:preferenceValue];
-    if (value == nil) {
-        return NO; // default to YES
-    }
-    [preferences release];
-    BOOL retVal=[value boolValue];
-    [value release];
-    return retVal;
-	}
+#define RandomNumber 1000
+static NSString* RandomString(int size){
+NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
+NSMutableString *s = [NSMutableString stringWithCapacity:size];
+for (NSUInteger i = 0; i < size; i++) {
+    u_int32_t r = arc4random() % [alphabet length];
+    unichar c = [alphabet characterAtIndex:r];
+    [s appendFormat:@"%C", c];
 }
+return s;
+}
+
+
 %group ASIdentifierManager
 %hook ASIdentifierManager
 -(NSUUID*)advertisingIdentifier{
@@ -29,11 +21,30 @@ static BOOL getBoolFromPreferences(NSString *preferenceValue) {
 }
 %end
 %end
+ static CFTypeRef (*old_MGCopyAnswer)(CFStringRef property);
+ static CFTypeRef MGCopyAnswer(CFStringRef property){
+    CFTypeRef X=old_MGCopyAnswer(property);
+    if (CFGetTypeID(X) == CFStringGetTypeID()) {
+        NSString* Y=RandomString([(NSString *)X length]);
+        CFRelease(X);
+        return Y;
+    }
+    else if(CFGetTypeID(X) == CFNumberGetTypeID()){
+        NSNumber* newNumber=@([(NSNumber*)X floatValue] + [[NSNumber numberWithInt: arc4random() % RandomNumber] floatValue]);
+        CFRelease(X);
+        return newNumber;
+
+    }
+    else{
+        return X;
+
+    }
+}
+
+
 
 %ctor{
-	if (getBoolFromPreferences(@"ASIdentifierManager")==YES){
-		%init(ASIdentifierManager);
-	}
-
+	%init(ASIdentifierManager);
+    MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyAnswer")),(void*)MGCopyAnswer, (void**)&old_MGCopyAnswer);
 
 }

@@ -1,0 +1,15 @@
+#import "../SharedDefine.pch"
+%group LSApplication
+	%hook LSApplicationProxy
+	+ (id)applicationProxyForBundleURL:(id)arg1;
+	+ (id)applicationProxyForIdentifier:(id)arg1;
+	+ (id)applicationProxyForIdentifier:(id)arg1 placeholder:(BOOL)arg2;
+	+ (id)applicationProxyForIdentifier:(id)arg1 roleIdentifier:(id)arg2;
+	+ (id)applicationProxyForItemID:(id)arg1;
+	+ (id)applicationProxyWithBundleUnitID:(unsigned long)arg1;
+
+	%end
+%end
+extern void init_LSApplication_hook() {
+    %init(LSApplication);
+}

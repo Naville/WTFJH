@@ -324,6 +324,8 @@ def buildThirdPartyComponents():
 				except Exception as inst:
 					print inst
 					print  (Fore.RED +"Build "+x+"Went Wrong. Rerun With DEBUG to see output")
+					cleanUp()
+					sys.exit(255)
 			global LinkerString
 			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
 def main():

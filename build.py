@@ -17,7 +17,7 @@ init(autoreset=True)
 
 # Global config
 makeFileString = ""
-PathList = ["Hooks/APIHooks/", "Hooks/SDKHooks/", "Hooks/Utils/","Hooks/ThirdPartyTools/"]
+PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/"]
 ManualObflist=ManualObfuscation.ManualList
 global toggleString
 toggleString = "#import \"./Hooks/Obfuscation.h\"\nvoid GlobalInit() {\n"

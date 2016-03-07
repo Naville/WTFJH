@@ -19,7 +19,7 @@ if (sys.argv[1] not in ValidType):
 		print x
 	sys.exit(-1)
 else:
-	outPath = outPath + sys.argv[1]+"Hooks/" + sys.argv[2] + ".xm"
+	outPath = outPath + sys.argv[1]+"/" + sys.argv[2] + ".xm"
 	xmString += "#import \"../SharedDefine.pch\"\n"
 	xmString += "%group " + sys.argv[2] + "\n"
 	xmString += "    // Insert Your Hooks Here\n"

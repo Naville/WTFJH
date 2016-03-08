@@ -61,7 +61,7 @@ Please Call Exactly In The Following Sequence
 
 #####dyld CallBack
 1.	WTCallBack(LibraryName,FunctionToCall) **Generate A Function That Call FunctionToCall() when an image which path containing LibraryName is loaded. You Can Init Hooks inside FunctionToCall**
-2.	WTAddCallBack **Register the callback with dyld**
+2.	WTAddCallBack(Loader) **Register the callback with dyld and execute Loader().Please Note That Loader Should Be The Function That Actually Init The Hooks,Not The CallBack**
 
 Please Note:
 

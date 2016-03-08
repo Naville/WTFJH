@@ -34,5 +34,5 @@ static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/
 					}\
 					[name release];\
 					}
-#define WTAddCallBack _dyld_register_func_for_add_image(&CallBackFunction);
+#define WTAddCallBack(LoaderFunction) _dyld_register_func_for_add_image(&CallBackFunction);LoaderFunction()
 

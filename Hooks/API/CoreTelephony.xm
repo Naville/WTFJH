@@ -119,23 +119,16 @@ typedef void (*CTServerConnectionCallback)(CTServerConnectionRef, CFStringRef, C
 
 int _CTServerConnectionSetVibratorState(int *, void *, int, int, int, int, int);
 */
-static void CTdyldCallBack(const struct mach_header* mh, intptr_t vmaddr_slide){
-	Dl_info image_info;
-	dladdr(mh, &image_info);//Will This Trigger Our Hook in DLFCN?
-	const char *image_name = image_info.dli_fname;
-	NSString* name=[NSString stringWithUTF8String:image_name];
-	if([name containsString:@"CoreTelephony"]){
+
+static void Loader(){
 	%init(CoreTelephony);
 	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCopyMobileEquipmentInfo")),(void*)new_CTServerConnectionCopyMobileEquipmentInfo, (void**)&old_CTServerConnectionCopyMobileEquipmentInfo);	
 	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellCount")),(void*)_CTServerConnectionCellMonitorGetCellCount, (void**)&old_CTServerConnectionCellMonitorGetCellCount);
 	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellInfo")),(void*)_CTServerConnectionCellMonitorGetCellInfo, (void**)&old_CTServerConnectionCellMonitorGetCellInfo);
-	
-	}
-	[name release];
-
 }
+WTCallBack(@"CoreTelephony",Loader)
 
 
 extern void init_CoreTelephony_hook(){
-_dyld_register_func_for_add_image(&CTdyldCallBack);
+WTAddCallBack(Loader);
 }

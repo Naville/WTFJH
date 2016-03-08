@@ -160,6 +160,6 @@ static void Loader(){
 }
 WTCallBack(@"MobileCoreServices",Loader)
 extern void init_LSApplication_hook() {
-WTAddCallBack;
+WTAddCallBack(Loader);
   
 }

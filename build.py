@@ -72,6 +72,10 @@ def cleanUp():
 	os.system("rm ./" + randomTweakName + ".plist")
 	os.system("rm ./*.dylib")
 	os.system("rm ./*.pyc")
+	print "Unlinking TheOS..."
+	os.system("rm ./theos")
+	os.system("rm ./ManualObfuscation.pyc")
+	os.system("rm -r ./.theos")
 	for x in buildlistdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x):
 			os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")
@@ -338,8 +342,9 @@ def buildThirdPartyComponents():
 				BuildLoader(x)
 				LoaderList.append(x)
 			if (DEBUG):
-				os.system("cd ./ThirdPartyTools/"+x+"/ &&make")
-				os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
+				SubDirectoryPath="./ThirdPartyTools/"+x
+				os.system("cd "+SubDirectoryPath+"/ &&make")
+				os.system("mv "+SubDirectoryPath+"/obj/"+x+".dylib ./")
 			else:
 				try:
 					subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && make"], stdout=open("ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
@@ -399,14 +404,10 @@ def main():
 				print "Building... Main"
 				x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
 				print "Make Exit With Status: ",x
-				os.system("rm ./CompileDefines.xm")
 			except Exception as inst:
 				buildSuccess=False
 				print inst
 				print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
-				os.system("rm ./" + randomTweakName + ".plist")
-				os.system("rm ./Makefile")
-				os.system("rm ./CompileDefines.xm")
 #Packaging
 	if buildSuccess==True:
 		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
@@ -424,10 +425,6 @@ def main():
 		if OBFUSCATION==True:
 			for x in ObfDict.keys():
 				print (Fore.CYAN +x+" Obfuscated To: "+ObfDict[x]+"\n")#Separate Lines For Readablity
-	print "Unlinking TheOS..."
-	os.system("rm ./theos")
-	os.system("rm ./ManualObfuscation.pyc")
-	os.system("rm -r ./.theos")
 	print "Finished."
 
 if __name__ == "__main__":

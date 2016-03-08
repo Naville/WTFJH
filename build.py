@@ -47,7 +47,7 @@ def buildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
 	fileList=listdir(path)
 	for x in SkippedList:
 		for y in fileList:
-			if y.endswith(x+".xm"):#Only Remove Module Files
+			if (y == x+".xm"):#Only Remove Module Files
 				fileList.remove(y)
 				print y+" Removed"
 	return fileList

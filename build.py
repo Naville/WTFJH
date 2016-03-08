@@ -9,6 +9,7 @@ import random
 import plistlib
 import argparse
 import re
+import signal
 from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
@@ -39,9 +40,18 @@ global LinkerString
 LinkerString=""
 global currentVersion
 currentVersion=0
-
 global SkippedList
 SkippedList=list()
+
+#Setup SIGINT Handler
+def signal_handler(signal, frame):
+	print (Fore.RED+"Force-Quit,Cleaning-Up")
+	cleanUp()
+	print "ByeBye"
+	sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+#End
+
 
 def buildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
 	fileList=listdir(path)
@@ -49,7 +59,7 @@ def buildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
 		for y in fileList:
 			if (y == x+".xm"):#Only Remove Module Files
 				fileList.remove(y)
-				print y+" Removed"
+				print (Fore.RED+y+" Removed")
 	return fileList
 #Clean-Up
 def cleanUp():
@@ -60,6 +70,8 @@ def cleanUp():
 	os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 	os.system("rm ./" + randomTweakName + ".plist")
+	os.system("rm ./*.dylib")
+	os.system("rm ./*.pyc")
 	for x in buildlistdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x):
 			os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")

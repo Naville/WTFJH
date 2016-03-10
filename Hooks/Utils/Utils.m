@@ -41,6 +41,32 @@ if (numClasses > 0 )
 return returnArray;
 }
 #ifdef PROTOTYPE
+static float IvarMatchingScore(NSDictionary* targetClassIvarDict,NSDictionary* ivarDictDB){
+    for(NSString* IvarKey in ivarDictDB.allKeys){//IVAR Names. a.k.a. Keys
+        NSDictionary* RecordInDB=[ivarDictDB objectForKey:IvarKey];//Corrensponding Item in TargetClass
+        NSDictionary* InfoOfTarget=[targetClassIvarDict objectForKey:IvarKey]
+        if([RecordInDB objectForKey:IvarKey]!=nil && [InfoOfTarget objectForKey:IvarKey]!=nil){//If This Key Exists In Both NSDictionary
+        
+        }
+
+       else{
+        //Name Didn't Match. Iterate All Records
+
+        }
+    
+    }
+
+}
+static float SuperScore(NSString* dbSuper,NSString* className){//Score For Super Class
+        NSString* SuperClass=[NSString stringWithFormat:@"%s",class_getName(class_getSuperclass(objc_getClass(className.UTF8String)))];
+        if([SuperClass isEqualToString:dbSuper]){
+
+            return SuperClassNameMatch;
+        }
+        else{
+            return 0;
+        }
+}
 -(NSArray*)possibleClassNameFromSignature:(NSString*)className{
     NSMutableDictionary* MatchedIvarDatabase=[NSMutableDictionary dictionary];
 
@@ -48,59 +74,13 @@ return returnArray;
     NSMutableDictionary* methodDict=[RuntimeUtils methodsForClass:className];
     NSMutableDictionary* ivarDict=[RuntimeUtils ivarForClass:className];
     NSMutableDictionary* protoDict=[RuntimeUtils protocalForClass:className];
-    NSString* SuperClass=[NSString stringWithFormat:@"%s",class_getName(class_getSuperclass(objc_getClass(className.UTF8String)))];
     for(id key in self.signatureDatabase.allKeys){
     NSDictionary* currentSig=[self.signatureDatabase objectForKey:key];
     double Confidence=0.00;
-    if [[currentSig objectForKey:@"SuperClass"] isEqualToString:SuperClass]{//Superclass Compare
-        Confidence=Confidence+0.1;
-    }
-    double FullMatchScoreForIvar=TotalIvarScore/ivarDict.allKeys.count;
-    for(id IvarKey in ivarDict.allKeys){//IVAR Names. a.k.a. Keys
-        NSDictionary* RecordInDB=[[currentSig objectForKey:@"Ivar"] objectForKey:IvarKey];
-        if (RecordInDB!=nil){//Name Match. Matching Signatures
-            if([[RecordInDB objectForKey:@"Offset"] isEqualToString:[[ivarDict objectForKey:IvarKey] objectForKey:@"Offset"]){
-                Confidence=Confidence+FullMatchScoreForIvar*IvarOffsetMatch;
-            }
-            if([[RecordInDB objectForKey:@"TypeEncoding"] isEqualToString:[[ivarDict objectForKey:IvarKey] objectForKey:@"TypeEncoding"]){
-                Confidence=Confidence+FullMatchScoreForIvar*IvarTypeEncodingMatch;
-            }
-            if([[RecordInDB objectForKey:@"Name"] isEqualToString:[[ivarDict objectForKey:IvarKey] objectForKey:@"Name"]){
-                Confidence=Confidence+FullMatchScoreForIvar*IvarNameMatch;
-            }
-
-        }
-       else{
-        //Name Didn't Match. Iterate All Records
-            for (NSString* SigName in [[currentSig objectForKey:@"Ivar"] allKeys]){
-                NSDictionary* RecordInDB=[[currentSig objectForKey:@"Ivar"] objectForKey:SigName];//One Record in DB
-                if([[RecordInDB objectForKey:@"Offset"] isEqualToString:[[ivarDict objectForKey:IvarKey] objectForKey:@"Offset"]){
-                Confidence=Confidence+FullMatchScoreForIvar*IvarOffsetMatch;
-                    }
-                if([[RecordInDB objectForKey:@"TypeEncoding"] isEqualToString:[[ivarDict objectForKey:IvarKey] objectForKey:@"TypeEncoding"]){
-                Confidence=Confidence+FullMatchScoreForIvar*IvarTypeEncodingMatch;
-                    }
-                if([[RecordInDB objectForKey:@"Name"] isEqualToString:[[ivarDict objectForKey:IvarKey] objectForKey:@"Name"]){
-                Confidence=Confidence+FullMatchScoreForIvar*IvarNameMatch;
-                    }                
-                if(Confidence>self.MinimumMatchConfidence.intValue){
-                    NSArray* oldArray=[MatchedIvarDatabase objectForKey:[ivarDict objectForKey:IvarKey]];//Key is IVAR Name in Binary
-                    [oldArray addObject:[RecordInDB objectForKey:@"Name"]];//Add current Match
-                    [MatchedDatabase setObject:oldArray forKey:[ivarDict objectForKey:IvarKey]];
-                    //Add This To MatchedDatabase
-
-                }
-
-            }
-        
-
-        }
-    //Insert Other matches Here
-    
-    }
+    Confidence=Confidence+SuperScore([currentSig objectForKey:@"SuperClass"],className);
 
 
-    [currentSig release];
+
     }
     [propDict release];
     [methodDict release];
@@ -119,6 +99,7 @@ return returnArray;
         NSString* curName=[NSString stringWithUTF8String:Nam];
         if([curName containsString:WTFJHTWEAKNAME]){
             //We Found Ourself
+            intptr_t ASLROffset=_dyld_get_image_vmaddr_slide(i);
 #ifndef _____LP64_____
             uint32_t size=0;
             const struct mach_header*   selfHeader=(const struct mach_header*)_dyld_get_image_header(i);
@@ -129,6 +110,7 @@ return returnArray;
             const struct mach_header_64*   selfHeader=(const struct mach_header_64*)_dyld_get_image_header(i);
             char * data=getsectdatafromheader_64(selfHeader,"WTFJH","SIGDB",&size);
 #endif
+            data=ASLROffset+data;//Add ASLR Offset To Pointer And Fix Address
             NSData* SDData=[NSData dataWithBytes:data length:size];
             self.signatureDatabase = [NSJSONSerialization JSONObjectWithData:SDData
                                                              options:NSJSONReadingAllowFragments

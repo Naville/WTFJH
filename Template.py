@@ -11,6 +11,9 @@ xmString = ""
 outPath = "./Hooks/"
 if (len(sys.argv) < 2):
 	print "Template.py ModuleType ModuleName"
+	print "Valid ModuleType:"
+	for name in ValidType:
+		print name
 	sys.exit(-1)
 if (sys.argv[1] not in ValidType):
 	print "Wrong argument #1"

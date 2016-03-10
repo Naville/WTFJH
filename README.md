@@ -12,7 +12,10 @@
 > Also make VERSION changes easy-trackable by reviewing history of **VERSION**
 
 # Usage
->Standard User: *./build.py*
+>Standard User:
+
+1.	Download Official Cycript SDK And Extract Cycript.framework to project root
+2.	*./build.py*
 
 >HackingGuide.md Contains Detailed Explanation
 

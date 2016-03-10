@@ -40,4 +40,6 @@ static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/
 
 #define RMASLRCenter @"com.naville.wtfjh.rmaslr"
 
+#define CyPort 2588
+
 

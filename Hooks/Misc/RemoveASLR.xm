@@ -5,6 +5,7 @@
 #include <string.h> 
 #include <stdint.h>
 #include <mach-o/loader.h>
+extern NSMutableArray* SplitMachO(NSString* Path) ;
 
 void hexify(unsigned char *data, uint32_t size){
 	while(size--)
@@ -125,7 +126,16 @@ int removeASLRAtPath(NSString* NSPath){
 -(void)HandleNotification:(NSNotification *)notification{
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	NSString* path=[[notification userInfo] objectForKey:@"Path"];
-	removeASLRAtPath(path);
+	NSArray* ThinData=SplitMachO(path);
+	int ArchCounter=0;
+	for (NSData* curData in ThinData){
+		NSString* curpath=[NSString stringWithFormat:@"%@ThinData%i",[[NSProcessInfo processInfo] processName],ArchCounter];
+	[curData writeToFile:curpath atomically:YES];
+	removeASLRAtPath(curpath);
+	NSLog(@"Saved Yet Another ASLR=0 Binary To :%@",curpath);
+	ArchCounter=ArchCounter+1;
+
+	}
 
 }
 

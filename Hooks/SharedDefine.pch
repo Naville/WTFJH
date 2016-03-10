@@ -36,3 +36,6 @@ static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/
 					}
 #define WTAddCallBack(LoaderFunction) _dyld_register_func_for_add_image(&CallBackFunction);LoaderFunction()
 
+#define RMASLRCenter @"com.naville.wtfjh.rmaslr"
+
+

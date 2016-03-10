@@ -4,6 +4,8 @@
 #import <dlfcn.h>
 extern NSString* RandomString();
 extern void init_TEMPLATENAME_hook(){
+#ifdef PROTOTYPE 
+//Because We Ain't Ready Yet. No Test
 	 for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);
         NSString* curName=[[NSString stringWithUTF8String:Nam] autorelease];
@@ -41,4 +43,5 @@ extern void init_TEMPLATENAME_hook(){
 
 
     }
+#endif
 }

@@ -6,7 +6,7 @@ import sys
 import string
 import random
 from os import listdir
-ValidType=["SDK","API","Utils","ThirdPartyTools"]
+ValidType=["SDK","API","Utils","ThirdPartyTools","Misc"]
 xmString = ""
 outPath = "./Hooks/"
 if (len(sys.argv) < 2):

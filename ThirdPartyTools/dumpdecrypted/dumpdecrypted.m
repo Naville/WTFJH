@@ -15,6 +15,8 @@
 #include <mach-o/fat.h>
 #include <mach-o/loader.h>
 
+#import "../../Hooks/SharedDefine.pch"
+
 struct ProgramVars {
     struct mach_header*	mh;
     int*		NXArgcPtr;
@@ -148,12 +150,26 @@ void dumptofile(int argc, const char **argv, const char **envp, const char **app
                     strlcat(npath, buffer, sizeof(npath));
                     NSLog(@"[+] Opening %s for writing.\n", npath);
                     outfd = open(npath, O_RDWR|O_CREAT|O_TRUNC, 0644);
+                    //Post Path Notification
+                    NSString* NSpath=[[NSString stringWithUTF8String:npath] autorelease];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RMASLRCenter
+                      object:nil
+                    userInfo:[NSDictionary dictionaryWithObject:NSpath forKey:@"Path"]];
+
                 }
                 if (outfd == -1) {
                     perror("[-] Failed opening");
                     NSLog(@"\n");
                     return; //_exit(1);
                 }
+            }
+            else{
+                //First Path Got Right
+                    NSString* NSpath=[[NSString stringWithUTF8String:npath] autorelease];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RMASLRCenter
+                      object:nil
+                    userInfo:[NSDictionary dictionaryWithObject:NSpath forKey:@"Path"]];
+
             }
             
             /* calculate address of beginning of crypted data */

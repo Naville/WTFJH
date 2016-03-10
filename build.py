@@ -18,7 +18,7 @@ init(autoreset=True)
 
 # Global config
 makeFileString = ""
-PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/"]
+PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/","Hooks/Misc/"]
 ManualObflist=ManualObfuscation.ManualList
 global toggleString
 toggleString = "#import \"./Hooks/Obfuscation.h\"\nvoid GlobalInit() {\n"
@@ -359,6 +359,7 @@ def buildThirdPartyComponents():
 			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
 def main():
 	ParseArgs()
+	os.system("echo \" \" >./Hooks/Obfuscation.h")
 	# Generate random Name to bypass detection
 	# os.remove("./Makefile")
 	os.system("echo \' \' >./MainLog.log")

@@ -42,9 +42,10 @@ return returnArray;
 }
 #ifdef PROTOTYPE
 static float IvarMatchingScore(NSDictionary* targetClassIvarDict,NSDictionary* ivarDictDB){
+    float Score=0
     for(NSString* IvarKey in ivarDictDB.allKeys){//IVAR Names. a.k.a. Keys
         NSDictionary* RecordInDB=[ivarDictDB objectForKey:IvarKey];//Corrensponding Item in TargetClass
-        NSDictionary* InfoOfTarget=[targetClassIvarDict objectForKey:IvarKey]
+        NSDictionary* InfoOfTarget=[targetClassIvarDict objectForKey:IvarKey];
         if([RecordInDB objectForKey:IvarKey]!=nil && [InfoOfTarget objectForKey:IvarKey]!=nil){//If This Key Exists In Both NSDictionary
         
         }
@@ -55,7 +56,7 @@ static float IvarMatchingScore(NSDictionary* targetClassIvarDict,NSDictionary* i
         }
     
     }
-
+return Score;
 }
 static float SuperScore(NSString* dbSuper,NSString* className){//Score For Super Class
         NSString* SuperClass=[NSString stringWithFormat:@"%s",class_getName(class_getSuperclass(objc_getClass(className.UTF8String)))];
@@ -78,8 +79,6 @@ static float SuperScore(NSString* dbSuper,NSString* className){//Score For Super
     NSDictionary* currentSig=[self.signatureDatabase objectForKey:key];
     double Confidence=0.00;
     Confidence=Confidence+SuperScore([currentSig objectForKey:@"SuperClass"],className);
-
-
 
     }
     [propDict release];

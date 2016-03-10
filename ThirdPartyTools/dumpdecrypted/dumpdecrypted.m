@@ -243,6 +243,19 @@ void dumptofile(int argc, const char **argv, const char **envp, const char **app
         lc = (struct load_command *)((unsigned char *)lc+lc->cmdsize);
     }
     NSLog(@"[-] This mach-o file is not encrypted. Nothing was decrypted.\n");
+    //Direct Copy mainExecutable
+    NSURL* mainExeURL=[NSBundle mainBundle].executableURL;
+    NSString* NewPath=[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NewPath=[NewPath stringByAppendingString:[[NSProcessInfo processInfo] processName]];
+    [[NSFileManager defaultManager] copyItemAtURL:mainExeURL toURL:[NSURL URLWithString:NewPath] error:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RMASLRCenter
+                      object:nil
+                    userInfo:[NSDictionary dictionaryWithObject:NewPath forKey:@"Path"]];
+
+    [NewPath release];
+
+
+    //
     return; //_exit(1);
 }
 

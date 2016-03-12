@@ -10,3 +10,4 @@ wax.txt
 *.log
 theos
 Cycript.framework
+*.zip

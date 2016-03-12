@@ -1,8 +1,5 @@
 #import "../SharedDefine.pch"
 #import <dlfcn.h>
-
-#ifdef PROTOTYPE
-//Pointless. Rarely Used By Apps And Called Too Much By System.Producing Tons Of Useless Message
 int (*old_dladdr)(const void *, Dl_info *);
 int new_dladdr(const void * addr, Dl_info * info){
     int ret = old_dladdr(addr, info);
@@ -15,7 +12,6 @@ int new_dladdr(const void * addr, Dl_info * info){
     }
     return ret;
 }
-#endif
 
 
 void * (*old_dlopen)(const char * __path, int __mode);
@@ -45,9 +41,7 @@ void * new_dlopen(const char * __path, int __mode) {
 
 
 extern void init_dlfcn_hook() {
-#ifdef PROTOTYPE
     MSHookFunction((void*)dladdr,(void*)new_dladdr, (void**)&old_dladdr);
-#endif
     MSHookFunction((void*)dlsym,(void*)new_dlsym, (void**)&old_dlsym);
     MSHookFunction((void*)dlopen,(void*)new_dlopen, (void**)&old_dlopen);
 }

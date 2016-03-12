@@ -10,10 +10,32 @@
 	}
 	grantpt(self->fatherPTY);
 	unlockpt(self->fatherPTY);
+	self->SSHPID = fork();
+	if(self->SSHPID==0){
+		//Success
+		self->subprocessPTY=open(ptsname(self->fatherPTY),O_RDWR | O_NOCTTY);
+		if(self->subprocessPTY==-1){
+			//Error
+			return nil;
+		}
+		setsid();
+        ioctl(self->subprocessPTY, TIOCSCTTY, 0);
+        //Redirect Subprocess's STDIN/OUT/ERR To The SubPTY
+        dup2(self->subprocessPTY, STDIN_FILENO);
+        dup2(self->subprocessPTY, STDOUT_FILENO);
+        dup2(self->subprocessPTY, STDERR_FILENO);
+        close(self->fatherPTY);
 
+	}
 
 
 	return self;
+}
+-(void)ExecuteCommand:(NSString*)command{
+	char* charCommand=command.UTF8String;
+	write(self->fatherPTY, &charCommand, (size_t)[command length]);
+
+
 }
 -(void)release{
 	close(self->subprocessPTY);

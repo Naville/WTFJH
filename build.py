@@ -16,6 +16,13 @@ from colorama import Fore, Back, Style
 import ManualObfuscation
 init(autoreset=True)
 
+
+def Exec(Command):
+	try:
+		subprocess.check_call([Command], stdout=open("/dev/null", 'a'), stderr=subprocess.STDOUT, shell=True)
+	except:
+		pass
+
 # Global config
 makeFileString = ""
 PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/","Hooks/Misc/"]
@@ -64,34 +71,36 @@ def buildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
 #Clean-Up
 def cleanUp():
 	print (Fore.YELLOW +"Cleaning Misc Files")
-	os.system("rm ./layout/DEBIAN/control")
-	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
-	os.system("rm -rf ./obj")
-	os.system("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
-	os.system("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
-	os.system("rm ./" + randomTweakName + ".plist")
-	os.system("rm ./*.dylib")
-	os.system("rm ./*.pyc")
+	Exec("rm ./layout/DEBIAN/control")
+	Exec("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".dylib")
+	Exec("rm -rf ./obj")
+	Exec("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
+	Exec("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
+	Exec("rm ./" + randomTweakName + ".plist")
+	Exec("rm ./*.dylib")
+	Exec("rm ./*.pyc")
 	print "Unlinking TheOS..."
-	os.system("rm ./theos")
-	os.system("rm ./ManualObfuscation.pyc")
-	os.system("rm -r ./.theos")
+	Exec("rm ./theos")
+	Exec("rm ./ManualObfuscation.pyc")
+	Exec("rm -r ./.theos")
 	for x in buildlistdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x):
-			os.system("rm -rf ./ThirdPartyTools/"+x+"/obj/")
-			os.system("rm -rf ./"+x+".dylib")
+			Exec("rm -rf ./ThirdPartyTools/"+x+"/obj/")
+			Exec("rm -rf ./ThirdPartyTools/"+x+"/.theos/")
+			Exec("rm -rf ./ThirdPartyTools/"+x+"/theos/")
+			Exec("rm -rf ./"+x+".dylib")
 	for x in LoaderList:
 		#Clean-Up Auto-Generated Loaders
 		print (Fore.YELLOW +"Cleaning:"+x+"Loader")
-		os.system("rm ./Hooks/ThirdPartyTools/"+x+".xm")
+		Exec("rm ./Hooks/ThirdPartyTools/"+x+".xm")
 	if (DEBUG):
 		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
 		if OBFUSCATION==False:
-			os.system("rm ./Hooks/Obfuscation.h")
+			Exec("rm ./Hooks/Obfuscation.h")
 	else:
-		os.system("rm ./Makefile")
-		os.system("rm ./Hooks/Obfuscation.h")
-		os.system("rm ./CompileDefines.xm")
+		Exec("rm ./Makefile")
+		Exec("rm ./Hooks/Obfuscation.h")
+		Exec("rm ./CompileDefines.xm")
 def BuildMakeFile():
 	global randomTweakName
 	global makeFileString
@@ -326,7 +335,7 @@ def BuildLoader(ModuleName):
 	f.write(Template)
 	f.close()
 def buildThirdPartyComponents():
-	os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
+	Exec("find . -type f -name .DS_Store -delete && xattr -cr *")
 	for x in buildlistdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x)==False:
 			pass
@@ -343,12 +352,15 @@ def buildThirdPartyComponents():
 				LoaderList.append(x)
 			if (DEBUG):
 				SubDirectoryPath="./ThirdPartyTools/"+x
-				os.system("cd "+SubDirectoryPath+"/ &&make")
+				os.system("cd "+SubDirectoryPath+"/ && ln -s $THEOS theos; mkdir .theos; mkdir .theos/obj; ln -s ./.theos/obj obj &&make")
 				os.system("mv "+SubDirectoryPath+"/obj/"+x+".dylib ./")
 			else:
 				try:
+					try:
+						subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && ln -s $THEOS theos; mkdir .theos; mkdir .theos/obj; ln -s ./.theos/obj obj && make"], stdout=open("/dev/null", 'a'), stderr=subprocess.STDOUT, shell=True)
+					except:
+						pass
 					subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && make"], stdout=open("ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-
 					os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
 				except Exception as inst:
 					print inst

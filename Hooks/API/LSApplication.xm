@@ -24,10 +24,40 @@
 	return ret;
 
 }
++ (id)applicationProxyForItemID:(id)arg1{
+
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"applicationProxyForItemID:");
+	WTAdd(arg1,@"ItemID");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
++ (id)applicationProxyWithBundleUnitID:(unsigned long)arg1{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"applicationProxyWithBundleUnitID:");
+	WTAdd([NSNumber numberWithUnsignedLong:arg1],@"BundleUnitID");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
+- (id)VPNPlugins{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"VPNPlugins");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
 /*
-+ (id)applicationProxyForItemID:(id)arg1;
-+ (id)applicationProxyWithBundleUnitID:(unsigned long)arg1;
-- (id)VPNPlugins;
 - (id)_initWithBundleUnit:(unsigned long)arg1 applicationIdentifier:(id)arg2;
 - (id)appStoreReceiptURL;
 - (id)appTags;
@@ -35,7 +65,6 @@
 - (id)applicationType;
 - (id)audioComponents;
 - (long)bundleModTime;
-- (id)description;
 - (id)deviceFamily;
 - (id)deviceIdentifierForVendor;
 - (id)directionsModes;
@@ -61,18 +90,60 @@
 - (id)staticDiskUsage;
 - (id)teamID;
 - (id)userActivityStringForAdvertisementData:(id)arg1;
-- (id)vendorName;
+- (id)vendorName;*/
 %end
-%hook LSApplicationWorkspace
-+ (id)defaultWorkspace;
 
-- (id)URLOverrideForURL:(id)arg1;
+%hook LSApplicationWorkspace
++ (id)defaultWorkspace{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationWorkspace",@"defaultWorkspace");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+
+}
+
+- (id)URLOverrideForURL:(id)arg1{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationWorkspace",@"URLOverrideForURL:");
+	WTAdd(arg1,@"URL");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+}
+- (id)allApplications{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationWorkspace",@"allApplications");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;	
+}
+- (id)allInstalledApplications{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationWorkspace",@"allInstalledApplications");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;	
+}
+/*
 - (void)_LSClearSchemaCaches;
 - (BOOL)_LSPrivateRebuildApplicationDatabasesForSystemApps:(BOOL)arg1 internal:(BOOL)arg2 user:(BOOL)arg3;
 - (void)_clearCachedAdvertisingIdentifier;
 - (void)addObserver:(id)arg1;
-- (id)allApplications;
-- (id)allInstalledApplications;
 - (id)applicationForOpeningResource:(id)arg1;
 - (id)applicationForUserActivityDomainName:(id)arg1;
 - (id)applicationForUserActivityType:(id)arg1;

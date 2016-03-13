@@ -4,10 +4,7 @@
 
 /*
 To Implement:
-Class objc_getClass(const char *name)
-const char *object_getClassName(id obj)
 objc_getMetaClass(const char *name)
-IMP class_getMethodImplementation(Class cls, SEL name) 
 BOOL class_respondsToSelector(Class cls, SEL sel)
 class_replaceMethod(Class cls, SEL name, IMP imp, 
                                     const char *types) 
@@ -27,7 +24,8 @@ NSString* (*old_NSStringFromSelector)(SEL aSelector);
 SEL (*old_NSSelectorFromString)(NSString* aSelectorName);
 BOOL (*old_class_addMethod)(Class cls, SEL name, IMP imp,const char *types);
 BOOL (*old_class_addIvar)(Class cls, const char *name, size_t size,uint8_t alignment, const char *types);
-
+Class (*old_objc_getClass)(const char *name);
+IMP (*old_class_getMethodImplementation)(Class cls, SEL name);
 
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
@@ -142,7 +140,39 @@ BOOL new_class_addIvar(Class cls, const char *name, size_t size,uint8_t alignmen
     return old_class_addIvar(cls,name,size,alignment,types);
     
 }
+Class new_objc_getClass(char* Name){
+	if(WTShouldLog){
+		NSString* ClassName=[NSString stringWithUTF8String:Name];
+		WTInit(@"ObjCRuntime",@"objc_getClass");
+		WTAdd(ClassName,@"ClassName");
+		WTSave;
+		WTRelease;
+		[ClassName release];
+	}
+	return old_objc_getClass(Name);
+}
 
+IMP new_class_getMethodImplementation(Class cls, SEL name){
+	IMP ret=old_class_getMethodImplementation(cls,name);
+	if(WTShouldLog){
+		NSString* ClassName=NSStringFromClass(cls);
+		NSString* SELName=NSStringFromSelector(name);
+		NSString* IMPAddress=[NSString stringWithFormat:@"%p",ret];
+		WTInit(@"ObjCRuntime",@"class_getMethodImplementation");
+		WTAdd(ClassName,@"ClassName");
+		WTAdd(SELName,@"SelectorName");
+		WTAdd(IMPAddress,@"IMPAddress");
+		WTSave;
+		WTRelease;
+		[ClassName release];
+		[SELName release];
+		[IMPAddress release];
+	}
+	return ret;
+
+
+
+}
 extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
    MSHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
@@ -152,4 +182,5 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)NSSelectorFromString,(void*)new_NSSelectorFromString, (void**)&old_NSSelectorFromString);
    MSHookFunction((void*)class_addMethod,(void*)new_class_addMethod, (void**)&old_class_addMethod);
    MSHookFunction((void*)class_addIvar,(void*)new_class_addIvar, (void**)&old_class_addIvar);
+   MSHookFunction((void*)objc_getClass,(void*)new_objc_getClass, (void**)&old_objc_getClass);
 }

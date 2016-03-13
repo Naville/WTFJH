@@ -49,6 +49,8 @@ global currentVersion
 currentVersion=0
 global SkippedList
 SkippedList=list()
+global InitialCWD
+InitialCWD=os.getcwd()
 
 #Setup SIGINT Handler
 def signal_handler(signal, frame):
@@ -129,7 +131,7 @@ def LINKTHEOS():#For God's Sake. Keep Your Codes Clean is IMPORTANT. We'll Remov
 	if (os.path.exists("theos") == False):
 		print "TheOS link doesn't exist, creating..."
 		if (os.environ.get('THEOS') != None):
-			os.system("ln -s $THEOS theos; mkdir .theos; mkdir .theos/obj; ln -s ./.theos/obj obj")
+			os.system("ln -s $THEOS theos && mkdir .theos && mkdir .theos/obj && ln -s ./.theos/obj obj")
 		else:
 			print "$THEOS ENV not set."
 			sys.exit(255)
@@ -336,9 +338,10 @@ def BuildLoader(ModuleName):
 	f.close()
 def buildThirdPartyComponents():
 	Exec("find . -type f -name .DS_Store -delete && xattr -cr *")
-	for x in buildlistdir("./ThirdPartyTools"):
-		if os.path.isdir("./ThirdPartyTools/"+x)==False:
-			pass
+	for x in buildlistdir("ThirdPartyTools"):
+		os.chdir(InitialCWD)#Make Sure CWD We've changed in buildThirdPartyComponents() is set back
+		if os.path.isdir("ThirdPartyTools/"+x)==False:
+			print (Fore.YELLOW+"ThirdPartyTools/"+x+" Not A Folder. Skipped")
 		else:
 			print "ThirdPartyTools---Building:",x
 			if len(x)>16:
@@ -352,21 +355,37 @@ def buildThirdPartyComponents():
 				LoaderList.append(x)
 			if (DEBUG):
 				SubDirectoryPath="./ThirdPartyTools/"+x
-				os.system("cd "+SubDirectoryPath+"/ && ln -s $THEOS theos; mkdir .theos; mkdir .theos/obj; ln -s ./.theos/obj obj &&make")
-				os.system("mv "+SubDirectoryPath+"/obj/"+x+".dylib ./")
+				origCH=os.getcwd()
+				os.chdir(SubDirectoryPath)
+				os.system("rm theos")
+				os.system("ln -s $THEOS theos")
+				os.system("mkdir .theos")
+				os.system("mkdir .theos/obj")
+				os.system("ln -s .theos/obj obj")
+				os.system("make")
+				os.system("mv ./obj/"+x+".dylib ../../")
+				os.chdir(origCH)
 			else:
+				Error=None
 				try:
-					try:
-						subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && ln -s $THEOS theos; mkdir .theos; mkdir .theos/obj; ln -s ./.theos/obj obj && make"], stdout=open("/dev/null", 'a'), stderr=subprocess.STDOUT, shell=True)
-					except:
-						pass
-					subprocess.check_call(["cd ./ThirdPartyTools/"+x+" && make"], stdout=open("ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					os.system("mv ./ThirdPartyTools/"+x+"/obj/"+x+".dylib ./")
+					SubDirectoryPath="./ThirdPartyTools/"+x
+					origCH=os.getcwd()
+					os.chdir(SubDirectoryPath)
+					subprocess.check_call(["rm theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["ln -s $THEOS theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["mkdir .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["mkdir .theos/obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["ln -s .theos/obj obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					Error=subprocess.check_call(["make"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["mv ./obj/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					os.chdir(origCH)						
 				except Exception as inst:
-					print inst
-					print  (Fore.RED +"Build "+x+"Went Wrong. Rerun With DEBUG to see output")
-					cleanUp()
-					sys.exit(255)
+					if (isinstance(inst,subprocess.CalledProcessError) and (Error==None or Error==0)):
+						print (Fore.YELLOW+"Minor Error Took Place When Building "+x+" ,Ignored")
+					else:
+						print  (Fore.RED +"Build "+x+"Went Wrong. Rerun With DEBUG to see output")
+						cleanUp()
+						sys.exit(255)
 			global LinkerString
 			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
 def main():
@@ -380,6 +399,7 @@ def main():
 	randomTweakName = id_generator()
 	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags.
 	#Call buildThirdPartyComponents() before generating Makefile. Or else the loaders won't be injected
+	os.chdir(InitialCWD)#Make Sure CWD We've changed in buildThirdPartyComponents() is set back
 	toggleModule()
 	subModuleList()
 	LINKTHEOS()

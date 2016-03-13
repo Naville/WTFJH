@@ -5,6 +5,7 @@ char * (*old_getsectdata)(const char *segname,const char *sectname,unsigned long
 const struct section * (*old_getsectbyname)(const char *segname,const char *sectname);
 const struct segment_command * (*old_getsegbyname)(const char *segname);
 char * (*old_getsectdatafromheader_64)(const struct mach_header_64 *mhp,const char *segname,const char *sectname,uint64_t *size);
+char * (*old_getsectiondata)(const struct mach_header *mhp,const char *segname,const char *sectname,unsigned long *size);
 /*extern char *getsectdatafromFramework(
     const char *FrameworkName,
     const char *segname,
@@ -16,12 +17,6 @@ extern unsigned long get_etext(void);
 extern unsigned long get_edata(void);
 
  * Runtime interfaces for 32-bit Mach-O programs.
-
-extern uint8_t *getsectiondata(
-    const struct mach_header *mhp,
-    const char *segname,
-    const char *sectname,
-    unsigned long *size);
 
 extern uint8_t *getsegmentdata(
     const struct mach_header *mhp,
@@ -140,10 +135,35 @@ char * new_getsectdatafromheader_64(const struct mach_header_64 *mhp,const char 
     return ret;
 
 }
+char * new_getsectiondata(const struct mach_header *mhp,const char *segname,const char *sectname,unsigned long *size){
+    char* ret=old_getsectiondata(mhp,segname,sectname,size);
+    if(WTShouldLog){
+        NSString* NSSegName=[NSString stringWithUTF8String:segname];
+        NSString* NSSectName=[NSString stringWithUTF8String:sectname];
+        NSData* SectData=[NSData dataWithBytes:ret length:*size];
+        NSString* HeaderAddress=[NSString stringWithFormat:@"%p",mhp];
+        WTInit(@"Mach-O",@"getsectdata");
+        WTAdd(NSSegName,@"SegmentName");
+        WTAdd(NSSectName,@"SectionName");
+        WTAdd(SectData,@"SectionData");
+        WTAdd(HeaderAddress,@"HeaderAddress");
 
+        [NSSectName release];
+        [NSSegName release];
+        [SectData release];
+        [HeaderAddress release];
+    }
+    return ret;    
+
+
+}
+
+
+//Init Hooks
 extern void init_MachO_hook() {
 	MSHookFunction((void*)getsectdata,(void*)new_getsectdata, (void**)&old_getsectdata);
     MSHookFunction((void*)getsectbyname,(void*)new_getsectbyname, (void**)&old_getsectbyname);
     MSHookFunction((void*)getsegbyname,(void*)new_getsegbyname, (void**)&old_getsegbyname);
     MSHookFunction((void*)getsectdatafromheader_64,(void*)new_getsectdatafromheader_64, (void**)&old_getsectdatafromheader_64);
+    MSHookFunction((void*)getsectiondata,(void*)new_getsectiondata, (void**)&old_getsectiondata);
 }

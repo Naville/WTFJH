@@ -5,11 +5,39 @@
 /*
 To Implement:
 objc_getMetaClass(const char *name)
-BOOL class_respondsToSelector(Class cls, SEL sel)
-class_replaceMethod(Class cls, SEL name, IMP imp, 
-                                    const char *types) 
+Ivar object_setInstanceVariable(id obj, const char *name, void *value)
+Ivar object_getInstanceVariable(id obj, const char *name, void **outValue)
+Ivar class_getInstanceVariable(Class cls, const char *name)
+Ivar class_getClassVariable(Class cls, const char *name) 
+Method class_getInstanceMethod(Class cls, SEL name)
+Method class_getClassMethod(Class cls, SEL name)
+IMP class_getMethodImplementation_stret(Class cls, SEL name) 
+BOOL class_addMethod(Class cls, SEL name, IMP imp, 
+                                 const char *types) 
+class_addIvar(Class cls, const char *name, size_t size, 
+                               uint8_t alignment, const char *types) 
+BOOL class_addProtocol(Class cls, Protocol *protocol) 
+void class_replaceProperty(Class cls, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount) 
+SEL method_getName(Method m) 
+IMP method_getImplementation(Method m) 
+IMP method_setImplementation(Method m, IMP imp) 
+BOOL class_addProperty(Class cls, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount)  
+void method_exchangeImplementations(Method m1, Method m2) 
+Protocol *objc_getProtocol(const char *name)
+objc_property_t protocol_getProperty(Protocol *proto, const char *name, BOOL isRequiredProperty, BOOL isInstanceProperty)
+void protocol_addProtocol(Protocol *proto, Protocol *addition) 
+void objc_registerProtocol(Protocol *proto) 
+void protocol_addProperty(Protocol *proto, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty)
+const char **objc_copyImageNames(unsigned int *outCount) 
+const char *class_getImageName(Class cls) 
+IMP imp_implementationWithBlock(id block)
+id imp_getBlock(IMP anImp)
+void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy)
+id objc_getAssociatedObject(id object, const void *key)
 
-And Runtime Method Implementation Related Funcs
+
+
+See: https://developer.apple.com/library/prerelease/mac/documentation/Cocoa/Reference/ObjCRuntimeRef/index.html
 
 
 */
@@ -26,6 +54,7 @@ BOOL (*old_class_addMethod)(Class cls, SEL name, IMP imp,const char *types);
 BOOL (*old_class_addIvar)(Class cls, const char *name, size_t size,uint8_t alignment, const char *types);
 Class (*old_objc_getClass)(const char *name);
 IMP (*old_class_getMethodImplementation)(Class cls, SEL name);
+IMP (*old_class_replaceMethod)(Class cls, SEL name, IMP imp, const char *types); 
 
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
@@ -97,6 +126,7 @@ BOOL new_class_addMethod(Class cls, SEL name, IMP imp,const char *types){
     NSString* ClassName;
     NSString* SelectorName=NSStringFromSelector(name);
     NSString* IMPAddress=[NSString stringWithFormat:@"%p",imp];
+    NSString* Types=[NSString stringWithUTF8String:types];
     if(SelectorName!=nil&&[SelectorName isEqualToString:@""]==false){
         ClassName=NSStringFromClass(cls);
     }
@@ -108,6 +138,7 @@ BOOL new_class_addMethod(Class cls, SEL name, IMP imp,const char *types){
     WTAdd(ClassName,@"ClassName");
     WTAdd(SelectorName,@"SelectorName");
     WTAdd(IMPAddress,@"IMPAddress");
+    WTAdd(Types,@"Types");
     WTSave;
     WTRelease;
 
@@ -116,6 +147,7 @@ BOOL new_class_addMethod(Class cls, SEL name, IMP imp,const char *types){
     [ClassName release];
     [SelectorName release];
     [IMPAddress release];
+    [Types release];
 	}
     return old_class_addMethod(cls,name,imp,types);
     
@@ -173,6 +205,32 @@ IMP new_class_getMethodImplementation(Class cls, SEL name){
 
 
 }
+IMP new_class_replaceMethod(Class cls, SEL name, IMP imp, const char *types){
+
+	IMP ret=old_class_replaceMethod(cls,name,imp,types);
+	if(WTShouldLog){
+		NSString* ClassName=NSStringFromClass(cls);
+		NSString* SELName=NSStringFromSelector(name);
+		NSString* NewIMPAddress=[NSString stringWithFormat:@"%p",ret];
+		NSString* OldIMPAddress=[NSString stringWithFormat:@"%p",imp];
+		WTInit(@"ObjCRuntime",@"class_replaceMethod");
+		WTAdd(ClassName,@"ClassName");
+		WTAdd(SELName,@"SelectorName");
+		WTAdd(NewIMPAddress,@"NewIMPAddress");
+		WTAdd(OldIMPAddress,@"OldIMPAddress");
+		WTSave;
+		WTRelease;
+		[ClassName release];
+		[SELName release];
+		[NewIMPAddress release];
+		[OldIMPAddress release];
+	}
+	return ret;
+
+
+
+
+}
 extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
    MSHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
@@ -183,4 +241,8 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)class_addMethod,(void*)new_class_addMethod, (void**)&old_class_addMethod);
    MSHookFunction((void*)class_addIvar,(void*)new_class_addIvar, (void**)&old_class_addIvar);
    MSHookFunction((void*)objc_getClass,(void*)new_objc_getClass, (void**)&old_objc_getClass);
+   MSHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
+   MSHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
+
+
 }

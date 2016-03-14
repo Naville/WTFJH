@@ -6,6 +6,8 @@ const struct section * (*old_getsectbyname)(const char *segname,const char *sect
 const struct segment_command * (*old_getsegbyname)(const char *segname);
 char * (*old_getsectdatafromheader_64)(const struct mach_header_64 *mhp,const char *segname,const char *sectname,uint64_t *size);
 char * (*old_getsectiondata)(const struct mach_header *mhp,const char *segname,const char *sectname,unsigned long *size);
+char * (*old_getsegmentdata)(const struct mach_header_64 *mhp,const char *segname,unsigned long *size);
+
 /*extern char *getsectdatafromFramework(
     const char *FrameworkName,
     const char *segname,
@@ -36,11 +38,6 @@ extern uint8_t *getsectiondata(
 
 extern const struct segment_command_64 *getsegbyname(
     const char *segname);
-
-extern uint8_t *getsegmentdata(
-    const struct mach_header_64 *mhp,
-    const char *segname,
-    unsigned long *size);
 
  * Interfaces for tools working with 32-bit Mach-O files.
 extern char *getsectdatafromheader(
@@ -157,7 +154,24 @@ char * new_getsectiondata(const struct mach_header *mhp,const char *segname,cons
 
 
 }
+char * new_getsegmentdata(const struct mach_header_64 *mhp,const char *segname,unsigned long *size){
+    char* ret=old_getsegmentdata(mhp,segname,size);
+    if(WTShouldLog){
+        NSString* NSSegName=[NSString stringWithUTF8String:segname];
+        NSData* SegData=[NSData dataWithBytes:ret length:*size];
+        NSString* HeaderAddress=[NSString stringWithFormat:@"%p",mhp];
+        WTInit(@"Mach-O",@"getsegmentdata");
+        WTAdd(NSSegName,@"SegmentName");
+        WTAdd(SegData,@"SegmentData");
+        WTAdd(HeaderAddress,@"HeaderAddress");
+        [NSSegName release];
+        [SegData release];
+        [HeaderAddress release];
+    }
+    return ret;  
 
+
+}
 
 //Init Hooks
 extern void init_MachO_hook() {
@@ -166,4 +180,5 @@ extern void init_MachO_hook() {
     MSHookFunction((void*)getsegbyname,(void*)new_getsegbyname, (void**)&old_getsegbyname);
     MSHookFunction((void*)getsectdatafromheader_64,(void*)new_getsectdatafromheader_64, (void**)&old_getsectdatafromheader_64);
     MSHookFunction((void*)getsectiondata,(void*)new_getsectiondata, (void**)&old_getsectiondata);
+    MSHookFunction((void*)getsegmentdata,(void*)new_getsegmentdata, (void**)&old_getsegmentdata);
 }

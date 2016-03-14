@@ -7,7 +7,7 @@ const struct segment_command * (*old_getsegbyname)(const char *segname);
 char * (*old_getsectdatafromheader_64)(const struct mach_header_64 *mhp,const char *segname,const char *sectname,uint64_t *size);
 char * (*old_getsectiondata)(const struct mach_header *mhp,const char *segname,const char *sectname,unsigned long *size);
 char * (*old_getsegmentdata)(const struct mach_header_64 *mhp,const char *segname,unsigned long *size);
-
+const struct section * (*old_getsectbynamefromheader)(const struct mach_header *mhp,const char *segname,const char *sectname);
 /*extern char *getsectdatafromFramework(
     const char *FrameworkName,
     const char *segname,
@@ -46,11 +46,6 @@ extern char *getsectdatafromheader(
     const char *sectname,
     uint32_t *size);
 
-extern const struct section *getsectbynamefromheader(
-    const struct mach_header *mhp,
-    const char *segname,
-    const char *sectname);
-
 extern const struct section *getsectbynamefromheaderwithswap(
     struct mach_header *mhp,
     const char *segname,
@@ -78,7 +73,8 @@ char* new_getsectdata(const char *segname,const char *sectname,unsigned long *si
 		WTAdd(NSSegName,@"SegmentName");
 		WTAdd(NSSectName,@"SectionName");
 		WTAdd(SectData,@"SectionData");
-
+        WTSave;
+        WTRelease;
 		[NSSectName release];
 		[NSSegName release];
 		[SectData release];
@@ -94,7 +90,8 @@ const struct section * new_getsectbyname(const char *segname,const char *sectnam
         WTInit(@"Mach-O",@"getsectbyname");
         WTAdd(NSSegName,@"SegmentName");
         WTAdd(NSSectName,@"SectionName");
-
+        WTSave;
+        WTRelease;
         [NSSectName release];
         [NSSegName release];    
     }
@@ -107,6 +104,8 @@ const struct segment_command * new_getsegbyname(const char *segname){
         NSString* NSSegName=[NSString stringWithUTF8String:segname];
         WTInit(@"Mach-O",@"getsegbyname");
         WTAdd(NSSegName,@"SegmentName");
+        WTSave;
+        WTRelease;        
         [NSSegName release];    
     }
     return old_getsegbyname(segname);
@@ -123,7 +122,8 @@ char * new_getsectdatafromheader_64(const struct mach_header_64 *mhp,const char 
         WTAdd(NSSectName,@"SectionName");
         WTAdd(SectData,@"SectionData");
         WTAdd(HeaderAddress,@"HeaderAddress");
-
+        WTSave;
+        WTRelease;
         [NSSectName release];
         [NSSegName release];
         [SectData release];
@@ -144,11 +144,13 @@ char * new_getsectiondata(const struct mach_header *mhp,const char *segname,cons
         WTAdd(NSSectName,@"SectionName");
         WTAdd(SectData,@"SectionData");
         WTAdd(HeaderAddress,@"HeaderAddress");
-
+        WTSave;
+        WTRelease;
         [NSSectName release];
         [NSSegName release];
         [SectData release];
         [HeaderAddress release];
+
     }
     return ret;    
 
@@ -164,6 +166,8 @@ char * new_getsegmentdata(const struct mach_header_64 *mhp,const char *segname,u
         WTAdd(NSSegName,@"SegmentName");
         WTAdd(SegData,@"SegmentData");
         WTAdd(HeaderAddress,@"HeaderAddress");
+        WTSave;
+        WTRelease;       
         [NSSegName release];
         [SegData release];
         [HeaderAddress release];
@@ -172,6 +176,29 @@ char * new_getsegmentdata(const struct mach_header_64 *mhp,const char *segname,u
 
 
 }
+const struct section * new_getsectbynamefromheader(const struct mach_header *mhp,const char *segname,const char *sectname){
+
+   const struct section* ret=old_getsectbynamefromheader(mhp,segname,sectname);
+    if(WTShouldLog){
+        NSString* NSSegName=[NSString stringWithUTF8String:segname];
+        NSString* NSSectName=[NSString stringWithUTF8String:sectname];
+        NSString* HeaderAddress=[NSString stringWithFormat:@"%p",mhp];
+        WTInit(@"Mach-O",@"getsegmentdata");
+        WTAdd(NSSegName,@"SegmentName");
+        WTAdd(NSSectName,@"SectionName");
+        WTAdd(HeaderAddress,@"HeaderAddress");
+        [NSSegName release];
+        [HeaderAddress release];
+        [NSSectName release];
+        WTSave;
+        WTRelease;
+    }
+    return ret;  
+
+
+
+
+};
 
 //Init Hooks
 extern void init_MachO_hook() {
@@ -181,4 +208,6 @@ extern void init_MachO_hook() {
     MSHookFunction((void*)getsectdatafromheader_64,(void*)new_getsectdatafromheader_64, (void**)&old_getsectdatafromheader_64);
     MSHookFunction((void*)getsectiondata,(void*)new_getsectiondata, (void**)&old_getsectiondata);
     MSHookFunction((void*)getsegmentdata,(void*)new_getsegmentdata, (void**)&old_getsegmentdata);
+    MSHookFunction((void*)getsectbynamefromheader,(void*)new_getsectbynamefromheader, (void**)&old_getsectbynamefromheader);
 }
+

@@ -12,10 +12,6 @@ Ivar class_getClassVariable(Class cls, const char *name)
 Method class_getInstanceMethod(Class cls, SEL name)
 Method class_getClassMethod(Class cls, SEL name)
 IMP class_getMethodImplementation_stret(Class cls, SEL name) 
-BOOL class_addMethod(Class cls, SEL name, IMP imp, 
-                                 const char *types) 
-class_addIvar(Class cls, const char *name, size_t size, 
-                               uint8_t alignment, const char *types) 
 BOOL class_addProtocol(Class cls, Protocol *protocol) 
 void class_replaceProperty(Class cls, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount) 
 SEL method_getName(Method m) 
@@ -144,8 +140,6 @@ BOOL new_class_addMethod(Class cls, SEL name, IMP imp,const char *types){
 
 
     [TypeString release];
-    [ClassName release];
-    [SelectorName release];
     [IMPAddress release];
     [Types release];
 	}
@@ -164,7 +158,6 @@ BOOL new_class_addIvar(Class cls, const char *name, size_t size,uint8_t alignmen
     WTAdd(Types,@"Types");
     WTSave;
     WTRelease;
-    [ClassName release];
     [IvarName release];
     [Types release];
 	}
@@ -196,8 +189,6 @@ IMP new_class_getMethodImplementation(Class cls, SEL name){
 		WTAdd(IMPAddress,@"IMPAddress");
 		WTSave;
 		WTRelease;
-		[ClassName release];
-		[SELName release];
 		[IMPAddress release];
 	}
 	return ret;
@@ -220,8 +211,6 @@ IMP new_class_replaceMethod(Class cls, SEL name, IMP imp, const char *types){
 		WTAdd(OldIMPAddress,@"OldIMPAddress");
 		WTSave;
 		WTRelease;
-		[ClassName release];
-		[SELName release];
 		[NewIMPAddress release];
 		[OldIMPAddress release];
 	}
@@ -243,6 +232,5 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)objc_getClass,(void*)new_objc_getClass, (void**)&old_objc_getClass);
    MSHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
    MSHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
-
 
 }

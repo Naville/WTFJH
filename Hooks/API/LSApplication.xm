@@ -57,22 +57,148 @@
 	}
 	return ret;
 }
+- (id)appStoreReceiptURL{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"appStoreReceiptURL");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+}
+- (id)appTags{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"appTags");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
+- (id)applicationDSID{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"applicationDSID");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+}
+- (id)applicationType{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"applicationType");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+
+}
+- (id)audioComponents{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"audioComponents");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+	
+}
+- (long)bundleModTime{
+	long ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"bundleModTime");
+	WTReturn([NSNumber numberWithLong:ret]);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+}
+- (id)deviceFamily{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"deviceFamily");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
+- (id)deviceIdentifierForVendor{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"deviceIdentifierForVendor");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
+- (id)directionsModes{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"directionsModes");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
+- (id)dynamicDiskUsage{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"dynamicDiskUsage");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+}
+- (id)externalAccessoryProtocols{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"externalAccessoryProtocols");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;
+
+}
+- (id)groupContainers{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"groupContainers");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;	
+}
+- (id)groupIdentifiers{
+	id ret=%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationProxy",@"groupIdentifiers");
+	WTReturn(ret);
+	WTSave;
+	WTRelease;
+	}
+	return ret;	
+	
+}
 /*
-- (id)_initWithBundleUnit:(unsigned long)arg1 applicationIdentifier:(id)arg2;
-- (id)appStoreReceiptURL;
-- (id)appTags;
-- (id)applicationDSID;
-- (id)applicationType;
-- (id)audioComponents;
-- (long)bundleModTime;
-- (id)deviceFamily;
-- (id)deviceIdentifierForVendor;
-- (id)directionsModes;
-- (id)dynamicDiskUsage;
-- (id)externalAccessoryProtocols;
-- (id)groupContainers;
-- (id)groupIdentifiers;
 - (unsigned int)installType;
+- (id)_initWithBundleUnit:(unsigned long)arg1 applicationIdentifier:(id)arg2;
 - (id)itemID;
 - (id)itemName;
 - (id)localizedName;
@@ -139,11 +265,25 @@
 	}
 	return ret;	
 }
+- (void)_clearCachedAdvertisingIdentifier{
+	%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationWorkspace",@"_clearCachedAdvertisingIdentifier");
+	WTSave;
+	WTRelease;
+	}
+
+}
+- (void)_LSClearSchemaCaches{
+	%orig;
+	if(WTShouldLog){
+	WTInit(@"LSApplicationWorkspace",@"_LSClearSchemaCaches");
+	WTSave;
+	WTRelease;
+	}
+}
 /*
-- (void)_LSClearSchemaCaches;
-- (BOOL)_LSPrivateRebuildApplicationDatabasesForSystemApps:(BOOL)arg1 internal:(BOOL)arg2 user:(BOOL)arg3;
-- (void)_clearCachedAdvertisingIdentifier;
-- (void)addObserver:(id)arg1;
+- (BOOL)_LSPrivateRebuildApplicationDatabasesForSystemApps:(BOOL)arg1 internal:(BOOL)arg2 user:(BOOL)arg3;void)addObserver:(id)arg1;
 - (id)applicationForOpeningResource:(id)arg1;
 - (id)applicationForUserActivityDomainName:(id)arg1;
 - (id)applicationForUserActivityType:(id)arg1;

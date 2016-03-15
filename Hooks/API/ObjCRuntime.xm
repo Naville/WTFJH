@@ -178,10 +178,11 @@ Class new_objc_getClass(char* Name){
 }
 
 IMP new_class_getMethodImplementation(Class cls, SEL name){
-	IMP ret=old_class_getMethodImplementation(cls,name);
+	IMP ret;
 	if(WTShouldLog){
 		NSString* ClassName=NSStringFromClass(cls);
 		NSString* SELName=NSStringFromSelector(name);
+		ret=old_class_getMethodImplementation(cls,name);
 		NSString* IMPAddress=[NSString stringWithFormat:@"%p",ret];
 		WTInit(@"ObjCRuntime",@"class_getMethodImplementation");
 		WTAdd(ClassName,@"ClassName");
@@ -191,6 +192,9 @@ IMP new_class_getMethodImplementation(Class cls, SEL name){
 		WTRelease;
 		[IMPAddress release];
 	}
+	else{
+		ret=old_class_getMethodImplementation(cls,name);
+	}
 	return ret;
 
 
@@ -198,10 +202,11 @@ IMP new_class_getMethodImplementation(Class cls, SEL name){
 }
 IMP new_class_replaceMethod(Class cls, SEL name, IMP imp, const char *types){
 
-	IMP ret=old_class_replaceMethod(cls,name,imp,types);
+	IMP ret;
 	if(WTShouldLog){
 		NSString* ClassName=NSStringFromClass(cls);
 		NSString* SELName=NSStringFromSelector(name);
+		ret=old_class_replaceMethod(cls,name,imp,types);
 		NSString* NewIMPAddress=[NSString stringWithFormat:@"%p",ret];
 		NSString* OldIMPAddress=[NSString stringWithFormat:@"%p",imp];
 		WTInit(@"ObjCRuntime",@"class_replaceMethod");
@@ -213,6 +218,9 @@ IMP new_class_replaceMethod(Class cls, SEL name, IMP imp, const char *types){
 		WTRelease;
 		[NewIMPAddress release];
 		[OldIMPAddress release];
+	}
+	else{
+		ret=old_class_replaceMethod(cls,name,imp,types);
 	}
 	return ret;
 

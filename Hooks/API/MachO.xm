@@ -20,10 +20,6 @@ extern unsigned long get_edata(void);
 
  * Runtime interfaces for 32-bit Mach-O programs.
 
-extern uint8_t *getsegmentdata(
-    const struct mach_header *mhp,
-    const char *segname,
-    unsigned long *size);
 
 Runtime interfaces for 64-bit Mach-O programs.
 extern const struct section_64 *getsectbyname(

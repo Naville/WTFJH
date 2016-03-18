@@ -51,7 +51,8 @@ BOOL (*old_class_addIvar)(Class cls, const char *name, size_t size,uint8_t align
 Class (*old_objc_getClass)(const char *name);
 IMP (*old_class_getMethodImplementation)(Class cls, SEL name);
 IMP (*old_class_replaceMethod)(Class cls, SEL name, IMP imp, const char *types); 
-
+const char **(*old_objc_copyImageNames)(unsigned int *outCount);
+const char *(*old_class_getImageName)(Class cls);
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
 	if(WTShouldLog){
@@ -228,6 +229,40 @@ IMP new_class_replaceMethod(Class cls, SEL name, IMP imp, const char *types){
 
 
 }
+
+const char ** new_objc_copyImageNames(unsigned int *outCount){
+const char** NameList=old_objc_copyImageNames(outCount);
+if(WTShouldLog){
+	WTInit(@"ObjCRuntime",@"objc_copyImageNames");
+	int Counter=*outCount;
+	for(int x=0;x<Counter;x++){
+		NSString* string=[NSString stringWithUTF8String:NameList[x]];
+		NSString* keyName=[NSString stringWithFormat:@"ImageNameAtIndex:%i",x];
+		WTAdd(string,keyName);
+		[string release];
+		[keyName release];
+	}
+	WTSave;
+	WTRelease;
+
+}
+
+return NameList;
+
+}
+
+const char * new_class_getImageName(Class cls){
+	const char* Name=old_class_getImageName(cls);
+	if(WTShouldLog){
+		WTInit(@"ObjCRuntime",@"class_getImageName");
+		WTAdd(NSStringFromClass(cls),@"ClassName");
+		WTAdd([NSString stringWithUTF8String:Name],@"ImageName");
+		WTSave;
+		WTRelease;
+	}
+	return Name;
+}
+
 extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
    MSHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
@@ -240,5 +275,5 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)objc_getClass,(void*)new_objc_getClass, (void**)&old_objc_getClass);
    MSHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
    MSHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
-
+   MSHookFunction((void*)objc_copyImageNames,(void*)new_objc_copyImageNames, (void**)&old_objc_copyImageNames);
 }

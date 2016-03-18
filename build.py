@@ -68,7 +68,15 @@ def buildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
 		for y in fileList:
 			if (y == x+".xm"):#Only Remove Module Files
 				fileList.remove(y)
-				print (Fore.RED+y+" Removed")
+				print (Fore.RED+y+" Removed From Modules")
+	return fileList
+def Thirdbuildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
+	fileList=listdir(path)
+	for x in SkippedList:
+		for y in fileList:
+			if (x == y):#Only Remove Module Files
+				fileList.remove(y)
+				print (Fore.RED+y+" Removed From Third Party Modules")
 	return fileList
 #Clean-Up
 def cleanUp():
@@ -302,7 +310,7 @@ def BuildLoader(ModuleName):
 	f.close()
 def buildThirdPartyComponents():
 	Exec("find . -type f -name .DS_Store -delete && xattr -cr *")
-	for x in buildlistdir("ThirdPartyTools"):
+	for x in Thirdbuildlistdir("ThirdPartyTools"):
 		os.chdir(InitialCWD)#Make Sure CWD We've changed in buildThirdPartyComponents() is set back
 		if os.path.isdir("ThirdPartyTools/"+x)==False:
 			print (Fore.YELLOW+"ThirdPartyTools/"+x+" Not A Folder. Skipped")

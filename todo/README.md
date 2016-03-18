@@ -14,3 +14,13 @@
 13. Finish OpenSSL
 14. SocketLevel/JSBridge/stringByEvaluatingJavaScriptFromString Hook
 15.	PROFIT??!!!
+
+# Third Party Tools TODOs
+- Merge [https://github.com/BishopFox/iSpy][3] into WTFJH
+- ~~Merge [https://github.com/DavidGoldman/InspectiveC][4] into WTFJH~~ Check ThirdPartyTools/InspectiveC
+- Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in *\_\_DATA*
+
+[1]:	https://github.com/iSECPartners/Introspy-iOS
+[2]:	https://github.com/Naville/MinusBlock
+[3]:	https://github.com/BishopFox/iSpy "iSpy"
+[4]:	https://github.com/DavidGoldman/InspectiveC "InspectiveC"

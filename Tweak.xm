@@ -1,6 +1,6 @@
 #import "./Hooks/SharedDefine.pch" 
 // Utility function to parse the preference file
-BOOL getBoolFromPreferences(NSString *preferenceValue) {
+extern BOOL getBoolFromPreferences(NSString *preferenceValue) {
     NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
     id value = [preferences objectForKey:preferenceValue];
     if (value == nil) {

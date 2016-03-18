@@ -115,13 +115,13 @@ return ret;
 
 
 static int newptrace(int _request, pid_t _pid, caddr_t _addr, int _data){
-
+int oldRequest=_request;
 if (getBoolFromPreferences(@"AntiAntiDebugging")==YES && _request == 31) {
 	_request = 1;
 }
 int ret=oldptrace(_request,_pid,_addr,_data);
 WTInit(@"ptrace",@"ptrace");
-WTAdd([NSNumber numberWithLong:_request],@"request");
+WTAdd([NSNumber numberWithLong:oldRequest],@"request");
 WTAdd([NSNumber numberWithLong:_pid],@"pid");
 WTAdd(objectTypeNotSupported,@"addr");
 WTAdd([NSNumber numberWithLong:_data],@"data");

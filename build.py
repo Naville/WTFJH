@@ -54,7 +54,7 @@ InitialCWD=os.getcwd()
 
 #Setup SIGINT Handler
 def signal_handler(signal, frame):
-	print (Fore.RED+"Force-Quit,Cleaning-Up")
+	print (Fore.RED+"\nForce-Quit,Cleaning-Up")
 	cleanUp()
 	print "ByeBye"
 	sys.exit(0)
@@ -241,43 +241,7 @@ def id_generator(size=15, chars=string.ascii_uppercase + string.digits):
 def BuildPF():
 	CustomPrefList = buildlistdir("./Preferences")
 	Plist = plistlib.readPlist('./BasePreferences.plist')
-	Dict = {
-		"cell": "PSGroupCell",
-		"label": "Additional",
-		"isStaticText": True
-	}
-	Plist["items"].append(Dict)
-	Dict = {
-		"cell": "PSSwitchCell",
-		"label": "Log To The Console",
-		"key": "LogToTheConsole",
-		"default": False,
-		"defaults": "naville.wtfjh"
-	}
-	Plist["items"].append(Dict)#Code-Signature Based Objc-Deobfuscation Confidence
-	Dict = {
-		"cell": "PSEditTextCell",
-		"keyboard": "numbers",
-		"placeholder": 0.8,
-		"bestGuess":0.8,
-		"isNumeric": True,
-		"defaults": "naville.wtfjh"
-	}
-	Plist["items"].append(Dict)
-	Dict = {
-		"cell": "PSSwitchCell",
-		"label": "URL Schemes Hooks",
-		"key": "URLSchemesHooks",
-		"default": False,
-		"defaults": "naville.wtfjh"
-	}
-	Plist["items"].append(Dict)
-	Dict = {
-		"cell": "PSGroupCell",
-		"label": "Modules",
-		"isStaticText": True
-	}
-	Plist["items"].append(Dict)
+	
 	for x in ModuleList:
 		CustomPrefPath = x + ".plist"
 		if (CustomPrefPath in CustomPrefList):

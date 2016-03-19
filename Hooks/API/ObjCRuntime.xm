@@ -5,7 +5,6 @@
 /*
 To Implement:
 objc_getMetaClass(const char *name)
-Ivar object_setInstanceVariable(id obj, const char *name, void *value)
 Ivar object_getInstanceVariable(id obj, const char *name, void **outValue)
 Ivar class_getInstanceVariable(Class cls, const char *name)
 Ivar class_getClassVariable(Class cls, const char *name) 
@@ -53,6 +52,7 @@ IMP (*old_class_getMethodImplementation)(Class cls, SEL name);
 IMP (*old_class_replaceMethod)(Class cls, SEL name, IMP imp, const char *types); 
 const char **(*old_objc_copyImageNames)(unsigned int *outCount);
 const char *(*old_class_getImageName)(Class cls);
+Ivar (*old_object_setInstanceVariable)(id obj, const char *name, void *value)
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
 	if(WTShouldLog){
@@ -262,7 +262,20 @@ const char * new_class_getImageName(Class cls){
 	}
 	return Name;
 }
+Ivar new_object_setInstanceVariable(id obj, const char *name, void *value){
+	if(WTShouldLog){
+		WTInit(@"ObjCRuntime",@"object_setInstanceVariable");
+		WTAdd(NSStringFromClass([obj class]),@"ObjectClassName");
+		WTAdd([NSString stringWithUTF8String:name],@"Name");
+		WTAdd([NSString stringWithFormat:@"%p",value],@"ValueAddress");
+		WTSave;
+		WTRelease;
+	}
+	Ivar ret=old_object_setInstanceVariable(obj,name,value);
+	return ret;
 
+
+}
 extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
    MSHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
@@ -276,4 +289,5 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
    MSHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
    MSHookFunction((void*)objc_copyImageNames,(void*)new_objc_copyImageNames, (void**)&old_objc_copyImageNames);
+   MSHookFunction((void*)object_setInstanceVariable,(void*)new_object_setInstanceVariable, (void**)&old_object_setInstanceVariable);
 }

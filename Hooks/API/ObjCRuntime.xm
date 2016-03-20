@@ -52,7 +52,7 @@ IMP (*old_class_getMethodImplementation)(Class cls, SEL name);
 IMP (*old_class_replaceMethod)(Class cls, SEL name, IMP imp, const char *types); 
 const char **(*old_objc_copyImageNames)(unsigned int *outCount);
 const char *(*old_class_getImageName)(Class cls);
-Ivar (*old_object_setInstanceVariable)(id obj, const char *name, void *value)
+Ivar (*old_object_setInstanceVariable)(id obj, const char *name, void *value);
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
 	if(WTShouldLog){
@@ -264,12 +264,16 @@ const char * new_class_getImageName(Class cls){
 }
 Ivar new_object_setInstanceVariable(id obj, const char *name, void *value){
 	if(WTShouldLog){
+		NSString* NSName=[NSString stringWithUTF8String:name];
+		NSString* NSAddr=[NSString stringWithFormat:@"%p",value];
 		WTInit(@"ObjCRuntime",@"object_setInstanceVariable");
 		WTAdd(NSStringFromClass([obj class]),@"ObjectClassName");
-		WTAdd([NSString stringWithUTF8String:name],@"Name");
-		WTAdd([NSString stringWithFormat:@"%p",value],@"ValueAddress");
+		WTAdd(NSName,@"Name");
+		WTAdd(NSAddr,@"ValueAddress");
 		WTSave;
 		WTRelease;
+		[NSName release];
+		[NSAddr release];
 	}
 	Ivar ret=old_object_setInstanceVariable(obj,name,value);
 	return ret;

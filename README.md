@@ -22,7 +22,9 @@
 >Standard User:
 
 1.	Download Official Cycript SDK And Extract Cycript.framework to project root
-2.	*./build.py*
+2.	./Setup.sh
+3.	./build.py
+4.	PROFIT??!!
 
 >HackingGuide.md Contains Detailed Explanation
 
@@ -31,3 +33,4 @@
 **Moved to TODO/**
 
 [1]:	https://github.com/iSECPartners/Introspy-iOS
+[2]:	https://github.com/Naville/MinusBlock

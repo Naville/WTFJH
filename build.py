@@ -13,7 +13,7 @@ import signal
 from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
-import ManualObfuscation
+import BuildConfig
 init(autoreset=True)
 
 
@@ -26,7 +26,7 @@ def Exec(Command):
 # Global config
 makeFileString = ""
 PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/","Hooks/Misc/"]
-ManualObflist=ManualObfuscation.ManualList
+ManualObflist=BuildConfig.ManualList
 global toggleString
 toggleString = "#import \"./Hooks/Obfuscation.h\"\nvoid GlobalInit() {\n"
 global MakeFileListString
@@ -91,7 +91,7 @@ def cleanUp():
 	Exec("rm ./*.pyc")
 	print "Unlinking TheOS..."
 	Exec("rm ./theos")
-	Exec("rm ./ManualObfuscation.pyc")
+	Exec("rm ./BuildConfig.pyc")
 	Exec("rm -r ./.theos")
 	for x in buildlistdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x):
@@ -125,9 +125,18 @@ def BuildMakeFile():
 	makeFileString += randomTweakName + MakeFileListString + "\n"
 	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
 	global LinkerString
-	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" -F./\n"
+	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" -F./"
+	for LDF in BuildConfig.LDFLAGS:
+		makeFileString +=" "+LDF
+	makeFileString +="\n"	
 	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate stdc++ c++\n"
-	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security JavaScriptCore Cycript\n"
+	for LBName in BuildConfig.ExtraLibrary:
+		makeFileString +=LBName+" "
+	makeFileString +="\n"
+	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security JavaScriptCore "
+	for FWName in BuildConfig.ExtraFramework:
+		makeFileString +=FWName+" "
+	makeFileString +="\n"
 	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
 	makeFileString += "after-install::\n"
 	makeFileString += "	install.exec \"killall -9 SpringBoard\""

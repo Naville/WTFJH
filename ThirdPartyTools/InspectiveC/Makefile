@@ -1,5 +1,4 @@
 export ARCHS = armv7 armv7s arm64
-export TARGET = iphone:clang:9.1:9.1
 ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000
 # ADDITIONAL_OBJCFLAGS += -S
 

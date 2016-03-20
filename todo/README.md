@@ -20,6 +20,5 @@
 - ~~Merge [https://github.com/DavidGoldman/InspectiveC][4] into WTFJH~~ Check ThirdPartyTools/InspectiveC
 - Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in *\_\_DATA*
 
-[2]:	https://github.com/Naville/MinusBlock
 [3]:	https://github.com/BishopFox/iSpy "iSpy"
 [4]:	https://github.com/DavidGoldman/InspectiveC "InspectiveC"

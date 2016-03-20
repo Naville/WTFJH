@@ -5,9 +5,7 @@
 /*
 To Implement:
 objc_getMetaClass(const char *name)
-Ivar object_getInstanceVariable(id obj, const char *name, void **outValue)
 Ivar class_getInstanceVariable(Class cls, const char *name)
-Ivar class_getClassVariable(Class cls, const char *name) 
 Method class_getInstanceMethod(Class cls, SEL name)
 Method class_getClassMethod(Class cls, SEL name)
 IMP class_getMethodImplementation_stret(Class cls, SEL name) 
@@ -53,6 +51,8 @@ IMP (*old_class_replaceMethod)(Class cls, SEL name, IMP imp, const char *types);
 const char **(*old_objc_copyImageNames)(unsigned int *outCount);
 const char *(*old_class_getImageName)(Class cls);
 Ivar (*old_object_setInstanceVariable)(id obj, const char *name, void *value);
+Ivar (*old_object_getInstanceVariable)(id obj, const char *name, void **outValue);
+Ivar (*old_class_getClassVariable)(Class cls, const char *name);
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
 	if(WTShouldLog){
@@ -279,6 +279,37 @@ Ivar new_object_setInstanceVariable(id obj, const char *name, void *value){
 	return ret;
 
 
+}
+Ivar new_object_getInstanceVariable(id obj, const char *name, void *value){
+	if(WTShouldLog){
+		NSString* NSName=[NSString stringWithUTF8String:name];
+		NSString* NSAddr=[NSString stringWithFormat:@"%p",value];
+		WTInit(@"ObjCRuntime",@"object_getInstanceVariable");
+		WTAdd(NSStringFromClass([obj class]),@"ObjectClassName");
+		WTAdd(NSName,@"Name");
+		WTAdd(NSAddr,@"ValueAddress");
+		WTSave;
+		WTRelease;
+		[NSName release];
+		[NSAddr release];
+	}
+	Ivar ret=old_object_getInstanceVariable(obj,name,value);
+	return ret;
+
+
+}
+Ivar new_class_getClassVariable(Class cls, const char *name){
+	if(WTShouldLog){
+		NSString* NSName=[NSString stringWithUTF8String:name];
+		WTInit(@"ObjCRuntime",@"class_getClassVariable");
+		WTAdd(NSStringFromClass(cls),@"ClassName");
+		WTAdd(NSName,@"Name");
+		WTSave;
+		WTRelease;
+		[NSName release];
+	}
+	Ivar ret=old_class_getClassVariable(cls,name);
+	return ret;
 }
 extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);

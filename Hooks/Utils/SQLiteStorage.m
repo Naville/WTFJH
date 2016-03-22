@@ -101,6 +101,7 @@ static sqlite3 *dbConnection;
     }
 
     if (logToConsole) {
+
         NSLog(@"\n-----WTFJH Console-----\nCALLED %@ %@\nWITH:\n%@\n---------------", [tracedCall className], [tracedCall methodName], [tracedCall argsAndReturnValue]);
     }
 

@@ -1,5 +1,37 @@
 #import "./Hooks/SharedDefine.pch" 
+#include <unistd.h>
 // Utility function to parse the preference file
+
+#ifdef PROTOTYPE
+int OriginalErrDes=dup(STDERR_FILENO);
+int NewDes=0;
+extern void WTFJHLog(id Obj1, ... ){
+    dup2(OriginalErrDes,STDERR_FILENO); 
+    va_list arg;
+    va_start(arg,Obj1);
+    NSLogv([Obj1 description],arg); 
+
+    va_end(arg);
+    dup2(NewDes, STDERR_FILENO);//Put it back
+}
+static BOOL RedirectLog(){
+    NSString* fileName=[NSString stringWithFormat:@"%@/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
+    [@"-----Overture-----\n" writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    id fileHandle = [NSFileHandle fileHandleForWritingAtPath:fileName];
+    if (!fileHandle){
+        NSLog(@"LogFileOpenFailed");
+        return NO;
+    }
+
+    int err = dup2([fileHandle fileDescriptor], STDERR_FILENO);
+    if (err==-1){
+        NSLog(@"Couldn't Redirect");
+        return NO;
+    }
+    NewDes=[fileHandle fileDescriptor];
+    return  YES;
+}
+#endif
 extern BOOL getBoolFromPreferences(NSString *preferenceValue) {
     NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
     id value = [preferences objectForKey:preferenceValue];
@@ -11,6 +43,8 @@ extern BOOL getBoolFromPreferences(NSString *preferenceValue) {
     [value release];
     return retVal;
 }
+
+
 NSString* RandomString(){
 NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
 NSMutableString *s = [NSMutableString stringWithCapacity:9];
@@ -57,6 +91,14 @@ static void traceURISchemes() {
     if (getBoolFromPreferences(@"URLSchemesHooks")) {
             traceURISchemes();
      }
+#ifdef PROTOTYPE
+    if (getBoolFromPreferences(@"RedirectLogging")) {
+            BOOL status=RedirectLog();
+            if(status){
+                NSLog(@"Redirect Failed");
+            }
+     }
+#endif
 	// Initialize DB storage
     NSLog(@"WTFJH - Profiling enabled for %@", appId);
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");

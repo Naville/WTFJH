@@ -40,9 +40,9 @@ if (numClasses > 0 )
 
 return returnArray;
 }
-#ifdef PROTOTYPE
+#if 0
 static float IvarMatchingScore(NSDictionary* targetClassIvarDict,NSDictionary* ivarDictDB){
-    float Score=0
+    float Score=0;
     for(NSString* IvarKey in ivarDictDB.allKeys){//IVAR Names. a.k.a. Keys
         NSDictionary* RecordInDB=[ivarDictDB objectForKey:IvarKey];//Corrensponding Item in TargetClass
         NSDictionary* InfoOfTarget=[targetClassIvarDict objectForKey:IvarKey];
@@ -85,6 +85,7 @@ static float SuperScore(NSString* dbSuper,NSString* className){//Score For Super
     [methodDict release];
     [ivarDict release];
     [protoDict release];
+    [MatchedIvarDatabase release];
     return nil;
 }
 -(void)setupSignatureDatabase{

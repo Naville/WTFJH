@@ -79,6 +79,18 @@
 			<key>defaults</key>
 			<string>naville.wtfjh</string>
 			<key>key</key>
+			<string>RedirectLogging</string>
+			<key>label</key>
+			<string>RedirectLogging</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>naville.wtfjh</string>
+			<key>key</key>
 			<string>URLSchemesHooks</string>
 			<key>label</key>
 			<string>URL Schemes Hooks</string>

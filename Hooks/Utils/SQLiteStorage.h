@@ -1,5 +1,9 @@
 #import "CallTracer.h"
 
+#ifdef PROTOTYPE
+#define NSLog WTFJHLog
+#endif
+extern void WTFJHLog(id Obj1, ... );
 @interface SQLiteStorage : NSObject {
 
 }

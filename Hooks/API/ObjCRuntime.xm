@@ -280,10 +280,10 @@ Ivar new_object_setInstanceVariable(id obj, const char *name, void *value){
 
 
 }
-Ivar new_object_getInstanceVariable(id obj, const char *name, void *value){
+Ivar new_object_getInstanceVariable(id obj, const char *name, void **value){
 	if(WTShouldLog){
 		NSString* NSName=[NSString stringWithUTF8String:name];
-		NSString* NSAddr=[NSString stringWithFormat:@"%p",value];
+		NSString* NSAddr=[NSString stringWithFormat:@"%p",*value];
 		WTInit(@"ObjCRuntime",@"object_getInstanceVariable");
 		WTAdd(NSStringFromClass([obj class]),@"ObjectClassName");
 		WTAdd(NSName,@"Name");

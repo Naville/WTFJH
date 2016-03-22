@@ -1,9 +1,8 @@
 #import "../SharedDefine.pch"
 #import <sys/socket.h>
 
-/*int	accept(int, struct sockaddr * __restrict, socklen_t * __restrict)
-		__DARWIN_ALIAS_C(accept);
-int	bind(int, const struct sockaddr *, socklen_t) __DARWIN_ALIAS(bind);
+/*
+int	bind(int, const struct sockaddr *, socklen_t) ;
 int	connect(int, const struct sockaddr *, socklen_t) __DARWIN_ALIAS_C( connect);
 int	getpeername(int, struct sockaddr * __restrict, socklen_t * __restrict)
 		__DARWIN_ALIAS(getpeername);
@@ -32,7 +31,7 @@ int disconnectx(int , sae_associd_t, sae_connid_t);*/
 
 //Old Pointers
 int (*old_socket)(int domain, int type, int protocol);
-
+int	(*old_accept)(int, struct sockaddr * __restrict, socklen_t * __restrict)
 
 //New Functions
 int new_socket(int domain, int type, int protocol){
@@ -50,7 +49,12 @@ int new_socket(int domain, int type, int protocol){
 return descriptor;
 
 }
+#ifdef PROTOTYPE
+int	accept(int, struct sockaddr * __restrict, socklen_t * __restrict){
 
+return 0;
+}
+#endif
 
 
 extern void init_Socket_hook() {

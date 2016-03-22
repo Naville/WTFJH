@@ -21,8 +21,6 @@ objc_property_t protocol_getProperty(Protocol *proto, const char *name, BOOL isR
 void protocol_addProtocol(Protocol *proto, Protocol *addition) 
 void objc_registerProtocol(Protocol *proto) 
 void protocol_addProperty(Protocol *proto, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty)
-const char **objc_copyImageNames(unsigned int *outCount) 
-const char *class_getImageName(Class cls) 
 IMP imp_implementationWithBlock(id block)
 id imp_getBlock(IMP anImp)
 void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy)
@@ -324,5 +322,8 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
    MSHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
    MSHookFunction((void*)objc_copyImageNames,(void*)new_objc_copyImageNames, (void**)&old_objc_copyImageNames);
+   MSHookFunction((void*)class_getImageName,(void*)new_class_getImageName, (void**)&old_class_getImageName);
    MSHookFunction((void*)object_setInstanceVariable,(void*)new_object_setInstanceVariable, (void**)&old_object_setInstanceVariable);
+   MSHookFunction((void*)object_getInstanceVariable,(void*)new_object_getInstanceVariable, (void**)&old_object_getInstanceVariable);
+   MSHookFunction((void*)class_getClassVariable,(void*)new_class_getClassVariable, (void**)&old_class_getClassVariable);
 }

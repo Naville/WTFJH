@@ -12,5 +12,4 @@ theos
 Cycript.framework
 *.zip
 ThirdPartyTools/DeviceIDFake/
-capstone/
 *.a

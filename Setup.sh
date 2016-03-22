@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 echo "Pulling Latest Trunk"
-git submodule update
+git submodule foreach git pull origin master
 pip install colorama >>/dev/null
 echo "Building capstone"
-cd capstone && ./make.sh ios >>/dev/null
+cd capstone && ./make.sh ios 
 echo "Moving capstone"
 mv libcapstone.a ../

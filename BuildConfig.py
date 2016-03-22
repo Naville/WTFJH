@@ -2,6 +2,6 @@
 ManualList=["GlobalInit","getBoolFromPreferences","RandomString"]
 ExtraFramework=["Cycript"]
 ExtraLibrary=[]
-#LDFLAGS=["-static","-lcapstone"]
-LDFLAGS=[]
+LDFLAGS=["-L.","-v","-force_load","libcapstone.a"]
+#LDFLAGS=[]
 ObjFiles=[]

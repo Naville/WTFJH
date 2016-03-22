@@ -31,7 +31,7 @@ int disconnectx(int , sae_associd_t, sae_connid_t);*/
 
 //Old Pointers
 int (*old_socket)(int domain, int type, int protocol);
-int	(*old_accept)(int, struct sockaddr * __restrict, socklen_t * __restrict)
+int	(*old_accept)(int, struct sockaddr * __restrict, socklen_t * __restrict);
 
 //New Functions
 int new_socket(int domain, int type, int protocol){
@@ -49,12 +49,27 @@ int new_socket(int domain, int type, int protocol){
 return descriptor;
 
 }
-#ifdef PROTOTYPE
-int	accept(int, struct sockaddr * __restrict, socklen_t * __restrict){
+int	new_accept(int newFileDesc, struct sockaddr * addr, socklen_t * addrlength){
+int retVal=0;
+if(WTShouldLog){
+		WTInit(@"Socket",@"accept");
+		WTAdd([NSNumber numberWithInt:newFileDesc],@"NewFileDescriptor");
+		WTAdd([NSNumber numberWithUnsignedInt:addr->sa_len],@"Addr->TotalLength(addr->sa_len)");
+		WTAdd([NSNumber numberWithUnsignedShort:addr->sa_family],@"Addr->AddressFamily(addr->sa_family)");
+		WTAdd([NSData dataWithBytes:&addr->sa_data length:14],@"Addr->AddrValue(addr->sa_data[14])");
+		WTAdd([NSNumber numberWithUnsignedShort:*addrlength],@"addrlength");
+		retVal=old_accept(newFileDesc,addr,addrlength);
+		WTReturn([NSNumber numberWithInt:retVal]);
+		WTSave;
+		WTRelease;
 
-return 0;
 }
-#endif
+else{
+	retVal=old_accept(newFileDesc,addr,addrlength);
+}
+
+return retVal;
+}
 
 
 extern void init_Socket_hook() {

@@ -1,7 +1,9 @@
 language: c
+sudo: true
 os: osx
 before_install:
   - brew update
+  - clear
   - brew install dpkg
   - brew install ldid
 

@@ -7,4 +7,4 @@ before_install:
   - brew install dpkg
   - brew install ldid
 
-script: "./Setup.sh && ./build.py"
+script: "./Setup.sh && ./build.py DEBUG"

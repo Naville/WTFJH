@@ -1,4 +1,6 @@
 # What The Fuck Just Happened
+[![Build Status](https://travis-ci.org/Naville/WTFJH.svg?branch=master)](https://travis-ci.org/Naville/WTFJH)
+
 > A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]
 
 > Feel Free To Send Us Pull Requests. 

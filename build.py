@@ -447,6 +447,8 @@ def main():
 			for x in ObfDict.keys():
 				print (Fore.CYAN +x+" Obfuscated To: "+ObfDict[x]+"\n")#Separate Lines For Readablity
 	print "Finished."
+	if buildSuccess==False:
+		sys.exit(255)
 
 if __name__ == "__main__":
     main()

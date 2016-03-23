@@ -23,10 +23,9 @@
 # Usage
 >Standard User:
 
-1.	Download Official Cycript SDK And Extract Cycript.framework to project root
-2.	./Setup.sh
-3.	./build.py
-4.	PROFIT??!!
+1.	./Setup.sh
+2.	./build.py
+3.	PROFIT??!!
 
 >HackingGuide.md Contains Detailed Explanation
 

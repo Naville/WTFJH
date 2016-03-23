@@ -1,6 +1,7 @@
 language: c
 sudo: true
 os: osx
+osx_image: xcode7.2
 before_install:
   - brew update
   - clear

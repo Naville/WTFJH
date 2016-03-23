@@ -8,4 +8,4 @@ before_install:
   - brew install dpkg
   - brew install ldid
 
-script: "./Setup.sh && ./build.py DEBUG"
+script: "sudo python get-pip.py && ./Setup.sh && ./build.py DEBUG"

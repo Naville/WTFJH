@@ -1,0 +1,9 @@
+language: c
+os: osx
+before_install:
+  - sh theos/git-submodule-recur.sh init
+  - brew update
+  - brew install dpkg
+  - brew install ldid
+
+script: ./build.py

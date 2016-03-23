@@ -12,7 +12,7 @@
 > Also make VERSION changes easy-trackable by reviewing history of **VERSION**
 
 #Requirements
-1.  Theos
+1.  Theos (We Brought Our Own Copy. Used if $THEOS Not Set In Environment Variable)
 2.  iOS Toolchain (Included in Xcode)
 3.  Python (Tested on Python2.X. The one preinstalled on OS X is enough)
 4.  colorama (Run "pip install colorama")

@@ -1,6 +1,6 @@
 [submodule "capstone"]
 	path = capstone
-	url = git@github.com:aquynh/capstone.git
+	url = https://github.com/aquynh/capstone.git
 [submodule "theos"]
 	path = theos
-	url = https://github.com/kirb/theos
+	url = https://github.com/theos/theos.git

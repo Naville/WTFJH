@@ -23,8 +23,6 @@ void objc_registerProtocol(Protocol *proto)
 void protocol_addProperty(Protocol *proto, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty)
 IMP imp_implementationWithBlock(id block)
 id imp_getBlock(IMP anImp)
-void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy)
-id objc_getAssociatedObject(id object, const void *key)
 
 
 
@@ -51,6 +49,14 @@ const char *(*old_class_getImageName)(Class cls);
 Ivar (*old_object_setInstanceVariable)(id obj, const char *name, void *value);
 Ivar (*old_object_getInstanceVariable)(id obj, const char *name, void **outValue);
 Ivar (*old_class_getClassVariable)(Class cls, const char *name);
+
+//Below. Key should actually be const void *
+void (*old_objc_setAssociatedObject)(id object, const char *key, id value, objc_AssociationPolicy policy);
+id (*old_objc_getAssociatedObject)(id object, const char *key);
+//End
+
+
+
 //New Func
 Class new_NSClassFromString(NSString* aClassName){
 	if(WTShouldLog){
@@ -309,7 +315,39 @@ Ivar new_class_getClassVariable(Class cls, const char *name){
 	Ivar ret=old_class_getClassVariable(cls,name);
 	return ret;
 }
+void new_objc_setAssociatedObject(id object, const char *key, id value, objc_AssociationPolicy policy){
+	if(WTShouldLog){
+		NSString* NSName=[[NSString stringWithUTF8String:key] autorelease];
+		WTInit(@"ObjCRuntime",@"objc_setAssociatedObject");
+		WTAdd([object description],@"Object");
+		WTAdd([value description],@"Value");
+		WTAdd(NSName,@"Key");
+		WTAdd([NSNumber numberWithUnsignedInt:policy],@"Key");
+		WTSave;
+		WTRelease;
+	}
+	old_objc_setAssociatedObject(object,key,value,policy);
+}
+id new_objc_getAssociatedObject(id object, const char *key){
+	id retVal=nil;
+	if(WTShouldLog){
+		NSString* NSName=[[NSString stringWithUTF8String:key] autorelease];
+		WTInit(@"ObjCRuntime",@"objc_getAssociatedObject");
+		WTAdd([object description],@"Object");
+		WTAdd(NSName,@"Key");
+		retVal=old_objc_getAssociatedObject(object,key);
+		WTReturn([retVal description]);
+		WTSave;
+		WTRelease;
+	}
+	else{
+		retVal=old_objc_getAssociatedObject(object,key);
+	}
+	return retVal;
+
+}
 extern void init_ObjCRuntime_hook() {
+#ifdef PROTOTYPE
    MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
    MSHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
    MSHookFunction((void*)NSStringFromProtocol,(void*)new_NSStringFromProtocol, (void**)&old_NSStringFromProtocol);
@@ -325,5 +363,7 @@ extern void init_ObjCRuntime_hook() {
    MSHookFunction((void*)class_getImageName,(void*)new_class_getImageName, (void**)&old_class_getImageName);
    MSHookFunction((void*)object_setInstanceVariable,(void*)new_object_setInstanceVariable, (void**)&old_object_setInstanceVariable);
    MSHookFunction((void*)object_getInstanceVariable,(void*)new_object_getInstanceVariable, (void**)&old_object_getInstanceVariable);
-   MSHookFunction((void*)class_getClassVariable,(void*)new_class_getClassVariable, (void**)&old_class_getClassVariable);
+   MSHookFunction((void*)objc_setAssociatedObject,(void*)new_objc_setAssociatedObject, (void**)&old_objc_setAssociatedObject);
+   MSHookFunction((void*)objc_getAssociatedObject,(void*)new_objc_getAssociatedObject, (void**)&old_objc_getAssociatedObject);
+#endif
 }

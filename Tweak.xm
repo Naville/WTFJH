@@ -3,9 +3,10 @@
 // Utility function to parse the preference file
 
 #ifdef PROTOTYPE
+void WTFJHLog(id Obj1, ... );
 int OriginalErrDes=dup(STDERR_FILENO);
 int NewDes=0;
-extern void WTFJHLog(id Obj1, ... ){
+void WTFJHLog(id Obj1, ... ){
     dup2(OriginalErrDes,STDERR_FILENO); 
     va_list arg;
     va_start(arg,Obj1);

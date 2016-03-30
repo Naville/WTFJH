@@ -1,6 +1,6 @@
 #import "CallTracer.h"
 
-#ifdef PROTOTYPE
+#if 0
 #define NSLog WTFJHLog
 #endif
 extern void WTFJHLog(id Obj1, ... );

@@ -6,4 +6,4 @@ before_install:
   - brew update
   - clear
 
-script: "sudo python get-pip.py && ./Setup.sh && ./build.py DEBUG"
+script: "sudo python get-pip.py && ./Setup.sh && ./build.py DEBUG PROTOTYPE"

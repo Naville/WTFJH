@@ -2,7 +2,6 @@
 #import <sys/socket.h>
 
 /*
-int	bind(int, const struct sockaddr *, socklen_t) ;
 int	connect(int, const struct sockaddr *, socklen_t) __DARWIN_ALIAS_C( connect);
 int	getpeername(int, struct sockaddr * __restrict, socklen_t * __restrict)
 		__DARWIN_ALIAS(getpeername);
@@ -32,6 +31,7 @@ int disconnectx(int , sae_associd_t, sae_connid_t);*/
 //Old Pointers
 int (*old_socket)(int domain, int type, int protocol);
 int	(*old_accept)(int, struct sockaddr * __restrict, socklen_t * __restrict);
+int	(*old_bind)(int, struct sockaddr *, socklen_t);
 
 //New Functions
 int new_socket(int domain, int type, int protocol){
@@ -50,28 +50,50 @@ return descriptor;
 
 }
 int	new_accept(int newFileDesc, struct sockaddr * addr, socklen_t * addrlength){
-int retVal=0;
-if(WTShouldLog){
+	int retVal=0;
+	if(WTShouldLog){
 		WTInit(@"Socket",@"accept");
 		WTAdd([NSNumber numberWithInt:newFileDesc],@"NewFileDescriptor");
 		WTAdd([NSNumber numberWithUnsignedInt:addr->sa_len],@"Addr->TotalLength(addr->sa_len)");
 		WTAdd([NSNumber numberWithUnsignedShort:addr->sa_family],@"Addr->AddressFamily(addr->sa_family)");
 		WTAdd([NSData dataWithBytes:&addr->sa_data length:14],@"Addr->AddrValue(addr->sa_data[14])");
 		WTAdd([NSNumber numberWithUnsignedShort:*addrlength],@"addrlength");
+
 		retVal=old_accept(newFileDesc,addr,addrlength);
 		WTReturn([NSNumber numberWithInt:retVal]);
 		WTSave;
 		WTRelease;
 
-}
-else{
+	}
+	else{
 	retVal=old_accept(newFileDesc,addr,addrlength);
-}
+	}
 
-return retVal;
+	return retVal;
 }
+int	new_bind(int A, struct sockaddr * addr, socklen_t addrlength){
+	int retVal=0;
+	if(WTShouldLog){
+		WTInit(@"Socket",@"bind");
+		WTAdd([NSNumber numberWithUnsignedInt:addr->sa_len],@"Addr->TotalLength(addr->sa_len)");
+		WTAdd([NSNumber numberWithUnsignedShort:addr->sa_family],@"Addr->AddressFamily(addr->sa_family)");
+		WTAdd([NSData dataWithBytes:&addr->sa_data length:14],@"Addr->AddrValue(addr->sa_data[14])");
+		WTAdd([NSNumber numberWithUnsignedShort:addrlength],@"addrlength");
+		retVal=old_bind(A,addr,addrlength);
+		WTReturn([NSNumber numberWithInt:retVal]);
+		WTSave;
+		WTRelease;
 
+	}
+	else{
+		retVal=old_bind(A,addr,addrlength);
+	}
+	return retVal;
+
+}
 
 extern void init_Socket_hook() {
     MSHookFunction((void*)socket,(void*)new_socket, (void**)&old_socket);
+    MSHookFunction((void*)accept,(void*)new_accept, (void**)&old_accept);
+    MSHookFunction((void*)bind,(void*)new_bind, (void**)&old_bind);
 }

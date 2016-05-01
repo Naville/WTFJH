@@ -31,3 +31,13 @@ Everything Left. Unless Otherwise Specified
 - NSURLSession.xm
 - NSKeyedArchiver.xm 
 - NSKeyedUnarchiver.xm 
+
+#DavidGoldman
+##ThirdPartyTools/InspectiveC
+
+#Elias Limneos
+##ThirdPartyTools/classdumpdyld
+
+#Carina
+##ThirdPartyTools/dumpdecrypted
+

@@ -73,6 +73,11 @@ static void traceURISchemes() {
 }
 
 %ctor {
+    //Stop Reveal
+
+     [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStop" object:nil];
+
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     // Only hook Apps the user has selected in WTFJH's settings panel

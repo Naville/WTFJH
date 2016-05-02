@@ -128,15 +128,15 @@ def BuildMakeFile():
 	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" -F./"
 	for LDF in BuildConfig.LDFLAGS:
 		makeFileString +=" "+LDF
-	makeFileString +="\n"	
-	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate stdc++ c++\n"
+	makeFileString +=" \n"	
+	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate stdc++ c++ "
 	for LBName in BuildConfig.ExtraLibrary:
 		makeFileString +=LBName+" "
-	makeFileString +="\n"
+	makeFileString +=" \n"
 	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security JavaScriptCore "
 	for FWName in BuildConfig.ExtraFramework:
 		makeFileString +=FWName+" "
-	makeFileString +="\n"
+	makeFileString +=" \n"
 	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
 	makeFileString += "after-install::\n"
 	makeFileString += "	install.exec \"killall -9 SpringBoard\""

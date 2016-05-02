@@ -51,17 +51,9 @@ So there you go.
 
 %end
 extern void init_Reveal_hook() {
+	//Start Reveal
 
-	dlopen("/Library/MobileSubstrate/DynamicLibraries/libReveal.dylib", RTLD_NOW);
-	//So we don't have to switch both WTFJH and RevealLoader on everytime.
-	char * Err=dlerror();
-	if (Err!=NULL){
-		WTInit(@"WTFJH",@"Error");
-		WTAdd([NSString stringWithUTF8String:Err],@"RevealLoadingError");
-		WTSave;
-		WTRelease;
-
-	}
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStart" object:nil];
 
     %init(Reveal);
 }

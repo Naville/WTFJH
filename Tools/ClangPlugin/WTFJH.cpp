@@ -133,19 +133,27 @@ public:
         if(Type=="SINT32"){
           Wrapper<<"[NSNumber numberWithInt:"<<ArgName<<"]";
         }
-        else if(Type=="CHAR *"){
+        else if(Type.find("CHAR *")!= std::string::npos){
           Wrapper<<"[NSString stringWithUTF8String:"<<ArgName<<"]";
         }
-        else if(Type=="CONST CHAR *"){
-          Wrapper<<"[NSString stringWithUTF8String:"<<ArgName<<"]";
-        } 
         else if(Type=="LONG"){
           Wrapper<<"[NSNumber numberWithLong:"<<ArgName<<"]";
         }   
         else if(Type=="BOOL"){
           Wrapper<<"[NSNumber numberWithBool:"<<ArgName<<"]";
+        }
+        else if(Type=="FLOAT"){
+          Wrapper<<"[NSNumber numberWithFloat:"<<ArgName<<"]";
         } 
-
+        else if(Type=="DOUBLE"){
+          Wrapper<<"[NSNumber numberWithDouble:"<<ArgName<<"]";
+        } 
+        else if(Type=="NSUINTEGER"){
+          Wrapper<<"[NSNumber numberWithUnsignedInteger:"<<ArgName<<"]";
+        }
+        else if(Type.find("VOID *")!= std::string::npos){
+          Wrapper<<"objectTypeNotSupported";
+        }
         else{
           Wrapper<<ArgName;
         }

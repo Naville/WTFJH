@@ -13,5 +13,9 @@ Core is complete(hopefully bug-free), although more transform rules needs to be 
 4.	Re-run CMake
 
 ###Todo
-1.	~~Add Generators for properties of a ObjC Class.~~
-2.	Add Support For C Functions
+1.	~~Add Generators for properties of a ObjC Class.~~ Done!
+2.	~~Add Support For C Functions~~ Not gonna happen. Finding a place to insert the MSHookXXX() codes would be pain-in-ass
+
+###Issues
+1. All char* are treated as NSString. Cuz length is unknown
+2. Type Support is far from complete

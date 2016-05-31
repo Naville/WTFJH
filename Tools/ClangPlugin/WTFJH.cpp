@@ -28,6 +28,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 using namespace clang;
 using namespace std;
@@ -127,11 +128,24 @@ public:
             return true;
     }
     static std::string WrapperGenerator(std::string Type,std::string ArgName){
-      
-      std::ostringstream Wrapper;
-        if(Type=="SInt32"){
+        std::transform(Type.begin(),Type.end(),Type.begin(),::toupper);
+        std::ostringstream Wrapper;
+        if(Type=="SINT32"){
           Wrapper<<"[NSNumber numberWithInt:"<<ArgName<<"]";
         }
+        else if(Type=="CHAR *"){
+          Wrapper<<"[NSString stringWithUTF8String:"<<ArgName<<"]";
+        }
+        else if(Type=="CONST CHAR *"){
+          Wrapper<<"[NSString stringWithUTF8String:"<<ArgName<<"]";
+        } 
+        else if(Type=="LONG"){
+          Wrapper<<"[NSNumber numberWithLong:"<<ArgName<<"]";
+        }   
+        else if(Type=="BOOL"){
+          Wrapper<<"[NSNumber numberWithBool:"<<ArgName<<"]";
+        } 
+
         else{
           Wrapper<<ArgName;
         }

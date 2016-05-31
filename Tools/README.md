@@ -13,5 +13,5 @@ Core is complete(hopefully bug-free), although more transform rules needs to be 
 4.	Re-run CMake
 
 ###Todo
-1.	Add Generators for properties of a ObjC Class.
+1.	~~Add Generators for properties of a ObjC Class.~~
 2.	Add Support For C Functions

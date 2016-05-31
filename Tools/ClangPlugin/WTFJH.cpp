@@ -50,12 +50,29 @@ public:
     {
       TraverseDecl(context.getTranslationUnitDecl());
     }
+  bool VisitObjCPropertyDecl(ObjCPropertyDecl *declaration)
+    {
+      if(Manager->isInMainFile(declaration->getSourceRange ().getBegin () )){ 
+
+        VisitObjCMethodDecl(declaration->getGetterMethodDecl ());
+
+        VisitObjCMethodDecl(declaration->getSetterMethodDecl ());
+      }
+
+
+
+
+
+
+      return true;
+    }
+
+
+
+
   bool VisitObjCMethodDecl(ObjCMethodDecl *declaration)
     {
       if(Manager->isInMainFile(declaration->getSourceRange ().getBegin () )){
-        //Need To Break Down The Selector Into Parts
-         /* llvm::errs()<<"ObjcMethod:"<<declaration->getNameAsString ()<<"\n";
-          SplitSelector(declaration->getNameAsString ());*/
         llvm::errs()<<"%hook "<<declaration->getClassInterface()->getObjCRuntimeNameAsString ()<<"\n";
         if(declaration->isInstanceMethod ()){
           //Class/Instance Method.Doesn't Really Matter Though.
@@ -67,20 +84,21 @@ public:
         //Now Build Return Type
         llvm::errs()<<declaration->getReturnType().getAsString ()<<")";
         //Build Method
-        llvm::errs()<<declaration->getSelector ().getNameForSlot(0)<<":";//Add First Part of the Selector
-
-
+        llvm::errs()<<declaration->getSelector ().getNameForSlot(0);//Add First Part of the Selector
         llvm::ArrayRef<clang::ParmVarDecl*> PVD=declaration->parameters();
         for(llvm::ArrayRef<clang::ParmVarDecl*>::iterator iter=PVD.begin();iter!=PVD.end();++iter)
         {
           const clang::ParmVarDecl* PTI=*iter;
-          llvm::errs()<<"("<<PTI->getOriginalType ().getAsString ()<<")"<<PTI->getNameAsString () <<" ";
+          llvm::errs()<<":("<<PTI->getOriginalType ().getAsString ()<<")"<<PTI->getNameAsString () <<" ";
         }
        // llvm::errs()<<declaration->getReturnType().getAsString ()<<" ";
         llvm::errs()<<"{\n";//Start of Bracket
         if(declaration->getReturnType().getAsString ()!="void"){
 
           llvm::errs()<<declaration->getReturnType().getAsString ()<<" RetVal=%orig\n";
+        }
+        else{
+          llvm::errs()<<"%orig;\n";
         }
 
         llvm::errs() <<"if(WTShouldLog){\n";
@@ -97,7 +115,7 @@ public:
         
         if(declaration->getReturnType().getAsString ()!="void"){
 
-          llvm::errs()<<"WTReturn("<<WrapperGenerator(declaration->getReturnType().getAsString (),"RetVal")<<");";
+          llvm::errs()<<"  WTReturn("<<WrapperGenerator(declaration->getReturnType().getAsString (),"RetVal")<<");";
         }
         llvm::errs()<<"\n  WTSave;\n  WTRelease;\n}\n";//End of Bracket
         if(declaration->getReturnType().getAsString ()!="void"){

@@ -23,10 +23,10 @@ rm -rf ./CYTMP
 rm -rf ./Cycript.zip
 echo "Downloading Reveal"
 wget http://download.revealapp.com/Reveal.app.zip
-unzip Reveal.app.zip -d ./RevealTMP
-cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework ./
-rm -rf ./RevealTMP
-rm -rf ./Reveal.app.zip
+unzip Reveal.app.zip -d ./RevealTMP >>/dev/null
+cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework ./ >>/dev/null
+rm -rf ./RevealTMP >>/dev/null
+rm -rf ./Reveal.app.zip >>/dev/null
 
 
 

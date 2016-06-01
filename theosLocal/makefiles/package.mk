@@ -6,7 +6,12 @@ _THEOS_PACKAGE_RULES_LOADED := 1
 
 package:: internal-package-check stage before-package internal-package after-package
 before-package:: $(THEOS_PACKAGE_DIR)
-internal-package internal-package-check::
+internal-package::
+ifeq ($(_THEOS_FINAL_PACKAGE),$(_THEOS_TRUE))
+	find $(THEOS_STAGING_DIR) -name \*.png -exec pincrush -i {} \;
+	find $(THEOS_STAGING_DIR) \( -name \*.plist -or -name \*.strings \) -exec plutil -convert binary1 {} \;
+endif
+internal-package-check::
 	@:
 
 # __THEOS_LAST_PACKAGE_FILENAME is to be set by a rule variable in the package format makefile.
@@ -45,9 +50,15 @@ __BASEVER_FOR_BUILDNUM = $(or $(__USERVER_FOR_BUILDNUM),$(THEOS_PACKAGE_BASE_VER
 # that offering these via an easy-to-use interface makes more sense than hiding them behind
 # a really stupidly long name.
 # VERSION.* are meant to be used in user PACKAGE_VERSIONs.
-VERSION.INC_BUILD_NUMBER = $(shell THEOS_PROJECT_DIR="$(THEOS_PROJECT_DIR)" "$(THEOS_BIN_PATH)/package_version.sh" -N "$(THEOS_PACKAGE_NAME)" -V "$(__BASEVER_FOR_BUILDNUM)")
 VERSION.EXTRAVERSION = $(if $(PACKAGE_BUILDNAME),+$(PACKAGE_BUILDNAME))
+
+ifeq ($(_THEOS_FINAL_PACKAGE),$(_THEOS_TRUE))
+VERSION.EXTRAVERSION = $(if $(PACKAGE_BUILDNAME),+$(PACKAGE_BUILDNAME))
+_THEOS_PACKAGE_DEFAULT_VERSION_FORMAT = $(THEOS_PACKAGE_BASE_VERSION)$(VERSION.EXTRAVERSION)
+else
+VERSION.INC_BUILD_NUMBER = $(shell THEOS_PROJECT_DIR="$(THEOS_PROJECT_DIR)" "$(THEOS_BIN_PATH)/package_version.sh" -N "$(THEOS_PACKAGE_NAME)" -V "$(__BASEVER_FOR_BUILDNUM)")
 _THEOS_PACKAGE_DEFAULT_VERSION_FORMAT = $(THEOS_PACKAGE_BASE_VERSION)-$(VERSION.INC_BUILD_NUMBER)$(VERSION.EXTRAVERSION)
+endif
 
 # Copy the actual value of PACKAGE_VERSION to __PACKAGE_VERSION and replace PACKAGE_VERSION with
 # a mere reference (to a simplified copy.)
@@ -64,24 +75,63 @@ _THEOS_INTERNAL_PACKAGE_VERSION = $(call __simplify,_THEOS_INTERNAL_PACKAGE_VERS
 ## Installation Core Rules
 install:: before-install internal-install after-install
 
+internal-install-check::
+	@if [[ -z "$(_THEOS_PACKAGE_LAST_FILENAME)" ]]; then \
+		$(PRINT_FORMAT_ERROR) "$(MAKE) install and show require that you build a package before you try to install it." >&2; \
+		exit 1; \
+	fi
+	@if [[ ! -f "$(_THEOS_PACKAGE_LAST_FILENAME)" ]]; then \
+		$(PRINT_FORMAT_ERROR) "Could not find “$(_THEOS_PACKAGE_LAST_FILENAME)” to install. Aborting." >&2; \
+		exit 1; \
+	fi
+
 export TARGET_INSTALL_REMOTE
 _THEOS_INSTALL_TYPE := local
 ifeq ($(TARGET_INSTALL_REMOTE),$(_THEOS_TRUE))
 _THEOS_INSTALL_TYPE := remote
 ifeq ($(THEOS_DEVICE_IP),)
 internal-install::
-	$(info $(MAKE) install requires that you set THEOS_DEVICE_IP in your environment. It is also recommended that you have public-key authentication set up for root over SSH, or you will be entering your password a lot.)
+	@$(PRINT_FORMAT_ERROR) "$(MAKE) install requires that you set THEOS_DEVICE_IP in your environment." >&2
+	@$(PRINT_FORMAT) "It is also recommended that you have public-key authentication set up for root over SSH, or you will be entering your password a lot." >&2
 	@exit 1
 endif # THEOS_DEVICE_IP == ""
-THEOS_DEVICE_PORT ?= 22
-export THEOS_DEVICE_IP THEOS_DEVICE_PORT
+THEOS_DEVICE_USER ?= root
+export THEOS_DEVICE_IP THEOS_DEVICE_PORT THEOS_DEVICE_USER
 endif # TARGET_INSTALL_REMOTE == true
 
+_THEOS_SUDO_COMMAND ?= $(THEOS_SUDO_COMMAND)
+
+ifeq ($(THEOS_DEVICE_USER),root)
+_THEOS_SUDO_COMMAND =
+endif
+
 after-install:: internal-after-install
-before-install internal-install internal-after-install::
+
+before-install::
+ifeq ($(PREINSTALL_TARGET_PROCESSES),)
 	@:
+else
+	$(ECHO_PRE_UNLOADING)install.exec "killall $(PREINSTALL_TARGET_PROCESSES) 2>/dev/null || true"$(ECHO_END)
+endif
+
+internal-install::
+	@:
+
+internal-after-install::
+ifeq ($(INSTALL_TARGET_PROCESSES),)
+	@:
+else
+	$(ECHO_UNLOADING)install.exec "killall $(INSTALL_TARGET_PROCESSES) 2>/dev/null || true"$(ECHO_END)
+endif
 
 -include $(THEOS_MAKE_PATH)/install/$(_THEOS_PACKAGE_FORMAT)_$(_THEOS_INSTALL_TYPE).mk
 $(eval $(call __mod,install/$(_THEOS_PACKAGE_FORMAT)_$(_THEOS_INSTALL_TYPE).mk))
 
 endif # _THEOS_PACKAGE_RULES_LOADED
+
+show:: internal-install-check
+ifeq ($(_THEOS_PLATFORM_SHOW_IN_FILE_MANAGER),)
+	@$(PRINT_FORMAT_ERROR) "It is not known how to open the file manager on this platform." >&2; exit 1
+else
+	$(_THEOS_PLATFORM_SHOW_IN_FILE_MANAGER) "$(shell cat "$(_THEOS_LOCAL_DATA_DIR)/last_package")"
+endif

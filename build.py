@@ -119,8 +119,8 @@ def BuildMakeFile():
 		makeFileString += ",-DPROTOTYPE"
 	makeFileString += "\"\n"
 	makeFileString += "include theos/makefiles/common.mk\n"
-	makeFileString += "export ARCHS = armv7 armv7s arm64\n"
-	makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
+	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
+	#makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
 	makeFileString += randomTweakName + MakeFileListString + "\n"
 	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
@@ -434,7 +434,7 @@ def main():
 	if buildSuccess==True:
 		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
 		FixControlFile("./layout/DEBIAN/control")
-		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
+		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/debug/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
 		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")

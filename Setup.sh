@@ -3,7 +3,7 @@ echo "Installing Latest Dependencies"
 brew install dpkg
 brew install ldid
 brew install wget
-brew install unzip
+brew install homebrew/dupes/unzip
 echo "Pulling Latest Trunk"
 git submodule foreach git pull origin master
 sudo pip install colorama

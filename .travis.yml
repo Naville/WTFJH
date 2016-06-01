@@ -6,4 +6,4 @@ before_install:
   - brew update
   - clear
 
-script: "sudo python get-pip.py && ./Setup.sh && ./build.py DEBUG PROTOTYPE"
+script: "sudo python get-pip.py && ./Setup.sh && ./InstallTheos.sh && ./build.py DEBUG PROTOTYPE"

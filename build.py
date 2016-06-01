@@ -351,7 +351,7 @@ def buildThirdPartyComponents():
 				os.system("mkdir .theos/obj")
 				os.system("ln -s .theos/obj obj")
 				os.system("make")
-				os.system("mv ./obj/"+x+".dylib ../../")
+				os.system("mv ./obj/debug/"+x+".dylib ../../")
 				os.chdir(origCH)
 			else:
 				Error=None
@@ -365,7 +365,7 @@ def buildThirdPartyComponents():
 					subprocess.check_call(["mkdir .theos/obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
 					subprocess.check_call(["ln -s .theos/obj obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
 					Error=subprocess.check_call(["make"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					subprocess.check_call(["mv ./obj/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
 					os.chdir(origCH)						
 				except Exception as inst:
 					if (isinstance(inst,subprocess.CalledProcessError) and (Error==None or Error==0)):
@@ -377,6 +377,7 @@ def buildThirdPartyComponents():
 			global LinkerString
 			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
 def main():
+	os.system("unset THEOS")#Latest Theos Brings Shit
 	ParseArgs()
 	LINKTHEOS()
 	os.system("echo \" \" >./Hooks/Obfuscation.h")

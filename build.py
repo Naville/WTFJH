@@ -150,11 +150,7 @@ def LINKTHEOS():#For God's Sake. Keep Your Codes Clean is IMPORTANT. We'll Remov
 		if (os.environ.get('THEOS') != None):
 			os.system("ln -s $THEOS theos && mkdir .theos && mkdir .theos/obj && ln -s ./.theos/obj obj")
 		else:
-			print "$THEOS ENV not set. Using Local Path"
-			os.environ['THEOS'] = os.path.dirname(os.path.realpath(sys.argv[0]))+"/theosLocal"
-			print "$THEOS Set To: "+os.environ.get('THEOS')
-			if (os.path.exists(os.environ.get('THEOS')) == False):
-				print (Fore.RED+"theosLocal/ Doesn't Exist. Get A Fresh Clone From Master")
+			print "$THEOS ENV not set. Try Run ./InstallTheos.sh"
 
 			os.system("ln -s $THEOS theos && mkdir .theos && mkdir .theos/obj && ln -s ./.theos/obj obj")
 

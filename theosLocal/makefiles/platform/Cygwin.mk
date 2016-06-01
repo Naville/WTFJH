@@ -1,1 +1,0 @@
-include $(THEOS_MAKE_PATH)/platform/Windows.mk

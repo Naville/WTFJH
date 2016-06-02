@@ -4,6 +4,12 @@ brew install dpkg
 brew install ldid
 brew install wget
 brew install homebrew/dupes/unzip
+echo "Clean-up"
+rm -rf ./Hooks/keystone/
+rm -rf ./Hooks/capstone/
+rm ./libcapstone.a
+rm ./libkeystone.a
+rm ./Reveal.framework
 echo "Pulling Latest Trunk"
 git submodule foreach git pull origin master
 sudo pip install colorama

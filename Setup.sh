@@ -3,15 +3,23 @@ echo "Installing Latest Dependencies"
 brew install dpkg
 brew install ldid
 brew install wget
+brew install cmake
 brew install homebrew/dupes/unzip
 echo "Clean-up"
-rm -rf ./Hooks/keystone/
-rm -rf ./Hooks/capstone/
-rm ./libcapstone.a
-rm ./libkeystone.a
-rm ./Reveal.framework
+rm -rf ./Hooks/keystone/ >>/dev/null
+rm -rf ./Hooks/capstone/ >>/dev/null
+rm ./libcapstone.a >>/dev/null
+rm ./libkeystone.a >>/dev/null
+rm ./Reveal.framework >>/dev/null
+rm ./Reveal.app.zip
+rm -rf ./RevealTMP
+rm -rf ./CYTMP
+rm -rf ./keystone
+rm -rf ./capstone
+mkdir keystone
+mkdir capstone
 echo "Pulling Latest Trunk"
-git submodule update --init
+git submodule update --init --recursive
 echo "Installing colorama from python-pip"
 sudo pip install colorama
 echo "Building capstone"
@@ -36,10 +44,10 @@ rm -rf ./CYTMP
 rm -rf ./Cycript.zip
 echo "Downloading Reveal"
 wget http://download.revealapp.com/Reveal.app.zip
-unzip Reveal.app.zip -d ./RevealTMP
-cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework ./
-rm -rf ./RevealTMP
-rm -rf ./Reveal.app.zip
+unzip Reveal.app.zip -d ./RevealTMP >>/dev/null
+cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework ./ >>/dev/null
+rm -rf ./RevealTMP >>/dev/null
+rm -rf ./Reveal.app.zip >>/dev/null
 
 
 

@@ -14,10 +14,6 @@ rm ./Reveal.framework >>/dev/null
 rm ./Reveal.app.zip
 rm -rf ./RevealTMP
 rm -rf ./CYTMP
-rm -rf ./keystone
-rm -rf ./capstone
-mkdir keystone
-mkdir capstone
 echo "Pulling Latest Trunk"
 git submodule update --init --recursive
 echo "Installing colorama from python-pip"

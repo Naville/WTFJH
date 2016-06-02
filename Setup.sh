@@ -11,7 +11,8 @@ rm ./libcapstone.a
 rm ./libkeystone.a
 rm ./Reveal.framework
 echo "Pulling Latest Trunk"
-git submodule foreach git pull origin master
+git submodule update --init
+echo "Installing colorama from python-pip"
 sudo pip install colorama
 echo "Building capstone"
 cd capstone && ./make.sh ios  && cd ../ >>/dev/null

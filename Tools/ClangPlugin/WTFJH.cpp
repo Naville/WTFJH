@@ -50,82 +50,74 @@ public:
   void HandleTranslationUnit(ASTContext &context)
     {
       TraverseDecl(context.getTranslationUnitDecl());
-    }
+    } 
   bool VisitObjCPropertyDecl(ObjCPropertyDecl *declaration)
     {
-      if(Manager->isInMainFile(declaration->getSourceRange ().getBegin () )){ 
+      if(Manager->isInMainFile(declaration->getSourceRange ().getBegin () )){
 
         VisitObjCMethodDecl(declaration->getGetterMethodDecl ());
 
         VisitObjCMethodDecl(declaration->getSetterMethodDecl ());
       }
-
-
-
-
-
-
-      return true;
+      return Base::VisitObjCPropertyDecl(declaration);
     }
-
-
-
-
   bool VisitObjCMethodDecl(ObjCMethodDecl *declaration)
     {
-      if(Manager->isInMainFile(declaration->getSourceRange ().getBegin () )){
-        llvm::errs()<<"%hook "<<declaration->getClassInterface()->getObjCRuntimeNameAsString ()<<"\n";
+       if(Manager->isInMainFile(declaration->getSourceRange ().getBegin () )){
+       // llvm::errs()<<"Visiting ObjCMethodDecl:"<<declaration->getSelector ().getAsString()<<"\n";
+        std::cout<<"%hook "<<declaration->getClassInterface()->getObjCRuntimeNameAsString ().str ()<<"\n";
         if(declaration->isInstanceMethod ()){
           //Class/Instance Method.Doesn't Really Matter Though.
-          llvm::errs()<<"-(";
+          std::cout<<"-(";
         }
         else{
-          llvm::errs()<<"+(";
+          std::cout<<"+(";
         }
         //Now Build Return Type
-        llvm::errs()<<declaration->getReturnType().getAsString ()<<")";
+        std::cout<<declaration->getReturnType().getAsString ()<<")";
         //Build Method
-        llvm::errs()<<declaration->getSelector ().getNameForSlot(0);//Add First Part of the Selector
+        std::cout<<declaration->getSelector ().getNameForSlot(0).str();//Add First Part of the Selector
         llvm::ArrayRef<clang::ParmVarDecl*> PVD=declaration->parameters();
         for(llvm::ArrayRef<clang::ParmVarDecl*>::iterator iter=PVD.begin();iter!=PVD.end();++iter)
         {
           const clang::ParmVarDecl* PTI=*iter;
-          llvm::errs()<<":("<<PTI->getOriginalType ().getAsString ()<<")"<<PTI->getNameAsString () <<" ";
+          std::cout<<":("<<PTI->getOriginalType ().getAsString ()<<")"<<PTI->getNameAsString ()<<" ";
         }
-       // llvm::errs()<<declaration->getReturnType().getAsString ()<<" ";
-        llvm::errs()<<"{\n";//Start of Bracket
+       // std::cout<<declaration->getReturnType().getAsString ()<<" ";
+        std::cout<<"{\n";//Start of Bracket
         if(declaration->getReturnType().getAsString ()!="void"){
 
-          llvm::errs()<<declaration->getReturnType().getAsString ()<<" RetVal=%orig\n";
+          std::cout<<declaration->getReturnType().getAsString ()<<" RetVal=%orig\n";
         }
         else{
-          llvm::errs()<<"%orig;\n";
+          std::cout<<"%orig;\n";
         }
 
-        llvm::errs() <<"if(WTShouldLog){\n";
+        std::cout <<"if(WTShouldLog){\n";
 
         //WTShouldLog Called
-        llvm::errs()<<"  WTInit(@\""<<declaration->getClassInterface()->getObjCRuntimeNameAsString ()<<",@\""<<declaration->getSelector ().getAsString()<<"\");\n";
+        std::cout<<"  WTInit(@\""<<declaration->getClassInterface()->getObjCRuntimeNameAsString ().str()<<",@\""<<declaration->getSelector ().getAsString()<<"\");\n";
         //WTAdd Code
         for(llvm::ArrayRef<clang::ParmVarDecl*>::iterator iter=PVD.begin();iter!=PVD.end();++iter)
         {
           const clang::ParmVarDecl* PTI=*iter;
-          llvm::errs()<<"  WTAdd("<<WrapperGenerator(PTI->getOriginalType ().getAsString (),PTI->getNameAsString ())<<",@\""<<PTI->getNameAsString ()<<"\");\n";
+          std::cout<<"  WTAdd("<<WrapperGenerator(PTI->getOriginalType ().getAsString (),PTI->getNameAsString ())<<",@\""<<PTI->getNameAsString ()<<"\");\n";
         }        
 
         
         if(declaration->getReturnType().getAsString ()!="void"){
 
-          llvm::errs()<<"  WTReturn("<<WrapperGenerator(declaration->getReturnType().getAsString (),"RetVal")<<");";
+          std::cout<<"  WTReturn("<<WrapperGenerator(declaration->getReturnType().getAsString ()  ,"RetVal")<<");";
         }
-        llvm::errs()<<"\n  WTSave;\n  WTRelease;\n}\n";//End of Bracket
+        std::cout<<"\n  WTSave;\n  WTRelease;\n}\n";//End of Bracket
         if(declaration->getReturnType().getAsString ()!="void"){
 
-          llvm::errs()<<"\nreturn RetVal;\n";
+          std::cout<<"\nreturn RetVal;\n";
         }
-        llvm::errs()<<"\n}\n%end\n";
-        }
-            return true;
+        std::cout<<"\n}\n%end\n";
+
+      }
+            return Base::VisitObjCMethodDecl(declaration);
     }
     static std::string WrapperGenerator(std::string Type,std::string ArgName){
         std::transform(Type.begin(),Type.end(),Type.begin(),::toupper);
@@ -133,27 +125,19 @@ public:
         if(Type=="SINT32"){
           Wrapper<<"[NSNumber numberWithInt:"<<ArgName<<"]";
         }
-        else if(Type.find("CHAR *")!= std::string::npos){
+        else if(Type=="CHAR *"){
           Wrapper<<"[NSString stringWithUTF8String:"<<ArgName<<"]";
         }
+        else if(Type=="CONST CHAR *"){
+          Wrapper<<"[NSString stringWithUTF8String:"<<ArgName<<"]";
+        } 
         else if(Type=="LONG"){
           Wrapper<<"[NSNumber numberWithLong:"<<ArgName<<"]";
         }   
         else if(Type=="BOOL"){
           Wrapper<<"[NSNumber numberWithBool:"<<ArgName<<"]";
-        }
-        else if(Type=="FLOAT"){
-          Wrapper<<"[NSNumber numberWithFloat:"<<ArgName<<"]";
         } 
-        else if(Type=="DOUBLE"){
-          Wrapper<<"[NSNumber numberWithDouble:"<<ArgName<<"]";
-        } 
-        else if(Type=="NSUINTEGER"){
-          Wrapper<<"[NSNumber numberWithUnsignedInteger:"<<ArgName<<"]";
-        }
-        else if(Type.find("VOID *")!= std::string::npos){
-          Wrapper<<"objectTypeNotSupported";
-        }
+
         else{
           Wrapper<<ArgName;
         }

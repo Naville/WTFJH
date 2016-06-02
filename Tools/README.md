@@ -11,6 +11,12 @@ Core is complete(hopefully bug-free), although more transform rules needs to be 
 2.	Put it inside `/PATH/TO/LLVM/SRC/tools/clang/examples`
 3.	Add `add_subdirectory(WTFJH)` To The End Of `/PATH/TO/LLVM/SRC/tools/clang/examples/CMakeLists.txt`
 4.	Re-run CMake
+5.	cd `/PATH/TO/LLVM/BUILD/DIRECTORY`
+6.	run `make` or `ninja`,depends on your choice in CMake
+7.	`make` or `ninja` + WTFJH
+
+	e.x.: *make WTFJH*
+8.	Check `ClangPlugin/TestClang.sh` on Sample of using this plugin
 
 ###Todo
 1.	~~Add Generators for properties of a ObjC Class.~~ Done!

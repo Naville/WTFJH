@@ -11,6 +11,12 @@ echo "Building capstone"
 cd capstone && ./make.sh ios  && cd ../ >>/dev/null
 echo "Moving capstone"
 mv ./capstone/libcapstone.a ./ >>/dev/null
+cp -r ./capstone/include ./Hooks/capstone >>/dev/null
+echo "Building keystone"
+cd keystone&&mkdir build &&cd build &&../make-lib.sh &&cd ../../>>/dev/null
+echo "Moving keystone"
+mv ./keystone/build/llvm/lib/libkeystone.a ./ >>/dev/null
+cp -r ./keystone/include/keystone ./Hooks/keystone >>/dev/null
 echo "Downloading Cycript"
 wget https://cydia.saurik.com/api/latest/3 -O Cycript.zip
 echo "Cleaning old framework"

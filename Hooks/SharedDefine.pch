@@ -12,6 +12,8 @@
 #import <mach-o/dyld.h>
 #import "./Obfuscation.h"
 #import "Cycript.h"
+#import "./capstone/capstone.h"
+#import "keystone/keystone.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"
 #define traceStorage [SQLiteStorage sharedManager]

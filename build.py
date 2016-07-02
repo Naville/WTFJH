@@ -341,6 +341,8 @@ def buildThirdPartyComponents():
 				origCH=os.getcwd()
 				os.chdir(SubDirectoryPath)
 				os.system("rm theos")
+				os.system("rm obj")
+				os.system("rm -rf .theos")
 				os.system("ln -s $THEOS theos")
 				os.system("mkdir .theos")
 				os.system("mkdir .theos/obj")

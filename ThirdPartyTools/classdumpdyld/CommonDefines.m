@@ -13,7 +13,7 @@
 #include <objc/runtime.h>
 #include <mach-o/nlist.h>
 #include <mach-o/dyld_images.h>
-
+#define exit(x) 
 static BOOL addHeadersFolder=NO;
 static BOOL shouldImportStructs=0;
 static NSMutableArray *allStructsFound=nil;

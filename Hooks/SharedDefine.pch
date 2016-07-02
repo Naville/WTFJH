@@ -16,9 +16,7 @@
 #import "keystone/keystone.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"
-#define traceStorage [SQLiteStorage sharedManager]
-
-//static NSString *preferenceFilePath = @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist";  
+#define traceStorage [SQLiteStorage sharedManager] 
 #define preferenceFilePath @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist"
 
 #define Meh1(x) #x

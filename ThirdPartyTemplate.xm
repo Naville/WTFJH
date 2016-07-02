@@ -3,6 +3,7 @@
 #import <mach-o/getsect.h>
 #import <dlfcn.h>
 extern NSString* RandomString();
+typedef void (*WTLoaderPrototype)();  
 extern void init_TEMPLATENAME_hook(){
 #ifdef PROTOTYPE 
 //Because We Ain't Ready Yet. No Test
@@ -26,7 +27,15 @@ extern void init_TEMPLATENAME_hook(){
             NSData* SDData=[NSData dataWithBytes:data length:size];
             NSString* randomPath=[NSString stringWithFormat:@"%@/Documents/%@",NSHomeDirectory(),RandomString()];
             [SDData writeToFile:randomPath atomically:YES];
-            dlopen(randomPath.UTF8String,RTLD_NOW);
+            void* handle=dlopen(randomPath.UTF8String,RTLD_NOW);//Open Created dylib
+            dlclose(handle);
+
+            handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);  
+            WTLoaderPrototype WTHandle = dlsym(handle, "WTFJHInitTEMPLATENAME");  //Call Init Function
+            if(WTHandle!=NULL){
+            WTHandle();  
+            }
+            dlclose(handle);  
             //Inform Our Logger
             CallTracer *tracer = [[CallTracer alloc] initWithClass:@"WTFJH" andMethod:@"LoadThirdPartyTools"];
         	[tracer addArgFromPlistObject:@"dlopen" withKey:@"Type"];

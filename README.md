@@ -1,5 +1,7 @@
 # What The Fuck Just Happened
-[![Build Status](https://travis-ci.org/Naville/WTFJH.svg?branch=master)](https://travis-ci.org/Naville/WTFJH)
+
+\#import <objc/runtime.h>
+
 
 > A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]
 

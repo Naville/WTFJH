@@ -19,7 +19,7 @@ init(autoreset=True)
 
 def Exec(Command):
 	try:
-		subprocess.check_call([Command], stdout=open("/dev/null", 'a'), stderr=subprocess.STDOUT, shell=True)
+		subprocess.check_call([Command], stdout=open("/dev/null", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
 	except:
 		pass
 
@@ -356,13 +356,13 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					subprocess.check_call(["rm theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					subprocess.check_call(["ln -s $THEOS theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					subprocess.check_call(["mkdir .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					subprocess.check_call(["mkdir .theos/obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					subprocess.check_call(["ln -s .theos/obj obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					Error=subprocess.check_call(["make"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
-					subprocess.check_call(["mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=subprocess.STDOUT, shell=True)
+					subprocess.check_call(["rm theos&&rm obj&&rm -rf .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					subprocess.check_call(["ln -s $THEOS theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					subprocess.check_call(["mkdir .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					subprocess.check_call(["mkdir .theos/obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					subprocess.check_call(["ln -s .theos/obj obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					Error=subprocess.check_call(["make"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					subprocess.check_call(["mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
 					os.chdir(origCH)						
 				except Exception as inst:
 					if (isinstance(inst,subprocess.CalledProcessError) and (Error==None or Error==0)):
@@ -421,7 +421,7 @@ def main():
 		with open("MainLog.log", 'a') as devnull:
 			try:
 				print "Building... Main"
-				x = subprocess.check_call(['make'], stdout=devnull, stderr=subprocess.STDOUT)
+				x = subprocess.check_call(['make'], stdout=devnull, stderr=open("../../ThirdPartyLog.log", 'a'))
 				print "Make Exit With Status: ",x
 			except Exception as inst:
 				buildSuccess=False

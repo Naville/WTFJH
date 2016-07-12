@@ -15,6 +15,8 @@ From https://github.com/iosre/Notificatcher With Modifications
 
 
 %group Notification
+
+
 %hook CPDistributedMessagingCenter
 - (BOOL)_sendMessage:(id)arg1 userInfo:(id)arg2 receiveReply:(id)arg3 error:(id)arg4 toTarget:(id)arg5 selector:(SEL)arg6 context:(void*)arg7 nonBlocking:(BOOL)arg8
 {
@@ -68,6 +70,7 @@ static void new__CFXNotificationPost(CFNotificationCenterRef center, NSNotificat
 	WTRelease;
 	}
 }
+//extern "C" void _CFXNotificationRegisterObserver();
 
 extern void init_Notification_hook() {
     %init(Notification);

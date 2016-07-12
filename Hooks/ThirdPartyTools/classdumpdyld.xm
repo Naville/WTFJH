@@ -4,7 +4,7 @@
 #import <dlfcn.h>
 extern NSString* RandomString();
 typedef void (*WTLoaderPrototype)();  
-extern void init_TEMPLATENAME_hook(){
+extern void init_classdumpdyld_hook(){
 #ifdef PROTOTYPE 
 //Because We Ain't Ready Yet. No Test
 	 for(int i=0;i<_dyld_image_count();i++){
@@ -13,15 +13,15 @@ extern void init_TEMPLATENAME_hook(){
         if([curName containsString:WTFJHTWEAKNAME]){
             intptr_t ASLROffset=_dyld_get_image_vmaddr_slide(i);
             //We Found Ourself
-#ifndef __LP64__
+#ifndef _____LP64_____
             uint32_t size=0;
             const struct mach_header*   selfHeader=(const struct mach_header*)_dyld_get_image_header(i);
-            char * data=getsectdatafromheader(selfHeader,"WTFJH","TEMPLATENAME",&size);
+            char * data=getsectdatafromheader(selfHeader,"WTFJH","classdumpdyld",&size);
 
-#else
+#elif 
             uint64_t size=0;
             const struct mach_header_64*   selfHeader=(const struct mach_header_64*)_dyld_get_image_header(i);
-            char * data=getsectdatafromheader_64(selfHeader,"WTFJH","TEMPLATENAME",&size);
+            char * data=getsectdatafromheader_64(selfHeader,"WTFJH","classdumpdyld",&size);
 #endif
             data=ASLROffset+data;//Add ASLR Offset To Pointer And Fix Address
             NSData* SDData=[NSData dataWithBytes:data length:size];
@@ -31,7 +31,7 @@ extern void init_TEMPLATENAME_hook(){
             dlclose(handle);
 
             handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);  
-            WTLoaderPrototype WTHandle = dlsym(handle, "WTFJHInitTEMPLATENAME");  //Call Init Function
+            WTLoaderPrototype WTHandle = dlsym(handle, "WTFJHInitclassdumpdyld");  //Call Init Function
             if(WTHandle!=NULL){
             WTHandle();  
             }
@@ -40,7 +40,7 @@ extern void init_TEMPLATENAME_hook(){
             CallTracer *tracer = [[CallTracer alloc] initWithClass:@"WTFJH" andMethod:@"LoadThirdPartyTools"];
         	[tracer addArgFromPlistObject:@"dlopen" withKey:@"Type"];
         	[tracer addArgFromPlistObject:randomPath withKey:@"Path"];
-            [tracer addArgFromPlistObject:@"TEMPLATENAME" withKey:@"ModuleName"];
+            [tracer addArgFromPlistObject:@"classdumpdyld" withKey:@"ModuleName"];
         	[traceStorage saveTracedCall: tracer];
         	[tracer release];
         	//End

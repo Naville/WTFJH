@@ -7,4 +7,4 @@ before_install:
   - clear
   - export THEOS=/opt/theos
 
-script: "sudo python get-pip.py && ./Setup.sh && ./InstallTheos.sh && export THEOS_VENDOR_INCLUDE_PATH=/opt/theos/vendor/include&& export THEOS_VENDOR_LIBRARY_PATH=/opt/theos/vendor/lib &&./build.py DEBUG PROTOTYPE"
+script: "sudo python get-pip.py && ./Setup.sh && ./InstallTheos.sh &&./build.py DEBUG"

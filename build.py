@@ -357,13 +357,7 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
-					subprocess.check_call(["ln -s $THEOS theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
-					subprocess.check_call(["mkdir .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
-					subprocess.check_call(["mkdir .theos/obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
-					subprocess.check_call(["ln -s .theos/obj obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
-					Error=subprocess.check_call(["make"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
-					subprocess.check_call(["mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& make &&"+"mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)		
 					os.chdir(origCH)						
 				except Exception as inst:
 					if (isinstance(inst,subprocess.CalledProcessError) and (Error==None or Error==0)):

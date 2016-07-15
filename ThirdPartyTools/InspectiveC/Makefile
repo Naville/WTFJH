@@ -1,4 +1,3 @@
-export ARCHS = armv7 armv7s arm64
 ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000
 # ADDITIONAL_OBJCFLAGS += -S
 

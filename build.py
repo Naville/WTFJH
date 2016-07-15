@@ -90,14 +90,14 @@ def cleanUp():
 	Exec("rm ./*.dylib")
 	Exec("rm ./*.pyc")
 	print "Unlinking TheOS..."
-	Exec("rm ./theos")
+	Exec("unlink ./theos")
 	Exec("rm ./BuildConfig.pyc")
 	Exec("rm -r ./.theos")
 	for x in buildlistdir("./ThirdPartyTools"):
 		if os.path.isdir("./ThirdPartyTools/"+x):
 			Exec("rm -rf ./ThirdPartyTools/"+x+"/obj/")
 			Exec("rm -rf ./ThirdPartyTools/"+x+"/.theos/")
-			Exec("rm -rf ./ThirdPartyTools/"+x+"/theos/")
+			Exec("unlink ./ThirdPartyTools/"+x+"/theos/")
 			Exec("rm -rf ./"+x+".dylib")
 	for x in LoaderList:
 		#Clean-Up Auto-Generated Loaders
@@ -125,7 +125,7 @@ def BuildMakeFile():
 	makeFileString += randomTweakName + MakeFileListString + "\n"
 	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
 	global LinkerString
-	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" -F./"
+	makeFileString += "ADDITIONAL_LDFLAGS  = -F./ -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
 	for LDF in BuildConfig.LDFLAGS:
 		makeFileString +=" "+LDF
 	makeFileString +=" \n"	
@@ -136,6 +136,7 @@ def BuildMakeFile():
 	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security JavaScriptCore "
 	for FWName in BuildConfig.ExtraFramework:
 		makeFileString +=FWName+" "
+		print FWName
 	makeFileString +=" \n"
 	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
 	makeFileString += "after-install::\n"
@@ -340,7 +341,7 @@ def buildThirdPartyComponents():
 				SubDirectoryPath="./ThirdPartyTools/"+x
 				origCH=os.getcwd()
 				os.chdir(SubDirectoryPath)
-				os.system("rm theos")
+				os.system("unlink theos")
 				os.system("rm obj")
 				os.system("rm -rf .theos")
 				os.system("ln -s $THEOS theos")
@@ -356,7 +357,7 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					subprocess.check_call(["rm theos&&rm obj&&rm -rf .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+					subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
 					subprocess.check_call(["ln -s $THEOS theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
 					subprocess.check_call(["mkdir .theos"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
 					subprocess.check_call(["mkdir .theos/obj"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
@@ -374,7 +375,7 @@ def buildThirdPartyComponents():
 			global LinkerString
 			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
 def main():
-	os.system("unset THEOS")#Latest Theos Brings Shit
+	#os.system("unset THEOS")#Latest Theos Brings Shit
 	ParseArgs()
 	LINKTHEOS()
 	os.system("echo \" \" >./Hooks/Obfuscation.h")

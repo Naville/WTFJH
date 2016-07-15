@@ -10,8 +10,9 @@
 #import <objc/runtime.h>
 #import <mach-o/getsect.h>
 #import <mach-o/dyld.h>
+#import <dlfcn.h>
 #import "./Obfuscation.h"
-#import "Cycript.h"
+//#import "Cycript.h"
 #import "./capstone/capstone.h"
 #import "keystone/keystone.h"
 

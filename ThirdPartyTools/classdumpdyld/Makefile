@@ -1,5 +1,4 @@
 include theos/makefiles/common.mk
-export ARCHS = armv7 armv7s arm64
 TWEAK_NAME = classdumpdyld
 classdumpdyld_FILES = classdumpdyldlib.xm
 classdumpdyld_LDFLAGS = -lsubstrate

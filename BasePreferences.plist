@@ -58,20 +58,6 @@
 			<string>Log To The Console</string>
 		</dict>
 		<dict>
-			<key>bestGuess</key>
-			<real>0.8</real>
-			<key>cell</key>
-			<string>PSEditTextCell</string>
-			<key>defaults</key>
-			<string>naville.wtfjh</string>
-			<key>isNumeric</key>
-			<true/>
-			<key>keyboard</key>
-			<string>numbers</string>
-			<key>placeholder</key>
-			<real>0.8</real>
-		</dict>
-		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>

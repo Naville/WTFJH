@@ -74,7 +74,10 @@ static void traceURISchemes() {
 
 %ctor {
     //Stop Reveal
+#ifndef NonJailbroken   
 
+dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
+#endif
      [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStop" object:nil];
 
 

@@ -122,9 +122,9 @@ int _CTServerConnectionSetVibratorState(int *, void *, int, int, int, int, int);
 
 static void Loader(){
 	%init(CoreTelephony);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCopyMobileEquipmentInfo")),(void*)new_CTServerConnectionCopyMobileEquipmentInfo, (void**)&old_CTServerConnectionCopyMobileEquipmentInfo);	
-	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellCount")),(void*)_CTServerConnectionCellMonitorGetCellCount, (void**)&old_CTServerConnectionCellMonitorGetCellCount);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellInfo")),(void*)_CTServerConnectionCellMonitorGetCellInfo, (void**)&old_CTServerConnectionCellMonitorGetCellInfo);
+	WTHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCopyMobileEquipmentInfo")),(void*)new_CTServerConnectionCopyMobileEquipmentInfo, (void**)&old_CTServerConnectionCopyMobileEquipmentInfo);	
+	WTHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellCount")),(void*)_CTServerConnectionCellMonitorGetCellCount, (void**)&old_CTServerConnectionCellMonitorGetCellCount);
+	WTHookFunction(((void*)MSFindSymbol(NULL, "__CTServerConnectionCellMonitorGetCellInfo")),(void*)_CTServerConnectionCellMonitorGetCellInfo, (void**)&old_CTServerConnectionCellMonitorGetCellInfo);
 }
 WTCallBack(@"CoreTelephony",Loader)
 

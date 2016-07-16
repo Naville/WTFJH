@@ -565,8 +565,7 @@ uintptr_t postObjc_msgSend() {
 #include "InspectiveCarm32.mm"
 #endif
 
-//MSInitialize {
-void WTFJHInitInspectiveC(){
+MSInitialize {
   pthread_key_create(&threadKey, &destroyThreadCallStack);
 
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

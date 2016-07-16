@@ -41,7 +41,7 @@ void * new_dlopen(const char * __path, int __mode) {
 
 
 extern void init_dlfcn_hook() {
-    MSHookFunction((void*)dladdr,(void*)new_dladdr, (void**)&old_dladdr);
-    MSHookFunction((void*)dlsym,(void*)new_dlsym, (void**)&old_dlsym);
-    MSHookFunction((void*)dlopen,(void*)new_dlopen, (void**)&old_dlopen);
+    WTHookFunction((void*)dladdr,(void*)new_dladdr, (void**)&old_dladdr);
+    WTHookFunction((void*)dlsym,(void*)new_dlsym, (void**)&old_dlsym);
+    WTHookFunction((void*)dlopen,(void*)new_dlopen, (void**)&old_dlopen);
 }

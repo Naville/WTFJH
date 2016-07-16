@@ -59,6 +59,19 @@ Please Call Exactly In The Following Sequence
 5.	WTRelease **Release The Memory Of The Logger**
 6.	WTShouldLog **if(WTShouldLog){} to check if it's called by the app itself**
 
+#####Hooking
+Wrappers of MS API Are in Hooks/Misc/WTSubstrate.h
+
+Currently 
+
+1.	WTHookFunction
+2.	WTFindSymbol
+
+Are available with the exact same usage with their MS* Equivalent
+
+Use them instead of MS** Ones as they take care of jailed situation
+
+
 #####dyld CallBack
 1.	WTCallBack(LibraryName,FunctionToCall) **Generate A Function That Call FunctionToCall() when an image which path containing LibraryName is loaded. You Can Init Hooks inside FunctionToCall**
 2.	WTAddCallBack(Loader) **Register the callback with dyld and execute Loader().Please Note That Loader Should Be The Function That Actually Init The Hooks,Not The CallBack**
@@ -81,6 +94,7 @@ Other Arguments(Upper/Lower Case Doesn't Matter):
 2.	OBFUSCATION OBFUSCATION SYMBOLS (NOT ALL. NEED CONTRIBUTIONS)
 3.	PROTOTYPE *Enable Codes Flagged As Prototype*
 4.	DISABLE=ModuleName1,ModuleName2,.........   *DISABLE UNWANTED MODULES*
+5.	JAILED *Will Attempt To Build For Non-Jailbroken Devices.MSHookFunction and ThirdPartyTools Are Currently Disabled. Probably Will Switch To FishHook Later*
 
 
 

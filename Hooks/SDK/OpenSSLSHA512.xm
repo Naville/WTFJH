@@ -77,8 +77,8 @@ int SHA512(const unsigned char *d, size_t n, unsigned char *md){
 
 
 extern void init_OpenSSLSHA512_hook(){
-MSHookFunction(((void*)MSFindSymbol(NULL, "_SHA512_Update")),(void*)SHA512_Update, (void**)&old_SHA512_Update);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_SHA512_Final")),(void*)SHA512_Final, (void**)&old_SHA512_Final);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_SHA512")),(void*)SHA512, (void**)&old_SHA512);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_SHA512_Update")),(void*)SHA512_Update, (void**)&old_SHA512_Update);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_SHA512_Final")),(void*)SHA512_Final, (void**)&old_SHA512_Final);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_SHA512")),(void*)SHA512, (void**)&old_SHA512);
 //void SHA512_Transform(SHA512_CTX *c, const unsigned char *data);
 }

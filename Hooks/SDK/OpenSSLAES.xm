@@ -195,16 +195,16 @@ static void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
 
 }
 extern void init_OpenSSLAES_hook() {
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_set_encrypt_key")),(void*)AES_set_encrypt_key, (void**)&old_AES_set_encrypt_key);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_set_decrypt_key")),(void*)AES_set_decrypt_key, (void**)&old_AES_set_decrypt_key);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ecb_encrypt")),(void*)AES_ecb_encrypt, (void**)&old_AES_ecb_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cbc_encrypt")),(void*)AES_cbc_encrypt, (void**)&old_AES_cbc_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb128_encrypt")),(void*)AES_cfb128_encrypt, (void**)&old_AES_cfb128_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb1_encrypt")),(void*)AES_cfb1_encrypt, (void**)&old_AES_cfb1_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_cfb8_encrypt")),(void*)AES_cfb8_encrypt, (void**)&old_AES_cfb8_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ofb128_encrypt")),(void*)AES_ofb128_encrypt, (void**)&old_AES_ofb128_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_ige_encrypt")),(void*)AES_ige_encrypt, (void**)&old_AES_ige_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_AES_bi_ige_encrypt")),(void*)AES_bi_ige_encrypt, (void**)&old_AES_bi_ige_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_set_encrypt_key")),(void*)AES_set_encrypt_key, (void**)&old_AES_set_encrypt_key);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_set_decrypt_key")),(void*)AES_set_decrypt_key, (void**)&old_AES_set_decrypt_key);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_ecb_encrypt")),(void*)AES_ecb_encrypt, (void**)&old_AES_ecb_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_cbc_encrypt")),(void*)AES_cbc_encrypt, (void**)&old_AES_cbc_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_cfb128_encrypt")),(void*)AES_cfb128_encrypt, (void**)&old_AES_cfb128_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_cfb1_encrypt")),(void*)AES_cfb1_encrypt, (void**)&old_AES_cfb1_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_cfb8_encrypt")),(void*)AES_cfb8_encrypt, (void**)&old_AES_cfb8_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_ofb128_encrypt")),(void*)AES_ofb128_encrypt, (void**)&old_AES_ofb128_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_ige_encrypt")),(void*)AES_ige_encrypt, (void**)&old_AES_ige_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_AES_bi_ige_encrypt")),(void*)AES_bi_ige_encrypt, (void**)&old_AES_bi_ige_encrypt);
 #ifdef PROTOTYPE
 
 #endif

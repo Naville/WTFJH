@@ -151,9 +151,9 @@ static void replaced_CCHmac(CCHmacAlgorithm algorithm, const void *key, size_t k
 }
 
 extern void init_CommonHMAC_hook(){
-    MSHookFunction((void*)CCHmacInit, (void*)replaced_CCHmacInit, (void **) &original_CCHmacInit);
-    MSHookFunction((void*)CCHmacUpdate, (void*)replaced_CCHmacUpdate, (void **) &original_CCHmacUpdate);
-    MSHookFunction((void*)CCHmacFinal, (void*)replaced_CCHmacFinal, (void **) &original_CCHmacFinal);
-    MSHookFunction((void*)CCHmac, (void*)replaced_CCHmac, (void **) &original_CCHmac);
+    WTHookFunction((void*)CCHmacInit, (void*)replaced_CCHmacInit, (void **) &original_CCHmacInit);
+    WTHookFunction((void*)CCHmacUpdate, (void*)replaced_CCHmacUpdate, (void **) &original_CCHmacUpdate);
+    WTHookFunction((void*)CCHmacFinal, (void*)replaced_CCHmacFinal, (void **) &original_CCHmacFinal);
+    WTHookFunction((void*)CCHmac, (void*)replaced_CCHmac, (void **) &original_CCHmac);
 }
 

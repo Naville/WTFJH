@@ -236,10 +236,10 @@ static CCCryptorStatus replaced_CCCrypt(
 
 
 extern void init_CommonCryptor_hook(){
-     MSHookFunction((void *) CCCryptorCreate, (void *)  replaced_CCCryptorCreate, (void **) &original_CCCryptorCreate);
-     MSHookFunction((void *) CCCryptorCreateFromData, (void *)  replaced_CCCryptorCreateFromData, (void **) &original_CCCryptorCreateFromData);
-     MSHookFunction((void *) CCCryptorUpdate, (void *)  replaced_CCCryptorUpdate, (void **) &original_CCCryptorUpdate);
-     MSHookFunction((void *) CCCryptorFinal, (void *)  replaced_CCCryptorFinal, (void **) &original_CCCryptorFinal);
-     MSHookFunction((void *) CCCrypt, (void *)  replaced_CCCrypt, (void **) &original_CCCrypt);
+     WTHookFunction((void *) CCCryptorCreate, (void *)  replaced_CCCryptorCreate, (void **) &original_CCCryptorCreate);
+     WTHookFunction((void *) CCCryptorCreateFromData, (void *)  replaced_CCCryptorCreateFromData, (void **) &original_CCCryptorCreateFromData);
+     WTHookFunction((void *) CCCryptorUpdate, (void *)  replaced_CCCryptorUpdate, (void **) &original_CCCryptorUpdate);
+     WTHookFunction((void *) CCCryptorFinal, (void *)  replaced_CCCryptorFinal, (void **) &original_CCCryptorFinal);
+     WTHookFunction((void *) CCCrypt, (void *)  replaced_CCCrypt, (void **) &original_CCCrypt);
     }
 

@@ -13,6 +13,7 @@
 12.	ObjC Runtime
 13. Finish OpenSSL
 14. SocketLevel/JSBridge/stringByEvaluatingJavaScriptFromString Hook
+15. Replace MSHookFunction with fishhook when *JAILED* Compile Flag is set
 15.	PROFIT??!!!
 
 # Third Party Tools TODOs

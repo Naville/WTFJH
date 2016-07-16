@@ -5,6 +5,7 @@
 extern NSString* RandomString();
 typedef void (*WTLoaderPrototype)();  
 extern void init_TEMPLATENAME_hook(){
+#ifndef NonJailbroken
 #ifdef PROTOTYPE 
 //Because We Ain't Ready Yet. No Test
 	 for(int i=0;i<_dyld_image_count();i++){
@@ -52,5 +53,6 @@ extern void init_TEMPLATENAME_hook(){
 
 
     }
+#endif
 #endif
 }

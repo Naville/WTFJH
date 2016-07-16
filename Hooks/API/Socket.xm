@@ -133,9 +133,9 @@ int	new_listen(int sockfd, int backlog){
 	return retVal;
 }
 extern void init_Socket_hook() {
-    MSHookFunction((void*)socket,(void*)new_socket, (void**)&old_socket);
-    MSHookFunction((void*)accept,(void*)new_accept, (void**)&old_accept);
-    MSHookFunction((void*)bind,(void*)new_bind, (void**)&old_bind);
-    MSHookFunction((void*)connect,(void*)new_connect, (void**)&old_connect);
-    MSHookFunction((void*)listen,(void*)new_listen, (void**)&old_listen);
+    WTHookFunction((void*)socket,(void*)new_socket, (void**)&old_socket);
+    WTHookFunction((void*)accept,(void*)new_accept, (void**)&old_accept);
+    WTHookFunction((void*)bind,(void*)new_bind, (void**)&old_bind);
+    WTHookFunction((void*)connect,(void*)new_connect, (void**)&old_connect);
+    WTHookFunction((void*)listen,(void*)new_listen, (void**)&old_listen);
 }

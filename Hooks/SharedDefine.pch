@@ -6,19 +6,28 @@
 #import "./Utils/Utils.h"
 #import "./Utils/DelegateProxies.h"
 #import "./Utils/NSURLConnectionDelegateProx.h"
+
 #import <substrate.h>
+
+#import "./Misc/WTSubstrate.h"
 #import <objc/runtime.h>
 #import <mach-o/getsect.h>
 #import <mach-o/dyld.h>
 #import <dlfcn.h>
+#import "./Misc/fishhook.h"
 #import "./Obfuscation.h"
-//#import "Cycript.h"
 #import "./capstone/capstone.h"
 #import "keystone/keystone.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"
 #define traceStorage [SQLiteStorage sharedManager] 
+
+#ifdef NonJailbroken
+#define preferenceFilePath [NSString stringWithFormat:@"%@/Library/Preferences/naville.wtfjh.plist",NSHomeDirectory()]
+#else
 #define preferenceFilePath @"/private/var/mobile/Library/Preferences/naville.wtfjh.plist"
+#endif
+
 
 #define Meh1(x) #x
 #define Meh(x) Meh1(x)

@@ -74,6 +74,6 @@ static void new__CFXNotificationPost(CFNotificationCenterRef center, NSNotificat
 
 extern void init_Notification_hook() {
     %init(Notification);
-    MSHookFunction(notify_post, new_notify_post, &old_notify_post);
-	MSHookFunction(_CFXNotificationPost, new__CFXNotificationPost, &old__CFXNotificationPost);	
+    WTHookFunction((void*)notify_post, (void*)new_notify_post, (void**)&old_notify_post);
+	WTHookFunction((void*)_CFXNotificationPost, (void*)new__CFXNotificationPost, (void**)&old__CFXNotificationPost);	
 }

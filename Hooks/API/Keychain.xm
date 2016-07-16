@@ -76,9 +76,9 @@ static OSStatus replaced_SecItemUpdate(CFDictionaryRef query, CFDictionaryRef at
 
 
 extern void init_Keychain_hook(){
-    MSHookFunction((void *)SecItemAdd, (void *)replaced_SecItemAdd, (void **) &original_SecItemAdd);
-    MSHookFunction((void *)SecItemCopyMatching, (void *)replaced_SecItemCopyMatching, (void **) &original_SecItemCopyMatching);
-    MSHookFunction((void *)SecItemDelete, (void *)replaced_SecItemDelete, (void **) &original_SecItemDelete);
-    MSHookFunction((void *)SecItemUpdate, (void *)replaced_SecItemUpdate, (void **) &original_SecItemUpdate);
+    WTHookFunction((void *)SecItemAdd, (void *)replaced_SecItemAdd, (void **) &original_SecItemAdd);
+    WTHookFunction((void *)SecItemCopyMatching, (void *)replaced_SecItemCopyMatching, (void **) &original_SecItemCopyMatching);
+    WTHookFunction((void *)SecItemDelete, (void *)replaced_SecItemDelete, (void **) &original_SecItemDelete);
+    WTHookFunction((void *)SecItemUpdate, (void *)replaced_SecItemUpdate, (void **) &original_SecItemUpdate);
 }
 

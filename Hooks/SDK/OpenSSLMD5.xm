@@ -43,6 +43,6 @@ int MD5_Final(unsigned char *md, MD5_CTX *c){
 
 }
 extern void init_OpenSSLMD5_hook(){
-MSHookFunction(((void*)MSFindSymbol(NULL, "_MD5_Update")),(void*)MD5_Update, (void**)&old_MD5_Update);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_MD5_Final")),(void*)MD5_Final, (void**)&old_MD5_Final);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_MD5_Update")),(void*)MD5_Update, (void**)&old_MD5_Update);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_MD5_Final")),(void*)MD5_Final, (void**)&old_MD5_Final);
 }

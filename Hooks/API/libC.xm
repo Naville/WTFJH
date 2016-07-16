@@ -47,7 +47,7 @@ static long replaced_random() {
 
 
 extern void init_libC_hook(){
-    MSHookFunction((void *)random, (void *)replaced_random, (void **) &original_random);
-    MSHookFunction((void *)rand, (void *)replaced_rand, (void **) &original_rand);
+    WTHookFunction((void *)random, (void *)replaced_random, (void **) &original_random);
+    WTHookFunction((void *)rand, (void *)replaced_rand, (void **) &original_rand);
 }
 

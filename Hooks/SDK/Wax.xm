@@ -85,13 +85,13 @@ void _wax_start(char *initScript, void* extensionFunctions, ...){
     va_end(arg);
 }
 extern void init_Wax_hook() {
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_xml_parseString")),(void*)_wax_xml_parseString, (void**)&old_wax_xml_parseString);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_runLuaFile")),(void*)_wax_runLuaFile, (void**)&old_wax_runLuaFile);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_runLuaByteCode")),(void*)_wax_runLuaByteCode, (void**)&old_wax_runLuaByteCode);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_runLuaString")),(void*)_wax_runLuaString, (void**)&old_wax_runLuaString);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_setup")),(void*)_wax_setup, (void**)&old_wax_setup);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_json_parseString")),(void*)_json_parseString, (void**)&old_json_parseString);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_wax_start")),(void*)_wax_start, (void**)&old_wax_start);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_wax_xml_parseString")),(void*)_wax_xml_parseString, (void**)&old_wax_xml_parseString);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_wax_runLuaFile")),(void*)_wax_runLuaFile, (void**)&old_wax_runLuaFile);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_wax_runLuaByteCode")),(void*)_wax_runLuaByteCode, (void**)&old_wax_runLuaByteCode);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_wax_runLuaString")),(void*)_wax_runLuaString, (void**)&old_wax_runLuaString);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_wax_setup")),(void*)_wax_setup, (void**)&old_wax_setup);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_json_parseString")),(void*)_json_parseString, (void**)&old_json_parseString);
+	WTHookFunction(((void*)WTFindSymbol(NULL, "_wax_start")),(void*)_wax_start, (void**)&old_wax_start);
 }
 
 

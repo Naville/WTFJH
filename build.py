@@ -14,8 +14,8 @@ from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
 import BuildConfig
-init(autoreset=True)
 
+init(autoreset=True)
 
 def Exec(Command):
 	try:
@@ -51,6 +51,10 @@ global SkippedList
 SkippedList=list()
 global InitialCWD
 InitialCWD=os.getcwd()
+global JAILED
+JAILED=False
+global buildCommand
+buildCommand="make "
 
 #Setup SIGINT Handler
 def signal_handler(signal, frame):
@@ -117,11 +121,16 @@ def BuildMakeFile():
 	makeFileString += "export CFLAGS=-Wp,\"-DWTFJHTWEAKNAME="+"@\\\""+randomTweakName+"\\\""
 	if(PROTOTYPE):
 		makeFileString += ",-DPROTOTYPE"
+	if(JAILED):
+		makeFileString += ",-DNonJailbroken"
 	makeFileString += "\"\n"
 	makeFileString += "include theos/makefiles/common.mk\n"
 	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
 	#makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
+	makeFileString += "SUBSTRATE ?= yes\n"
+	if(JAILED==True):
+		makeFileString += randomTweakName+"_USE_SUBSTRATE = $(SUBSTRATE)\n"
 	makeFileString += randomTweakName + MakeFileListString + "\n"
 	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
 	global LinkerString
@@ -129,6 +138,11 @@ def BuildMakeFile():
 	for LDF in BuildConfig.LDFLAGS:
 		makeFileString +=" "+LDF
 	makeFileString +=" \n"	
+	if(JAILED):
+		makeFileString +=randomTweakName+"_CFLAGS+=-Wno-unused-function"
+	for CFlag in BuildConfig.ExtraCFlags:
+		makeFileString +=","+CFlag
+	makeFileString+="\n"
 	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate stdc++ c++ "
 	for LBName in BuildConfig.ExtraLibrary:
 		makeFileString +=LBName+" "
@@ -136,7 +150,6 @@ def BuildMakeFile():
 	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security JavaScriptCore "
 	for FWName in BuildConfig.ExtraFramework:
 		makeFileString +=FWName+" "
-		print FWName
 	makeFileString +=" \n"
 	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
 	makeFileString += "after-install::\n"
@@ -235,7 +248,7 @@ def toggleModule():
 def MakeFileIter(Path):#Iterate All Code Files
 		FileList = buildlistdir(Path)
 		for x in FileList:
-			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False):
+			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False and x.endswith(".c") == False):
 				if DEBUG==True:
 					print (Fore.RED +x + " has been ignored.")
 			else:	
@@ -295,10 +308,19 @@ def ParseArgs():
  			print "Obfuscation Enabled"
  			global OBFUSCATION
  			OBFUSCATION=True
+  		if x.upper() == "JAILED":
+ 			print "Attempting To Build For Jailed Device. ThirdPartyTools Are Disabled"
+ 			print "WTFJH is far more limited in JAILED MODE"
+ 			global JAILED
+ 			JAILED=True
+ 			global buildCommand
+ 			buildCommand += "SUBSTRATE=no"
  		if x.upper().startswith("DISABLE="):
  			tempList=x[8:].split(",")
  			for z in tempList:
  				SkippedList.append(z)
+ 	if(DEBUG==False):
+ 		buildCommand+=" DEBUG=0"
 def Obfuscation():
 	if OBFUSCATION==False:
 		print "No Obfuscation"
@@ -348,7 +370,7 @@ def buildThirdPartyComponents():
 				os.system("mkdir .theos")
 				os.system("mkdir .theos/obj")
 				os.system("ln -s .theos/obj obj")
-				os.system("make")
+				os.system(buildCommand)
 				os.system("mv ./obj/debug/"+x+".dylib ../../")
 				os.chdir(origCH)
 			else:
@@ -357,7 +379,7 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& make &&"+"mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)		
+					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& "+buildCommand+"&&"+"mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)		
 					os.chdir(origCH)						
 				except Exception as inst:
 					if (isinstance(inst,subprocess.CalledProcessError) and (Error==None or Error==0)):
@@ -391,6 +413,7 @@ def main():
 	print (Fore.YELLOW +"DEBUG:"+str(DEBUG))
 	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
 	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
+	print (Fore.YELLOW +"JAILED:"+str(JAILED))
 	buildSuccess=True
 	#Start Sanity Check
 	for name in buildlistdir("./Hooks/ThirdPartyTools"):
@@ -407,7 +430,7 @@ def main():
 	#end
 	if (DEBUG == True):
 		print "Building... Main"
-		x=os.system("make")
+		x=os.system(buildCommand)
 		print "Make Exit With Status: ",x
 		if x!=0:
 			buildSuccess=False
@@ -416,7 +439,7 @@ def main():
 		with open("MainLog.log", 'a') as devnull:
 			try:
 				print "Building... Main"
-				x = subprocess.check_call(['make'], stdout=devnull, stderr=open("../../ThirdPartyLog.log", 'a'))
+				x = subprocess.check_call([buildCommand], stdout=devnull, stderr=open("../../ThirdPartyLog.log", 'a'))
 				print "Make Exit With Status: ",x
 			except Exception as inst:
 				buildSuccess=False

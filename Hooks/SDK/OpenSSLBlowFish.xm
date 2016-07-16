@@ -147,14 +147,14 @@ void BF_decrypt(BF_LONG *data,  BF_KEY *key){
 
 }
 extern void init_OpenSSLBlowFish_hook(){
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_set_key")),(void*)BF_set_key, (void**)&old_BF_set_key);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_ecb_encrypt")),(void*)BF_ecb_encrypt, (void**)&old_BF_ecb_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_cbc_encrypt")),(void*)BF_cbc_encrypt, (void**)&old_BF_cbc_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_cfb64_encrypt")),(void*)BF_cfb64_encrypt, (void**)&old_BF_cfb64_encrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_ofb64_encrypt")),(void*)BF_ofb64_encrypt, (void**)&old_BF_ofb64_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_set_key")),(void*)BF_set_key, (void**)&old_BF_set_key);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_ecb_encrypt")),(void*)BF_ecb_encrypt, (void**)&old_BF_ecb_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_cbc_encrypt")),(void*)BF_cbc_encrypt, (void**)&old_BF_cbc_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_cfb64_encrypt")),(void*)BF_cfb64_encrypt, (void**)&old_BF_cfb64_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_ofb64_encrypt")),(void*)BF_ofb64_encrypt, (void**)&old_BF_ofb64_encrypt);
 #ifdef PROTOTYPE
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_decrypt")),(void*)BF_decrypt, (void**)&old_BF_decrypt);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_BF_encrypt")),(void*)BF_encrypt, (void**)&old_BF_encrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_decrypt")),(void*)BF_decrypt, (void**)&old_BF_decrypt);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_BF_encrypt")),(void*)BF_encrypt, (void**)&old_BF_encrypt);
 #endif 
 
 }

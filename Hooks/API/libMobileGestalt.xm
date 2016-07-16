@@ -39,9 +39,9 @@ int MGSetAnswer(CFStringRef question, CFTypeRef answer){
 
 }
 static void Loader(){
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyAnswer")),(void*)MGCopyAnswer, (void**)&old_MGCopyAnswer);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyMultipleAnswers")),(void*)MGCopyMultipleAnswers, (void**)&old_MGCopyMultipleAnswers);
-	MSHookFunction(((void*)MSFindSymbol(NULL, "_MGSetAnswer")),(void*)MGSetAnswer, (void**)&old_MGSetAnswer);
+	WTHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyAnswer")),(void*)MGCopyAnswer, (void**)&old_MGCopyAnswer);
+	WTHookFunction(((void*)MSFindSymbol(NULL, "_MGCopyMultipleAnswers")),(void*)MGCopyMultipleAnswers, (void**)&old_MGCopyMultipleAnswers);
+	WTHookFunction(((void*)MSFindSymbol(NULL, "_MGSetAnswer")),(void*)MGSetAnswer, (void**)&old_MGSetAnswer);
 }
 
 

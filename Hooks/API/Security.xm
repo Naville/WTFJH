@@ -24,6 +24,6 @@ static OSStatus replaced_SecPKCS12Import(CFDataRef pkcs12_data, CFDictionaryRef 
 
 
 extern void init_Security_hook(){
-    MSHookFunction((void *) SecPKCS12Import,(void *)  replaced_SecPKCS12Import, (void **) &original_SecPKCS12Import);
+    WTHookFunction((void *) SecPKCS12Import,(void *)  replaced_SecPKCS12Import, (void **) &original_SecPKCS12Import);
 }
 

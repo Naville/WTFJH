@@ -54,6 +54,6 @@ static int replaced_CCKeyDerivationPBKDF(
 
 
 extern void init_CommonKeyDerivation_hook(){
-     MSHookFunction((void *) CCKeyDerivationPBKDF, (void *)  replaced_CCKeyDerivationPBKDF, (void **) &original_CCKeyDerivationPBKDF);
+     WTHookFunction((void *) CCKeyDerivationPBKDF, (void *)  replaced_CCKeyDerivationPBKDF, (void **) &original_CCKeyDerivationPBKDF);
 }
 

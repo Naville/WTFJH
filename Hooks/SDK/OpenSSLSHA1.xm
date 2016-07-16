@@ -62,9 +62,9 @@ int SHA1(const unsigned char *d, size_t n, unsigned char *md){
 }
 
 extern void init_OpenSSLSHA1_hook(){
-MSHookFunction(((void*)MSFindSymbol(NULL, "_SHA1_Update")),(void*)SHA1_Update, (void**)&old_SHA1_Update);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_SHA1_Final")),(void*)SHA1_Final, (void**)&old_SHA1_Final);
-MSHookFunction(((void*)MSFindSymbol(NULL, "_SHA1")),(void*)SHA1, (void**)&old_SHA1);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_SHA1_Update")),(void*)SHA1_Update, (void**)&old_SHA1_Update);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_SHA1_Final")),(void*)SHA1_Final, (void**)&old_SHA1_Final);
+WTHookFunction(((void*)WTFindSymbol(NULL, "_SHA1")),(void*)SHA1, (void**)&old_SHA1);
 
 //void SHA1_Transform(SHA_CTX *c, const unsigned char *data);
 }

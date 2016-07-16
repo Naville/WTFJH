@@ -222,25 +222,25 @@ static unsigned char * replaced_CC_SHA256(const void *data, CC_LONG len, unsigne
 
 
 extern void init_CommonDigest_hook(){
-    MSHookFunction((void*)CC_MD2_Update, (void*)replaced_CC_MD2_Update, (void **) &original_CC_MD2_Update);
-    MSHookFunction((void*)CC_MD4_Update, (void*)replaced_CC_MD4_Update, (void **) &original_CC_MD4_Update);
-    MSHookFunction((void*)CC_MD5_Update, (void*)replaced_CC_MD5_Update, (void **) &original_CC_MD5_Update);
-    MSHookFunction((void*)CC_SHA1_Update, (void*)replaced_CC_SHA1_Update, (void **) &original_CC_SHA1_Update);
-    MSHookFunction((void*)CC_SHA512_Update, (void*)replaced_CC_SHA512_Update, (void **) &original_CC_SHA512_Update);
-    MSHookFunction((void*)CC_SHA256_Update, (void*)replaced_CC_SHA256_Update, (void **) &original_CC_SHA256_Update);
+    WTHookFunction((void*)CC_MD2_Update, (void*)replaced_CC_MD2_Update, (void **) &original_CC_MD2_Update);
+    WTHookFunction((void*)CC_MD4_Update, (void*)replaced_CC_MD4_Update, (void **) &original_CC_MD4_Update);
+    WTHookFunction((void*)CC_MD5_Update, (void*)replaced_CC_MD5_Update, (void **) &original_CC_MD5_Update);
+    WTHookFunction((void*)CC_SHA1_Update, (void*)replaced_CC_SHA1_Update, (void **) &original_CC_SHA1_Update);
+    WTHookFunction((void*)CC_SHA512_Update, (void*)replaced_CC_SHA512_Update, (void **) &original_CC_SHA512_Update);
+    WTHookFunction((void*)CC_SHA256_Update, (void*)replaced_CC_SHA256_Update, (void **) &original_CC_SHA256_Update);
 
-    MSHookFunction((void*)CC_MD2_Final, (void*)replaced_CC_MD2_Final, (void **) &original_CC_MD2_Final);
-    MSHookFunction((void*)CC_MD4_Final, (void*)replaced_CC_MD4_Final, (void **) &original_CC_MD4_Final);
-    MSHookFunction((void*)CC_MD5_Final, (void*)replaced_CC_MD5_Final, (void **) &original_CC_MD5_Final);
-    MSHookFunction((void*)CC_SHA1_Final, (void*)replaced_CC_SHA1_Final, (void **) &original_CC_SHA1_Final);
-    MSHookFunction((void*)CC_SHA512_Final, (void*)replaced_CC_SHA512_Final, (void **) &original_CC_SHA512_Final);
-    MSHookFunction((void*)CC_SHA256_Final, (void*)replaced_CC_SHA256_Final, (void **) &original_CC_SHA256_Final);
+    WTHookFunction((void*)CC_MD2_Final, (void*)replaced_CC_MD2_Final, (void **) &original_CC_MD2_Final);
+    WTHookFunction((void*)CC_MD4_Final, (void*)replaced_CC_MD4_Final, (void **) &original_CC_MD4_Final);
+    WTHookFunction((void*)CC_MD5_Final, (void*)replaced_CC_MD5_Final, (void **) &original_CC_MD5_Final);
+    WTHookFunction((void*)CC_SHA1_Final, (void*)replaced_CC_SHA1_Final, (void **) &original_CC_SHA1_Final);
+    WTHookFunction((void*)CC_SHA512_Final, (void*)replaced_CC_SHA512_Final, (void **) &original_CC_SHA512_Final);
+    WTHookFunction((void*)CC_SHA256_Final, (void*)replaced_CC_SHA256_Final, (void **) &original_CC_SHA256_Final);
     
-    MSHookFunction((void*)CC_MD2, (void*)replaced_CC_MD2, (void **) &original_CC_MD2);
-    MSHookFunction((void*)CC_MD4, (void*)replaced_CC_MD4, (void **) &original_CC_MD4);
-    MSHookFunction((void*)CC_MD5, (void*)replaced_CC_MD5, (void **) &original_CC_MD5);
-    MSHookFunction((void*)CC_SHA1, (void*)replaced_CC_SHA1, (void **) &original_CC_SHA1);
-    MSHookFunction((void*)CC_SHA512, (void*)replaced_CC_SHA512, (void **) &original_CC_SHA512);
-    MSHookFunction((void*)CC_SHA256, (void*)replaced_CC_SHA256, (void **) &original_CC_SHA256);
+    WTHookFunction((void*)CC_MD2, (void*)replaced_CC_MD2, (void **) &original_CC_MD2);
+    WTHookFunction((void*)CC_MD4, (void*)replaced_CC_MD4, (void **) &original_CC_MD4);
+    WTHookFunction((void*)CC_MD5, (void*)replaced_CC_MD5, (void **) &original_CC_MD5);
+    WTHookFunction((void*)CC_SHA1, (void*)replaced_CC_SHA1, (void **) &original_CC_SHA1);
+    WTHookFunction((void*)CC_SHA512, (void*)replaced_CC_SHA512, (void **) &original_CC_SHA512);
+    WTHookFunction((void*)CC_SHA256, (void*)replaced_CC_SHA256, (void **) &original_CC_SHA256);
 }
 

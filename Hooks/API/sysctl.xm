@@ -132,8 +132,8 @@ return ret;
 
 }
 extern void init_sysctl_hook() {
-   MSHookFunction((void *) sysctlbyname,(void *)new_sysctlbyname,(void **) &old_sysctlbyname);
-   MSHookFunction((void *) sysctl,(void *)new_sysctl,(void **) &old_sysctl);
-   MSHookFunction((void *)MSFindSymbol(NULL,"_syscall"),(void *)newsyscall,(void **)&oldsyscall);
-   MSHookFunction((void *)MSFindSymbol(NULL,"_ptrace"), (void *)newptrace, (void **)&oldptrace);
+   WTHookFunction((void *) sysctlbyname,(void *)new_sysctlbyname,(void **) &old_sysctlbyname);
+   WTHookFunction((void *) sysctl,(void *)new_sysctl,(void **) &old_sysctl);
+   WTHookFunction((void *)WTFindSymbol(NULL,"_syscall"),(void *)newsyscall,(void **)&oldsyscall);
+   WTHookFunction((void *)WTFindSymbol(NULL,"_ptrace"), (void *)newptrace, (void **)&oldptrace);
 }

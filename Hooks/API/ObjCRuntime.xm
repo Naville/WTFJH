@@ -348,22 +348,22 @@ id new_objc_getAssociatedObject(id object, const char *key){
 }
 extern void init_ObjCRuntime_hook() {
 #ifdef PROTOTYPE
-   MSHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
-   MSHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
-   MSHookFunction((void*)NSStringFromProtocol,(void*)new_NSStringFromProtocol, (void**)&old_NSStringFromProtocol);
-   MSHookFunction((void*)NSProtocolFromString,(void*)new_NSProtocolFromString, (void**)&old_NSProtocolFromString);
-   MSHookFunction((void*)NSStringFromSelector,(void*)new_NSStringFromSelector, (void**)&old_NSStringFromSelector);
-   MSHookFunction((void*)NSSelectorFromString,(void*)new_NSSelectorFromString, (void**)&old_NSSelectorFromString);
-   MSHookFunction((void*)class_addMethod,(void*)new_class_addMethod, (void**)&old_class_addMethod);
-   MSHookFunction((void*)class_addIvar,(void*)new_class_addIvar, (void**)&old_class_addIvar);
-   MSHookFunction((void*)objc_getClass,(void*)new_objc_getClass, (void**)&old_objc_getClass);
-   MSHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
-   MSHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
-   MSHookFunction((void*)objc_copyImageNames,(void*)new_objc_copyImageNames, (void**)&old_objc_copyImageNames);
-   MSHookFunction((void*)class_getImageName,(void*)new_class_getImageName, (void**)&old_class_getImageName);
-   MSHookFunction((void*)object_setInstanceVariable,(void*)new_object_setInstanceVariable, (void**)&old_object_setInstanceVariable);
-   MSHookFunction((void*)object_getInstanceVariable,(void*)new_object_getInstanceVariable, (void**)&old_object_getInstanceVariable);
-   MSHookFunction((void*)objc_setAssociatedObject,(void*)new_objc_setAssociatedObject, (void**)&old_objc_setAssociatedObject);
-   MSHookFunction((void*)objc_getAssociatedObject,(void*)new_objc_getAssociatedObject, (void**)&old_objc_getAssociatedObject);
+   WTHookFunction((void*)NSClassFromString,(void*)new_NSClassFromString, (void**)&old_NSClassFromString);
+   WTHookFunction((void*)NSStringFromClass,(void*)new_NSStringFromClass, (void**)&old_NSStringFromClass);
+   WTHookFunction((void*)NSStringFromProtocol,(void*)new_NSStringFromProtocol, (void**)&old_NSStringFromProtocol);
+   WTHookFunction((void*)NSProtocolFromString,(void*)new_NSProtocolFromString, (void**)&old_NSProtocolFromString);
+   WTHookFunction((void*)NSStringFromSelector,(void*)new_NSStringFromSelector, (void**)&old_NSStringFromSelector);
+   WTHookFunction((void*)NSSelectorFromString,(void*)new_NSSelectorFromString, (void**)&old_NSSelectorFromString);
+   WTHookFunction((void*)class_addMethod,(void*)new_class_addMethod, (void**)&old_class_addMethod);
+   WTHookFunction((void*)class_addIvar,(void*)new_class_addIvar, (void**)&old_class_addIvar);
+   WTHookFunction((void*)objc_getClass,(void*)new_objc_getClass, (void**)&old_objc_getClass);
+   WTHookFunction((void*)class_getMethodImplementation,(void*)new_class_getMethodImplementation, (void**)&old_class_getMethodImplementation);
+   WTHookFunction((void*)class_replaceMethod,(void*)new_class_replaceMethod, (void**)&old_class_replaceMethod);
+   WTHookFunction((void*)objc_copyImageNames,(void*)new_objc_copyImageNames, (void**)&old_objc_copyImageNames);
+   WTHookFunction((void*)class_getImageName,(void*)new_class_getImageName, (void**)&old_class_getImageName);
+   WTHookFunction((void*)object_setInstanceVariable,(void*)new_object_setInstanceVariable, (void**)&old_object_setInstanceVariable);
+   WTHookFunction((void*)object_getInstanceVariable,(void*)new_object_getInstanceVariable, (void**)&old_object_getInstanceVariable);
+   WTHookFunction((void*)objc_setAssociatedObject,(void*)new_objc_setAssociatedObject, (void**)&old_objc_setAssociatedObject);
+   WTHookFunction((void*)objc_getAssociatedObject,(void*)new_objc_getAssociatedObject, (void**)&old_objc_getAssociatedObject);
 #endif
 }

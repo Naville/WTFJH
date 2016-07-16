@@ -13,8 +13,9 @@
 12.	ObjC Runtime
 13. Finish OpenSSL
 14. SocketLevel/JSBridge/stringByEvaluatingJavaScriptFromString Hook
-15. Replace MSHookFunction with fishhook when *JAILED* Compile Flag is set
-15.	PROFIT??!!!
+15. ~~Replace MSHookFunction with fishhook when *JAILED* Compile Flag is set~~
+16. Codesign the dylib when JAILED is set.
+17.	PROFIT??!!!
 
 # Third Party Tools TODOs
 - Merge [https://github.com/BishopFox/iSpy][3] into WTFJH

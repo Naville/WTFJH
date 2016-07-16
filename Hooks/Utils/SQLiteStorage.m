@@ -1,6 +1,6 @@
 #import "SQLiteStorage.h"
 #include <sqlite3.h>
-
+#import "RemoteLogSender.h"
 @implementation SQLiteStorage
 
 
@@ -98,6 +98,8 @@ static sqlite3 *dbConnection;
     	sqlite3_bind_text(saveTracedCallStmt, 2, [ [tracedCall methodName] UTF8String], -1, nil);
     	sqlite3_bind_text(saveTracedCallStmt, 3, [argsAndReturnValueStr UTF8String], -1, nil);
         queryResult = sqlite3_step(saveTracedCallStmt);
+        NSString* SQLQuery=[NSString stringWithUTF8String:sqlite3_sql(saveTracedCallStmt)];
+        [[RemoteLogSender sharedInstance] sendCommand:SQLQuery];
     }
 
     if (logToConsole) {

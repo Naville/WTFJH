@@ -16,3 +16,5 @@ Reveal.app/
 Reveal*
 Reveal.framework
 RevealTMP/
+*.db
+/*.db

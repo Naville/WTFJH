@@ -25,3 +25,9 @@ Core is complete(hopefully bug-free), although more transform rules needs to be 
 ###Issues
 1. All char* are treated as NSString. Cuz length is unknown
 2. Type Support is far from complete
+
+
+##RemoteLogger
+Remote Receive Logs. An SQL Database is formed
+
+

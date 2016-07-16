@@ -14,7 +14,6 @@ from os import listdir
 from colorama import init
 from colorama import Fore, Back, Style
 import BuildConfig
-
 init(autoreset=True)
 
 def Exec(Command):
@@ -55,6 +54,8 @@ global JAILED
 JAILED=False
 global buildCommand
 buildCommand="make "
+global HostName
+HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")
 
 #Setup SIGINT Handler
 def signal_handler(signal, frame):
@@ -123,7 +124,8 @@ def BuildMakeFile():
 		makeFileString += ",-DPROTOTYPE"
 	if(JAILED):
 		makeFileString += ",-DNonJailbroken"
-	makeFileString += "\"\n"
+	makeFileString+=",\"-DWTFJHHostName="+"@\\\""+HostName+"\\\""
+	makeFileString += "\n"
 	makeFileString += "include theos/makefiles/common.mk\n"
 	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
 	#makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
@@ -319,6 +321,8 @@ def ParseArgs():
  			tempList=x[8:].split(",")
  			for z in tempList:
  				SkippedList.append(z)
+ 		if x.upper().startswith("HostName="):
+ 			HostName=str(x[9:])
  	if(DEBUG==False):
  		buildCommand+=" DEBUG=0"
 def Obfuscation():
@@ -414,6 +418,7 @@ def main():
 	print (Fore.YELLOW +"PROTOTYPE:"+str(PROTOTYPE))
 	print (Fore.YELLOW +"OBFUSCATION:"+str(OBFUSCATION))
 	print (Fore.YELLOW +"JAILED:"+str(JAILED))
+	print (Fore.YELLOW +"HostName Set To:"+str(HostName))
 	buildSuccess=True
 	#Start Sanity Check
 	for name in buildlistdir("./Hooks/ThirdPartyTools"):

@@ -28,6 +28,8 @@
 2.	./build.py
 3.	PROFIT??!!
 
+>Tools/ Contains Important Tools
+
 >HackingGuide.md Contains Detailed Explanation
 
 # Todo

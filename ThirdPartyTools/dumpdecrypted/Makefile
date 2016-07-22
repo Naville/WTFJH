@@ -1,4 +1,4 @@
-include theos/makefiles/common.mk
+include $(THEOS)/makefiles/common.mk
 ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000
 TWEAK_NAME = dumpdecrypted
 dumpdecrypted_FILES = dumpdecrypted.m

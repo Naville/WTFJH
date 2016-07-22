@@ -6,7 +6,7 @@ InspectiveC_FILES = hashmap.mm logging.mm blocks.mm InspectiveC.mm
 InspectiveC_LIBRARIES = substrate
 InspectiveC_FRAMEWORKS = Foundation UIKit
 
-include theos/makefiles/common.mk
+include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
 include $(THEOS_MAKE_PATH)/library.mk
 

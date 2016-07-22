@@ -126,7 +126,7 @@ def BuildMakeFile():
 		makeFileString += ",-DNonJailbroken"
 	makeFileString+=",\"-DWTFJHHostName="+"@\\\""+HostName+"\\\""
 	makeFileString += "\n"
-	makeFileString += "include theos/makefiles/common.mk\n"
+	makeFileString += "include $(THEOS)/makefiles/common.mk\n"
 	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
 	#makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"

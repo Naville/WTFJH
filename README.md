@@ -2,7 +2,11 @@
 
 [![Build Status](https://travis-ci.org/Naville/WTFJH.svg?branch=master)](https://travis-ci.org/Naville/WTFJH)
 
-<font size=4>DO NOT USE PRE-BUILT BINARY</font>
+*DO NOT USE PRE-BUILT BINARY*
+
+*Theos-Legacy is no longer Supported. Run ./InstallTheos.sh To Install The Latest Version of Theos*
+
+
 
 > A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]
 

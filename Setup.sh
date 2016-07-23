@@ -19,7 +19,7 @@ rm ./Reveal.app.zip >> /dev/null 2>&1
 rm -rf ./RevealTMP >> /dev/null 2>&1  
 rm -rf ./CYTMP >> /dev/null 2>&1 
 mkdir ExtraFWs >> /dev/null 2>&1 
-mkdir DEBS >> /dev/null 2>&1 
+mkdir Packages >> /dev/null 2>&1 
 echo "Pulling Latest Trunk"
 git submodule update --init --recursive
 echo "Installing colorama from python-pip"

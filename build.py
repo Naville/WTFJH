@@ -463,7 +463,7 @@ def main():
 		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
-		os.system("dpkg-deb -Zgzip -b ./layout ./DEBS/Build-"+str(currentVersion)+".deb")
+		os.system("dpkg-deb -Zgzip -b ./layout ./Packages/Build-"+str(currentVersion)+".deb")
 	cleanUp()
 	if buildSuccess==True:
 		print (Fore.YELLOW +"Built with components: \n")

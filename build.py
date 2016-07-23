@@ -56,6 +56,14 @@ global buildCommand
 buildCommand="make "
 global HostName
 HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")
+global AllowedSourceExtension
+AllowedSourceExtension=[".cpp",".xm",".xmi",".mm",".c",".m",".x",".xi"]
+
+def isSource(FileName):
+	for End in AllowedSourceExtension:
+		if FileName.upper().endswith(End.upper()):
+			return True
+	return False
 
 #Setup SIGINT Handler
 def signal_handler(signal, frame):
@@ -134,16 +142,18 @@ def BuildMakeFile():
 	if(JAILED==True):
 		makeFileString += randomTweakName+"_USE_SUBSTRATE = $(SUBSTRATE)\n"
 	makeFileString += randomTweakName + MakeFileListString + "\n"
-	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
+	makeFileString += "export ADDITIONAL_CCFLAGS  = -Qunused-arguments"
+	for CCFlag in BuildConfig.ExtraCCFlags:
+		makeFileString +=" "+CCFlag
+	makeFileString+="\n"
 	global LinkerString
-	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
+	makeFileString += "export ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
 	for LDF in BuildConfig.LDFLAGS:
 		makeFileString +=" "+LDF
 	makeFileString +=" \n"	
-	if(JAILED):
-		makeFileString +=randomTweakName+"_CFLAGS+=-Wno-unused-function"
+	makeFileString +="export ADDITIONAL_CFLAGS = "
 	for CFlag in BuildConfig.ExtraCFlags:
-		makeFileString +=","+CFlag
+		makeFileString +=" "+CFlag
 	makeFileString+="\n"
 	makeFileString += randomTweakName + "_LIBRARIES = sqlite3 substrate stdc++ c++ "
 	for LBName in BuildConfig.ExtraLibrary:
@@ -255,7 +265,7 @@ def toggleModule():
 def MakeFileIter(Path):#Iterate All Code Files
 		FileList = buildlistdir(Path)
 		for x in FileList:
-			if (x.endswith(".mm") == False and x.endswith(".m") == False and x.endswith(".xm") == False and x.endswith(".c") == False):
+			if (isSource(x)==False):
 				if DEBUG==True:
 					print (Fore.RED +x + " has been ignored.")
 			else:	

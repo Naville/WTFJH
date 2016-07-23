@@ -1,6 +1,6 @@
 [submodule "capstone"]
 	path = capstone
 	url = https://github.com/aquynh/capstone.git
-[submodule "keystone"]
-	path = keystone
-	url = https://github.com/keystone-engine/keystone.git
+[submodule "Liberation"]
+	path = Liberation
+	url = git@github.com:iOSCheaters/Liberation.git

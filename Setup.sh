@@ -2,7 +2,6 @@
 
 OrigDIR="$(pwd)"
 echo "DIR Set to:""${OrigDIR}"
-
 echo "Installing Latest Dependencies"
 brew install dpkg
 brew install ldid
@@ -18,6 +17,8 @@ rm ./ExtraFWs/Reveal.framework >> /dev/null 2>&1
 rm ./Reveal.app.zip >> /dev/null 2>&1  
 rm -rf ./RevealTMP >> /dev/null 2>&1  
 rm -rf ./CYTMP >> /dev/null 2>&1 
+rm ./ExtraFWs/libLiberation.a
+rm ./Hooks/Liberation.h
 mkdir ExtraFWs >> /dev/null 2>&1 
 mkdir Packages >> /dev/null 2>&1 
 echo "Pulling Latest Trunk"
@@ -30,12 +31,16 @@ cd "${OrigDIR}"
 echo "Moving capstone"
 mv ./capstone/libcapstone.a ./ExtraFWs/ >>/dev/null
 cp -r ./capstone/include ./Hooks/capstone >>/dev/null
-echo "Building keystone"
-cd keystone && git pull origin master&&rm -rf build &&mkdir build &&cd build &&../make-lib.sh
 cd "${OrigDIR}"
-echo "Moving keystone"
-mv ./keystone/build/llvm/lib/libkeystone.a ./ExtraFWs/ >> /dev/null 2>&1  
-cp -r ./keystone/include/keystone ./Hooks/keystone >> /dev/null 2>&1  
+echo "Building Liberation"
+cd ./Liberation
+cd keystone&&git pull origin master &&cd ../
+./liberation setup
+./liberation build
+cd "${OrigDIR}"
+echo "Moving Liberation"
+mv ./Liberation/lib/libLiberation.a ./ExtraFWs/
+mv ./Liberation/include/Liberation.h ./Hooks/
 cd "${OrigDIR}"
 echo "Downloading Cycript"
 wget https://cydia.saurik.com/api/latest/3 -O Cycript.zip

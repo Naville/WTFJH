@@ -19,3 +19,6 @@ Reveal.framework
 RevealTMP/
 *.db
 /*.db
+./ExtraFWs/*.*
+ExtraFWs/*.*
+DEBS/*.*

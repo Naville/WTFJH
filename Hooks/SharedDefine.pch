@@ -17,6 +17,7 @@
 #import "./Misc/fishhook.h"
 #import "./Obfuscation.h"
 #import "./capstone/capstone.h"
+#import "Cycript.h"
 #import "keystone/keystone.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"

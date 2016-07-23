@@ -136,7 +136,7 @@ def BuildMakeFile():
 	makeFileString += randomTweakName + MakeFileListString + "\n"
 	makeFileString += "ADDITIONAL_CCFLAGS  = -Qunused-arguments\n"
 	global LinkerString
-	makeFileString += "ADDITIONAL_LDFLAGS  = -F./ -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
+	makeFileString += "ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
 	for LDF in BuildConfig.LDFLAGS:
 		makeFileString +=" "+LDF
 	makeFileString +=" \n"	
@@ -152,6 +152,11 @@ def BuildMakeFile():
 	makeFileString += randomTweakName + "_FRAMEWORKS = Foundation UIKit Security JavaScriptCore "
 	for FWName in BuildConfig.ExtraFramework:
 		makeFileString +=FWName+" "
+	makeFileString +=" \n"
+	if len(BuildConfig.ExtraOBJFiles)>0:
+		makeFileString += randomTweakName + "_OBJ_FILES ="
+		for OBName in BuildConfig.ExtraOBJFiles:
+			makeFileString +=OBName+" "
 	makeFileString +=" \n"
 	makeFileString += "include $(THEOS_MAKE_PATH)/tweak.mk\n"
 	makeFileString += "after-install::\n"
@@ -458,7 +463,7 @@ def main():
 		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
-		os.system("dpkg-deb -Zgzip -b ./layout ./Build-"+str(currentVersion)+".deb")
+		os.system("dpkg-deb -Zgzip -b ./layout ./DEBS/Build-"+str(currentVersion)+".deb")
 	cleanUp()
 	if buildSuccess==True:
 		print (Fore.YELLOW +"Built with components: \n")

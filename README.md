@@ -4,7 +4,7 @@
 
 *DO NOT USE PRE-BUILT BINARY*
 
-*Theos-Legacy is no longer Supported. Run ./InstallTheos.sh To Install The Latest Version of Theos*
+*Theos-Legacy is no longer Supported. Run ./CIScripts/InstallTheos.sh To Install The Latest Version of Theos*
 
 
 

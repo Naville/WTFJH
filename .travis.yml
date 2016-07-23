@@ -7,4 +7,4 @@ before_install:
   - clear
   - export THEOS=/opt/theos
 
-script: "sudo python get-pip.py && ./Setup.sh && ./InstallTheos.sh &&./build.py DEBUG"
+script: "sudo python ./CIScripts/get-pip.py && ./Setup.sh && ./CIScripts/InstallTheos.sh &&./build.py DEBUG"

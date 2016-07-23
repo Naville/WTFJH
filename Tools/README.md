@@ -28,6 +28,7 @@ Core is complete(hopefully bug-free), although more transform rules needs to be 
 
 
 ##RemoteLogger
-Remote Receive Logs. An SQL Database is formed
+Remote Receive Logs. An SQL Database is formed. Check *RemoteLogger/README.md*
 
-
+##WTFJHAnalyzer
+A bare clone of introspy-analyzer. I do have plan of implementing auto-generated Call-Sorting. Low priority though.

@@ -3,4 +3,4 @@
 	url = https://github.com/aquynh/capstone.git
 [submodule "Liberation"]
 	path = Liberation
-	url = git@github.com:iOSCheaters/Liberation.git
+	url = https://github.com/iOSCheaters/Liberation.git

@@ -1,38 +1,19 @@
 #import "./Hooks/SharedDefine.pch" 
 #include <unistd.h>
-// Utility function to parse the preference file
+#include <stdio.h>
 
-#ifdef PROTOTYPE
-void WTFJHLog(id Obj1, ... );
-int OriginalErrDes=dup(STDERR_FILENO);
-int NewDes=0;
-void WTFJHLog(id Obj1, ... ){
-    dup2(OriginalErrDes,STDERR_FILENO); 
-    va_list arg;
-    va_start(arg,Obj1);
-    NSLogv([Obj1 description],arg); 
-
-    va_end(arg);
-    dup2(NewDes, STDERR_FILENO);//Put it back
-}
 static BOOL RedirectLog(){
     NSString* fileName=[NSString stringWithFormat:@"%@/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
     [@"-----Overture-----\n" writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    id fileHandle = [NSFileHandle fileHandleForWritingAtPath:fileName];
-    if (!fileHandle){
-        NSLog(@"LogFileOpenFailed");
+    FILE *stdoutHandle=freopen(fileName.UTF8String,"w",stdout);
+    FILE *stderrHandle=freopen(fileName.UTF8String,"w",stderr);
+    if(stdoutHandle!=NULL && stderrHandle!=NULL){
+        return YES;
+    }
+    else{
         return NO;
     }
-
-    int err = dup2([fileHandle fileDescriptor], STDERR_FILENO);
-    if (err==-1){
-        NSLog(@"Couldn't Redirect");
-        return NO;
-    }
-    NewDes=[fileHandle fileDescriptor];
-    return  YES;
 }
-#endif
 extern BOOL getBoolFromPreferences(NSString *preferenceValue) {
     NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
     id value = [preferences objectForKey:preferenceValue];
@@ -100,14 +81,12 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
     if (getBoolFromPreferences(@"URLSchemesHooks")) {
             traceURISchemes();
      }
-#ifdef PROTOTYPE
     if (getBoolFromPreferences(@"RedirectLogging")) {
             BOOL status=RedirectLog();
-            if(status){
+            if(status==NO){
                 NSLog(@"Redirect Failed");
             }
      }
-#endif
 	// Initialize DB storage
     NSLog(@"WTFJH - Profiling enabled for %@", appId);
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");

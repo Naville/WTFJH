@@ -33,7 +33,7 @@ MakeFileListString = "_FILES = Tweak.xm CompileDefines.xm"
 global ModuleList
 ModuleList = list()
 global DEBUG
-DEBUG = False
+DEBUG = True
 global PROTOTYPE
 PROTOTYPE = False
 global OBFUSCATION

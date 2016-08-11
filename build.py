@@ -144,16 +144,16 @@ def BuildMakeFile():
 	if(JAILED==True):
 		makeFileString += randomTweakName+"_USE_SUBSTRATE = $(SUBSTRATE)\n"
 	makeFileString += randomTweakName + MakeFileListString + "\n"
-	makeFileString += "export ADDITIONAL_CCFLAGS  = -Qunused-arguments"
+	makeFileString += randomTweakName +"_CCFLAGS  = -Qunused-arguments"
 	for CCFlag in BuildConfig.ExtraCCFlags:
 		makeFileString +=" "+CCFlag
 	makeFileString+="\n"
 	global LinkerString
-	makeFileString += "export ADDITIONAL_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
+	makeFileString += randomTweakName +"_LDFLAGS  = -Wl,-segalign,4000,-sectcreate,WTFJH,SIGDB,./SignatureDatabase.plist"+LinkerString+" "
 	for LDF in BuildConfig.LDFLAGS:
 		makeFileString +=" "+LDF
 	makeFileString +=" \n"	
-	makeFileString +="export ADDITIONAL_CFLAGS = "
+	makeFileString +=randomTweakName +"_CFLAGS = "
 	for CFlag in BuildConfig.ExtraCFlags:
 		makeFileString +=" "+CFlag
 	makeFileString+="\n"

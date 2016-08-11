@@ -15,8 +15,7 @@
 #include <mach-o/fat.h>
 #include <mach-o/loader.h>
 
-#import "../../Hooks/SharedDefine.pch"
-
+#define RMASLRCenter @"com.naville.wtfjh.rmaslr"
 struct ProgramVars {
     struct mach_header*	mh;
     int*		NXArgcPtr;

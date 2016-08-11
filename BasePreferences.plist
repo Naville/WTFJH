@@ -41,6 +41,18 @@
 			<key>defaults</key>
 			<string>naville.wtfjh</string>
 			<key>key</key>
+			<string>AddCallStackToDatabase</string>
+			<key>label</key>
+			<string>AddCallStackToDatabase</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>naville.wtfjh</string>
+			<key>key</key>
 			<string>AntiAntiDebugging</string>
 			<key>label</key>
 			<string>AntiAntiDebugging</string>

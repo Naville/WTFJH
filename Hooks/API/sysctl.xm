@@ -31,7 +31,7 @@ static NSArray* HWArgs=@[
 /*
 int	sysctlnametomib(const char *, int *, size_t *);//Probably Pointless To Hook
 */
-extern BOOL getBoolFromPreferences(NSString *preferenceValue);
+extern  BOOL getBoolFromPreferences(NSString *preferenceValue);
 static int (*oldsyscall)(long request, long pid, long addr, long data);
 int (*old_sysctl)(int *, u_int, void *, size_t *, void *, size_t);
 int	(*old_sysctlbyname)(const char *, void *, size_t *, void *, size_t);

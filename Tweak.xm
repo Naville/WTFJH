@@ -1,7 +1,6 @@
 #import "./Hooks/SharedDefine.pch" 
 #include <unistd.h>
 #include <stdio.h>
-
 static BOOL RedirectLog(){
     NSString* fileName=[NSString stringWithFormat:@"%@/Documents/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
     [@"-----Overture-----\n" writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];

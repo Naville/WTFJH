@@ -620,7 +620,7 @@ if([response respondsToSelector:@selector(allHeaderFields)]){
 	return errorDict;
 }
 
-+ (NSDictionary *) convertNSURLSessionTask:(id)task {
++ (NSDictionary *) convertNSURLSessionTask:(NSURLSessionTask*)task {
 	if (task == nil)
 		return [NSDictionary dictionary];
 	NSString *state_str = nil;

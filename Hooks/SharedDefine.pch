@@ -41,6 +41,10 @@
 					Dl_info image_info;\
 					dladdr(mh, &image_info);\
 					const char *image_name = image_info.dli_fname;\
+					if(image_name==NULL){\
+						NSLog(@"Empty ImageName");\
+						return;\
+					}\
 					NSString* name=[NSString stringWithUTF8String:image_name];\
 					if([name containsString:LibraryName]){\
 						FunctionToCall();\

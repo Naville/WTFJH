@@ -14,6 +14,17 @@ static BOOL RedirectLog(){
         return NO;
     }
 }
+void UncaughtExceptionHandler(NSException *exception) {  
+     NSArray *arr = [exception callStackSymbols];  
+     NSString *reason = [exception reason];  
+     NSString *name = [exception name];  
+     NSLog(@"WTFJH-UncaughtExceptionHandler:\nCallStackSymbols%@\nReason:%@\nName:%@",arr,reason,name);
+     exit(255);
+
+}  
+
+
+
 extern BOOL getBoolFromPreferences(NSString *preferenceValue) {
     NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
     id value = [preferences objectForKey:preferenceValue];
@@ -92,6 +103,14 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
     [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
 	if (traceStorage != nil) {
+        if(NSGetUncaughtExceptionHandler()==nil){
+            NSLog(@"Registering UncaughtExceptionHandler");
+            NSSetUncaughtExceptionHandler (&UncaughtExceptionHandler);  
+        }
+        else{
+            NSLog(@"UncaughtExceptionHandler Exists");
+
+        }
         NSLog(@"WTFJH - Enabling Hooks");
         extern void GlobalInit();
         GlobalInit();

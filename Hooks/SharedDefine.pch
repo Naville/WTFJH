@@ -31,7 +31,12 @@
 
 #define Meh1(x) #x
 #define Meh(x) Meh1(x)
+#ifdef DEBUG
+#define WTInit(CLASSNAME,ARGUMENTNAME) CallTracer *tracer = [[CallTracer alloc] initWithClass:CLASSNAME andMethod:ARGUMENTNAME];\
+									   NSLog(@"WTFJH-%@-%@",CLASSNAME,ARGUMENTNAME)
+#else
 #define WTInit(CLASSNAME,ARGUMENTNAME) CallTracer *tracer = [[CallTracer alloc] initWithClass:CLASSNAME andMethod:ARGUMENTNAME]
+#endif
 #define WTAdd(Argument,Name) [tracer addArgFromPlistObject:Argument withKey:Name]
 #define WTReturn(Return) [tracer addReturnValueFromPlistObject:Return]
 #define WTSave [traceStorage saveTracedCall: tracer]

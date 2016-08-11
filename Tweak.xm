@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 static BOOL RedirectLog(){
-    NSString* fileName=[NSString stringWithFormat:@"%@/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
+    NSString* fileName=[NSString stringWithFormat:@"%@/Documents/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
     [@"-----Overture-----\n" writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
     FILE *stdoutHandle=freopen(fileName.UTF8String,"w",stdout);
     FILE *stderrHandle=freopen(fileName.UTF8String,"w",stderr);

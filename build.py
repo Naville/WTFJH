@@ -15,10 +15,12 @@ from colorama import init
 from colorama import Fore, Back, Style
 import BuildConfig
 init(autoreset=True)
+STDOUT=open("STDOUT.log", 'a')
+STDERR=open("STDERR.log", 'a')
 
 def Exec(Command):
 	try:
-		subprocess.check_call([Command], stdout=open("/dev/null", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)
+		subprocess.check_call([Command], stdout=STDOUT, stderr=STDERR, shell=True)
 	except:
 		pass
 
@@ -33,7 +35,7 @@ MakeFileListString = "_FILES = Tweak.xm CompileDefines.xm"
 global ModuleList
 ModuleList = list()
 global DEBUG
-DEBUG = True
+DEBUG = False
 global PROTOTYPE
 PROTOTYPE = False
 global OBFUSCATION
@@ -53,7 +55,7 @@ InitialCWD=os.getcwd()
 global JAILED
 JAILED=False
 global buildCommand
-buildCommand="make "
+buildCommand="make debug=0"
 global HostName
 HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")
 global AllowedSourceExtension
@@ -339,7 +341,7 @@ def ParseArgs():
  		if x.upper().startswith("HostName="):
  			HostName=str(x[9:])
  	if(DEBUG==False):
- 		buildCommand+=" DEBUG=0"
+ 		buildCommand="make "
 def Obfuscation():
 	if OBFUSCATION==False:
 		print "No Obfuscation"
@@ -382,15 +384,7 @@ def buildThirdPartyComponents():
 				SubDirectoryPath="./ThirdPartyTools/"+x
 				origCH=os.getcwd()
 				os.chdir(SubDirectoryPath)
-				os.system("unlink theos")
-				os.system("rm obj")
-				os.system("rm -rf .theos")
-				os.system("ln -s $THEOS theos")
-				os.system("mkdir .theos")
-				os.system("mkdir .theos/obj")
-				os.system("ln -s .theos/obj obj")
-				os.system(buildCommand)
-				os.system("mv ./obj/debug/"+x+".dylib ../../")
+				os.system("unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& make&&"+"mv ./obj/debug/"+x+".dylib ../../")	
 				os.chdir(origCH)
 			else:
 				Error=None
@@ -398,7 +392,8 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& "+buildCommand+"&&"+"mv ./obj/debug/"+x+".dylib ../../"], stdout=open("../../ThirdPartyLog.log", 'a'), stderr=open("../../ThirdPartyLog.log", 'a'), shell=True)		
+					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& make &&"+"mv ./obj/debug/"+x+".dylib ../../"], stdout=STDOUT, stderr=STDERR, shell=True)		
+					#sys.exit(0)	
 					os.chdir(origCH)						
 				except Exception as inst:
 					if (isinstance(inst,subprocess.CalledProcessError) and (Error==None or Error==0)):
@@ -415,9 +410,6 @@ def main():
 	LINKTHEOS()
 	os.system("echo \" \" >./Hooks/Obfuscation.h")
 	# Generate random Name to bypass detection
-	# os.remove("./Makefile")
-	os.system("echo \' \' >./MainLog.log")
-	os.system("echo \' \' >./ThirdPartyLog.log")
 	global randomTweakName
 	randomTweakName = id_generator()
 	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags.
@@ -456,15 +448,15 @@ def main():
 			buildSuccess=False
 			print (Fore.RED+"Error Occured.Quit")
 	else:
-		with open("MainLog.log", 'a') as devnull:
-			try:
-				print "Building... Main"
-				x = subprocess.check_call([buildCommand], stdout=devnull, stderr=open("../../ThirdPartyLog.log", 'a'))
-				print "Make Exit With Status: ",x
-			except Exception as inst:
-				buildSuccess=False
-				print inst
-				print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
+		try:
+			print "Building... Main"
+			print os.getcwd()
+			x = subprocess.check_call([buildCommand], stdout=STDOUT, stderr=STDERR,shell=True)
+			print "Make Exit With Status: ",x
+		except Exception as inst:
+			buildSuccess=False
+			print inst
+			print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
 #Packaging
 	if buildSuccess==True:
 		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")

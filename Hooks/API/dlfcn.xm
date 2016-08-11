@@ -1,39 +1,55 @@
 #import "../SharedDefine.pch"
 #import <dlfcn.h>
 int (*old_dladdr)(const void *, Dl_info *);
+void * (*old_dlsym)(void * __handle, const char * __symbol);
+void * (*old_dlopen)(const char * __path, int __mode);
 int new_dladdr(const void * addr, Dl_info * info){
     int ret = old_dladdr(addr, info);
-    if ([CallStackInspector wasDirectlyCalledByApp] && info->dli_fname != nil && info->dli_sname != nil) {
-        CallTracer *tracer = [[CallTracer alloc] initWithClass:@"dlfcn" andMethod:@"dladdr"];
-        [tracer addArgFromPlistObject:[NSString stringWithUTF8String:info->dli_fname] withKey:@"PathOfObject"];
-        [tracer addArgFromPlistObject:[NSString stringWithUTF8String:info->dli_sname] withKey:@"NameOfNearestSymbol"];
-        [traceStorage saveTracedCall: tracer];
-        [tracer release];
+    if (WTShouldLog) {
+        WTInit(@"dlfcn",@"dladdr");
+        if(info->dli_fname!=NULL){
+             WTAdd([NSString stringWithUTF8String:info->dli_fname],@"PathOfObject");
+        }
+        else{
+            WTAdd(@"NULL",@"PathOfObject");
+        }
+        if(info->dli_sname!=NULL){
+             WTAdd([NSString stringWithUTF8String:info->dli_sname],@"NameOfNearestSymbol");
+        }
+        else{
+            WTAdd(@"NULL",@"NameOfNearestSymbol");
+        }
+        WTSave;
+        WTRelease;
     }
     return ret;
 }
-
-
-void * (*old_dlopen)(const char * __path, int __mode);
-void * (*old_dlsym)(void * __handle, const char * __symbol);
-
 void * new_dlsym(void * handle, const char* symbol) {
-	if ([CallStackInspector wasDirectlyCalledByApp] && symbol != NULL) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"dlfcn" andMethod:@"dlsym"];
-        [tracer addArgFromPlistObject:[NSString stringWithUTF8String:symbol] withKey:@"Symbol"];
-        [traceStorage saveTracedCall: tracer];
-        [tracer release];
+	if (WTShouldLog) {
+		WTInit(@"dlfcn",@"dlsym");
+        if(symbol!=NULL){
+            WTAdd([NSString stringWithUTF8String:symbol],@"Symbol");
+        }
+
+        WTAdd(objectTypeNotSupported,@"Handle");
+        WTSave;
+        WTRelease;
 	}
 	return old_dlsym(handle,symbol);
 
 }
 void * new_dlopen(const char * __path, int __mode) {
-	if ([CallStackInspector wasDirectlyCalledByApp] && __path != NULL) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"dlfcn" andMethod:@"dlopen"];
-        [tracer addArgFromPlistObject:[NSString stringWithUTF8String: __path] withKey:@"Path"];
-        [tracer addArgFromPlistObject:[NSNumber numberWithInt:__mode] withKey:@"Mode"];
-        [traceStorage saveTracedCall: tracer];
-        [tracer release];
+	if (WTShouldLog) {
+		WTInit(@"dlfcn",@"dlopen");
+        if(__path!=NULL){
+            WTAdd([NSString stringWithUTF8String:__path],@"Path");
+        }
+        else{
+            WTAdd(objectTypeNotSupported,@"Path");
+        }
+        WTAdd([NSNumber numberWithInt:__mode],@"Mode");
+        WTSave;
+        WTRelease;
 	}
 	return old_dlopen(__path,__mode);
 

@@ -60,7 +60,8 @@ global HostName
 HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")
 global AllowedSourceExtension
 AllowedSourceExtension=[".cpp",".xm",".xmi",".mm",".c",".m",".x",".xi"]
-
+global theospathmid
+theospathmid="//"
 def isSource(FileName):
 	for End in AllowedSourceExtension:
 		if FileName.upper().endswith(End.upper()):
@@ -340,8 +341,10 @@ def ParseArgs():
  				SkippedList.append(z)
  		if x.upper().startswith("HostName="):
  			HostName=str(x[9:])
- 	if(DEBUG==False):
+ 	if(DEBUG==True):
  		buildCommand="make "
+ 		global theospathmid
+ 		theospathmid="/debug/"
 def Obfuscation():
 	if OBFUSCATION==False:
 		print "No Obfuscation"
@@ -364,6 +367,8 @@ def BuildLoader(ModuleName):
 	f.write(Template)
 	f.close()
 def buildThirdPartyComponents():
+	global theospathmid
+	global buildCommand
 	Exec("find . -type f -name .DS_Store -delete && xattr -cr *")
 	for x in Thirdbuildlistdir("ThirdPartyTools"):
 		os.chdir(InitialCWD)#Make Sure CWD We've changed in buildThirdPartyComponents() is set back
@@ -384,7 +389,7 @@ def buildThirdPartyComponents():
 				SubDirectoryPath="./ThirdPartyTools/"+x
 				origCH=os.getcwd()
 				os.chdir(SubDirectoryPath)
-				os.system("unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& make&&"+"mv ./obj/debug/"+x+".dylib ../../")	
+				os.system("unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&&"+buildCommand+"&&"+"mv ./obj/"+theospathmid+x+".dylib ../../")	
 				os.chdir(origCH)
 			else:
 				Error=None
@@ -392,7 +397,7 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& make &&"+"mv ./obj/debug/"+x+".dylib ../../"], stdout=STDOUT, stderr=STDERR, shell=True)		
+					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& "+buildCommand+"&&"+"mv ./obj/"+theospathmid+x+".dylib ../../"], stdout=STDOUT, stderr=STDERR, shell=True)		
 					#sys.exit(0)	
 					os.chdir(origCH)						
 				except Exception as inst:
@@ -461,7 +466,8 @@ def main():
 	if buildSuccess==True:
 		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
 		FixControlFile("./layout/DEBIAN/control")
-		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj/debug/" + randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
+		global theospathmid
+		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj" +theospathmid+randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
 		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")

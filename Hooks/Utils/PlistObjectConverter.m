@@ -31,8 +31,12 @@ static NSString *serializedNilValue = @"nil";
 	}
 	else{
 		NSMutableDictionary* retDict=[NSMutableDictionary dictionary];
+		if(USC.HTTPAdditionalHeaders!=nil){
 		[retDict setObject:USC.HTTPAdditionalHeaders forKey:@"HTTPAdditionalHeaders"];
+		}
+		if(USC.connectionProxyDictionary!=nil){
 		[retDict setObject:USC.connectionProxyDictionary forKey:@"connectionProxyDictionary"];
+		}
 		[retDict setObject:[NSNumber numberWithInt:USC.networkServiceType] forKey:@"networkServiceType"];
 		return retDict;
 	}

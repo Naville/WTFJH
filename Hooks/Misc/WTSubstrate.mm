@@ -18,9 +18,19 @@ void * WTFindSymbol(WTImageRef image, const char *name){
 #ifndef NonJailbroken	
 	return MSFindSymbol(image,name);
 #else
-	
-	return dlsym(image,name);
+	if(image!=NULL){
+		return dlsym(image,name);
+	}
+	else{
+		void* Handle=dlopen(NULL,RTLD_LAZY|RTLD_NOW);
+		return dlsym(Handle,name);
+	}
 #endif
 
+
+}
+int WTFishHookSymbols(const char* symbol,void *replace, void **result){
+
+return rebind_symbols((struct rebinding[1]){{symbol, replace,result}}, 1);
 
 }

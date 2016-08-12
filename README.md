@@ -1,7 +1,5 @@
 # What The Fuck Just Happened
 
-[![Build Status](https://travis-ci.org/Naville/WTFJH.svg?branch=master)](https://travis-ci.org/Naville/WTFJH)
-
 *DO NOT USE PRE-BUILT BINARY*
 
 *Theos-Legacy is no longer Supported. Run ./CIScripts/InstallTheos.sh To Install The Latest Version of Theos*

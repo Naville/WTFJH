@@ -11,5 +11,5 @@ typedef MSImageRef WTImageRef;
 
 int WTHookFunction(void *symbol, void *replace, void **result);
 void * WTFindSymbol(WTImageRef image, const char *name);
-
+int WTFishHookSymbols(const char* symbol,void *replace, void **result);
 #define WTHookOK 0

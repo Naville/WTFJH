@@ -8,12 +8,7 @@ int	getpeername(int, struct sockaddr * __restrict, socklen_t * __restrict)
 int	getsockname(int, struct sockaddr * __restrict, socklen_t * __restrict)
 		__DARWIN_ALIAS(getsockname);
 int	getsockopt(int, int, int, void * __restrict, socklen_t * __restrict);
-     ssize_t
-     recvfrom(int socket, void *restrict buffer, size_t length, int flags,
-         struct sockaddr *restrict address, socklen_t *restrict address_len);
 
-     ssize_t
-     recvmsg(int socket, struct msghdr *message, int flags);
 
 
      ssize_t
@@ -64,6 +59,23 @@ static NSString* get_ip_str(const struct sockaddr *sa)
    }
 }
 
+static NSMutableDictionary* GetInfoFormsghdr(struct msghdr* message){
+	NSMutableDictionary* RetDict=[NSMutableDictionary dictionary];
+	if(message->msg_name!=NULL){
+		[RetDict setObject:get_ip_str((const struct sockaddr *)message->msg_name) forKey:@"MessageName"];
+	}
+	NSMutableArray* iovecArray=[[NSMutableArray array] autorelease];
+	if(message->msg_iov!=NULL && message->msg_iovlen>0){
+		for (int i = 0; i < message->msg_iovlen; i++) {
+			struct iovec currentIOVEC=message->msg_iov[i];
+			[iovecArray addObject:[NSData dataWithBytes:currentIOVEC.iov_base length:currentIOVEC.iov_len]];
+        }
+    }
+    [RetDict setObject:iovecArray forKey:@"IOVEC"];
+	[RetDict setObject:[NSData dataWithBytes:message->msg_control length:message->msg_controllen] forKey:@"Data"];
+	[RetDict setObject:[NSNumber numberWithInt:message->msg_flags] forKey:@"flags"];
+	return RetDict;
+}
 
 //Old Pointers
 int (*old_socket)(int domain, int type, int protocol);
@@ -72,7 +84,8 @@ int	(*old_bind)(int, struct sockaddr *, socklen_t);
 int	(*old_connect)(int, const struct sockaddr *, socklen_t);
 int	(*old_listen)(int, int);
 ssize_t (*old_recv)(int socket, void *buffer, size_t length, int flags);
-
+ssize_t (*old_recvfrom)(int socket, void *buffer, size_t length,int flags,struct sockaddr *address,socklen_t * addresslen);
+ssize_t (*old_recvmsg)(int socket, struct msghdr *message, int flags);
 //New Functions
 int new_socket(int domain, int type, int protocol){
 	int descriptor=old_socket(domain,type,protocol);
@@ -189,6 +202,48 @@ ssize_t new_recv(int socket, void *buffer, size_t length, int flags){
 	}
 	return retVal;
 }
+ssize_t new_recvfrom(int socket, void *buffer, size_t length, int flags,struct sockaddr *address, socklen_t *address_len){
+	ssize_t retVal=0;
+	if(WTShouldLog){
+		retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
+		WTInit(@"Socket",@"recvfrom");
+		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
+		WTAdd([NSData dataWithBytes:buffer length:length],@"Data");
+		WTAdd([NSNumber numberWithInt:flags],@"Flags");
+		WTAdd(get_ip_str(address),@"Address");
+		WTReturn([NSNumber numberWithLong:retVal]);
+		WTSave;
+		WTRelease;
+
+	}
+	else{
+		retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
+	}
+	return retVal;
+
+
+
+}
+ssize_t new_recvmsg(int socket, struct msghdr *message, int flags){
+	ssize_t retVal=0;
+	if(WTShouldLog){
+		retVal=old_recvmsg(socket,message,flags);
+		WTInit(@"Socket",@"recvmsg");
+		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
+
+		WTAdd([NSNumber numberWithInt:flags],@"Flags");
+		WTAdd(GetInfoFormsghdr(message),@"Address");
+		WTReturn([NSNumber numberWithLong:retVal]);
+		WTSave;
+		WTRelease;
+
+	}
+	else{
+		retVal=old_recvmsg(socket,message,flags);
+	}
+	return retVal;
+
+}
 extern void init_Socket_hook() {
     WTHookFunction((void*)socket,(void*)new_socket, (void**)&old_socket);
     WTHookFunction((void*)accept,(void*)new_accept, (void**)&old_accept);
@@ -196,4 +251,5 @@ extern void init_Socket_hook() {
     WTHookFunction((void*)connect,(void*)new_connect, (void**)&old_connect);
     WTHookFunction((void*)listen,(void*)new_listen, (void**)&old_listen);
     WTHookFunction((void*)recv,(void*)new_recv, (void**)&old_recv);
+    WTHookFunction((void*)recvfrom,(void*)new_recvfrom, (void**)&old_recvfrom);
 }

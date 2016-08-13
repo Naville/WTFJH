@@ -16,9 +16,13 @@ static BOOL RedirectLog(){
 void UncaughtExceptionHandler(NSException *exception) {  
      NSArray *arr = [exception callStackSymbols];  
      NSString *reason = [exception reason];  
-     NSString *name = [exception name];  
-     NSLog(@"WTFJH-UncaughtExceptionHandler:\nCallStackSymbols%@\nReason:%@\nName:%@",arr,reason,name);
-     exit(255);
+     NSString *name = [exception name];
+     WTInit(name,@"UncaughtExceptionHandler");
+     WTAdd(arr,@"callStackSymbols");
+     WTAdd(reason,@"reason");
+     WTSave;
+     WTRelease;
+     //exit(255);
 
 }  
 

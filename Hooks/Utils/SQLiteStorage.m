@@ -6,8 +6,8 @@
 
 // Database settings
 static BOOL logToConsole = TRUE;
-static NSString *appstoreDBFileFormat = @"~/Library/wtfjh-%@.db"; // Becomes ~/Library/introspy-<appName>.db
-static NSString *systemDBFileFormat = @"~/Library/Preferences/wtfjh-%@.db";
+static NSString *appstoreDBFileFormat = @"~/Library/wtfjh-%@-%@.db";
+static NSString *systemDBFileFormat = @"~/Library/Preferences/wtfjh-%@-@.db";
 static const char createTableStmtStr[] = "CREATE TABLE tracedCalls (className TEXT, methodName TEXT, argumentsAndReturnValueDict TEXT,CALLSTACK TEXT)";
 static const char saveTracedCallStmtStr[] = "INSERT INTO tracedCalls VALUES (?1, ?2, ?3,?4)";
 static BOOL ApplyCallStack=NO;
@@ -45,10 +45,10 @@ static sqlite3 *dbConnection;
     // Are we monitoring a System app or an App Store app ?
     NSString *appRoot = [@"~/" stringByExpandingTildeInPath];
     if ([appRoot isEqualToString: @"/var/mobile"]) {
-        DBFilePath = [NSString stringWithFormat:systemDBFileFormat, appId];
+        DBFilePath = [NSString stringWithFormat:systemDBFileFormat, appId,[NSDate date]];
     }
     else {
-        DBFilePath = [NSString stringWithFormat:appstoreDBFileFormat, appId];
+        DBFilePath = [NSString stringWithFormat:appstoreDBFileFormat, appId,[NSDate date]];
     }
 
     return [self initWithDBFilePath: [DBFilePath stringByExpandingTildeInPath] andLogToConsole: shouldLog];

@@ -203,12 +203,12 @@ ssize_t new_recv(int socket, void *buffer, size_t length, int flags){
 ssize_t new_recvfrom(int socket, void *buffer, size_t length, int flags,struct sockaddr *address, socklen_t *address_len){
 	ssize_t retVal=0;
 	if(WTShouldLog){
-		retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
 		WTInit(@"Socket",@"recvfrom");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 		WTAdd([NSData dataWithBytes:buffer length:length],@"Data");
 		WTAdd([NSNumber numberWithInt:flags],@"Flags");
 		WTAdd(get_ip_str(address),@"Address");
+		retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
 		WTReturn([NSNumber numberWithLong:retVal]);
 		WTSave;
 		WTRelease;

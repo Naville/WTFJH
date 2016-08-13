@@ -416,7 +416,11 @@ def main():
 	os.system("echo \" \" >./Hooks/Obfuscation.h")
 	# Generate random Name to bypass detection
 	global randomTweakName
-	randomTweakName = id_generator()
+	global OBFUSCATION
+	if(OBFUSCATION==True):
+		randomTweakName = id_generator()
+	else:
+		randomTweakName="WTFJH"
 	buildThirdPartyComponents()#Call This Before Generating Makefile for a complete Linker Flags.
 	#Call buildThirdPartyComponents() before generating Makefile. Or else the loaders won't be injected
 	os.chdir(InitialCWD)#Make Sure CWD We've changed in buildThirdPartyComponents() is set back
@@ -468,7 +472,7 @@ def main():
 		FixControlFile("./layout/DEBIAN/control")
 		global theospathmid
 		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj" +theospathmid+randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
-		os.system("cp ./WTFJH.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
+		os.system("cp ./BundleFilter.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
 		os.system("dpkg-deb -Zgzip -b ./layout ./Packages/Build-"+str(currentVersion)+".deb")

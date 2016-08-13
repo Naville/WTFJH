@@ -146,13 +146,13 @@ int	new_connect(int sockfd, const struct sockaddr *addr,
                    socklen_t addrlen){
 	int retVal=0;
 	if(WTShouldLog){
+		retVal=old_connect(sockfd,addr,addrlen);
 		WTInit(@"Socket",@"connect");
 		WTAdd([NSNumber numberWithUnsignedShort:sockfd],@"SocketFileDescriptor");
 		WTAdd([NSNumber numberWithUnsignedInt:addr->sa_len],@"SocketAddressTotalLength");
 		WTAdd([NSNumber numberWithUnsignedShort:addr->sa_family],@"SocketAddressAddressFamily");
 		WTAdd(get_ip_str(addr),@"Address");
 		WTAdd([NSNumber numberWithUnsignedShort:addrlen],@"SocketAddressLength");
-		retVal=old_connect(sockfd,addr,addrlen);
 		WTReturn([NSNumber numberWithInt:retVal]);
 		WTSave;
 		WTRelease;
@@ -168,10 +168,10 @@ int	new_connect(int sockfd, const struct sockaddr *addr,
 int	new_listen(int sockfd, int backlog){
 	int retVal=0;
 	if(WTShouldLog){
+		retVal=old_listen(sockfd,backlog);
 		WTInit(@"Socket",@"listen");
 		WTAdd([NSNumber numberWithUnsignedInt:sockfd],@"SocketFileDescriptor");
 		WTAdd([NSNumber numberWithUnsignedInt:backlog],@"BackLog");
-		retVal=old_listen(sockfd,backlog);
 		WTReturn([NSNumber numberWithInt:retVal]);
 		WTSave;
 		WTRelease;

@@ -59,6 +59,7 @@ echo "Downloading Reveal"
 wget http://download.revealapp.com/Reveal.app.zip
 unzip Reveal.app.zip -d ./RevealTMP >> /dev/null 2>&1  
 rm ./layout/usr/lib/libReveal.dylib
+mkdir /layout/usr/lib
 cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib ./layout/usr/lib >> /dev/null 2>&1  
 rm -rf ./RevealTMP >> /dev/null 2>&1  
 rm -rf ./Reveal.app.zip >> /dev/null 2>&1  

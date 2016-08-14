@@ -32,7 +32,7 @@ extern void init_TEMPLATENAME_hook(){
             dlclose(handle);
 
             handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);  
-            WTLoaderPrototype WTHandle = dlsym(handle, "WTFJHInitTEMPLATENAME");  //Call Init Function
+            WTLoaderPrototype WTHandle =(WTLoaderPrototype) dlsym(handle, "WTFJHInitTEMPLATENAME");  //Call Init Function
             if(WTHandle!=NULL){
             WTHandle();  
             }
@@ -54,5 +54,11 @@ extern void init_TEMPLATENAME_hook(){
 
     }
 #endif
+#elif
+
+NSString* BundledDYLIBPath=[NSString stringWithFormat:@"%@/TEMPLATENAME.dylib",[NSBundle mainBundle].bundlePath];
+dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW);
+
+[BundledDYLIBPath release];
 #endif
 }

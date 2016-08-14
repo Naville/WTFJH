@@ -94,7 +94,7 @@ Other Arguments(Upper/Lower Case Doesn't Matter):
 2.	OBFUSCATION OBFUSCATION SYMBOLS (NOT ALL. NEED CONTRIBUTIONS)
 3.	PROTOTYPE *Enable Codes Flagged As Prototype*
 4.	DISABLE=ModuleName1,ModuleName2,.........   *DISABLE UNWANTED MODULES*
-5.	JAILED *Will Attempt To Build For Non-Jailbroken Devices.MSHookFunction and ThirdPartyTools Are Currently Disabled. Probably Will Switch To FishHook Later*
+5.	JAILED *Will Attempt To Build For Non-Jailbroken Devices.MSHookFunction Will Switch To FishHook*
 
 
 
@@ -107,4 +107,12 @@ I personally use a dyldCallBack for that.
 
 You might want to dlopen() that library itself.However that will also cause performance issues
 
+When built with *JAILED* on, ThirdPartyToolsLoader will attempt to dlopen():
+
+```
+ @"%@/TEMPLATENAME.dylib",[NSBundle mainBundle].bundlePath  
+
+```
+
+Make sure it's correctly signed
 

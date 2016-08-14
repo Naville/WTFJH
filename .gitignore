@@ -20,3 +20,4 @@ RevealTMP/
 *.db
 ExtraFWs/
 Packages/
+layout/usr/lib/libReveal.dylib

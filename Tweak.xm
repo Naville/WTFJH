@@ -16,9 +16,13 @@ static BOOL RedirectLog(){
 void UncaughtExceptionHandler(NSException *exception) {  
      NSArray *arr = [exception callStackSymbols];  
      NSString *reason = [exception reason];  
-     NSString *name = [exception name];  
-     NSLog(@"WTFJH-UncaughtExceptionHandler:\nCallStackSymbols%@\nReason:%@\nName:%@",arr,reason,name);
-     exit(255);
+     NSString *name = [exception name];
+     WTInit(name,@"UncaughtExceptionHandler");
+     WTAdd(arr,@"callStackSymbols");
+     WTAdd(reason,@"reason");
+     WTSave;
+     WTRelease;
+     //exit(255);
 
 }  
 
@@ -86,8 +90,9 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
     if ( (shouldHook == nil) || (! [shouldHook boolValue]) ) {
         NSLog(@"WTFJH - Profiling disabled for %@", appId);
         [pool drain];
-	    return;
+        return;
     }
+    NSLog(@"WTFJH - Profiling enabled for %@", appId);
     if (getBoolFromPreferences(@"URLSchemesHooks")) {
             traceURISchemes();
      }
@@ -97,11 +102,9 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
                 NSLog(@"Redirect Failed");
             }
      }
-	// Initialize DB storage
-    NSLog(@"WTFJH - Profiling enabled for %@", appId);
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
     [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
-	if (traceStorage != nil) {
+    if (traceStorage != nil) {
         if(NSGetUncaughtExceptionHandler()==nil){
             NSLog(@"Registering UncaughtExceptionHandler");
             NSSetUncaughtExceptionHandler (&UncaughtExceptionHandler);  
@@ -113,10 +116,10 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
         NSLog(@"WTFJH - Enabling Hooks");
         extern void GlobalInit();
         GlobalInit();
-	}
-	else {
-		NSLog(@"WTFJH - DB Initialization error; disabling hooks.");
-	}
+    }
+    else {
+        NSLog(@"WTFJH - DB Initialization error; disabling hooks.");
+    }
 
     [pool drain];
 }

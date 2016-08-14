@@ -57,7 +57,10 @@ void * new_dlopen(const char * __path, int __mode) {
 
 
 extern void init_dlfcn_hook() {
-    WTHookFunction((void*)dladdr,(void*)new_dladdr, (void**)&old_dladdr);
+    WTFishHookSymbols("dladdr",(void*)new_dladdr, (void**)&old_dladdr);
+    WTFishHookSymbols("dlopen",(void*)new_dlopen, (void**)&old_dlopen);
+    WTFishHookSymbols("dlsym",(void*)new_dlsym, (void**)&old_dlsym);
+    /*WTHookFunction((void*)dladdr,(void*)new_dladdr, (void**)&old_dladdr);
     WTHookFunction((void*)dlsym,(void*)new_dlsym, (void**)&old_dlsym);
-    WTHookFunction((void*)dlopen,(void*)new_dlopen, (void**)&old_dlopen);
+    WTHookFunction((void*)dlopen,(void*)new_dlopen, (void**)&old_dlopen);*/
 }

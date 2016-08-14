@@ -1,6 +1,6 @@
 Package: naville.wtfjh
 Name: What The Fuck Just Happened
-Depends: mobilesubstrate, applist
+Depends: mobilesubstrate, applist, mobilesubstrate (>= 0.9.5000), firmware (>= 3.0), com.rpetrich.rocketbootstrap (>= 1.0.3) | firmware (<< 7.0)
 Architecture: iphoneos-arm
 Description: Ongoing Replacement For Introspy
 Maintainer: Naville

@@ -51,9 +51,12 @@ So there you go.
 
 %end
 extern void init_Reveal_hook() {
-	//Start Reveal
+#ifndef NonJailbroken   
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStart" object:nil];
+	dlopen("/usr/lib/libReveal.dylib",RTLD_NOW);
+#elif 
+	NSLog(@"Reveal Unsupported On Jailed Device");
+#endif
 
     %init(Reveal);
 }

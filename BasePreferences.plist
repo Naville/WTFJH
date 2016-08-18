@@ -105,14 +105,6 @@
 			<key>label</key>
 			<string>URL Schemes Hooks</string>
 		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>isStaticText</key>
-			<true/>
-			<key>label</key>
-			<string>Modules</string>
-		</dict>
 	</array>
 	<key>title</key>
 	<string>WTFJH</string>

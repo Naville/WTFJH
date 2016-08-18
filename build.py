@@ -26,6 +26,7 @@ def Exec(Command):
 
 # Global config
 makeFileString = ""
+#When Adding Path To The List. Please Strictly Follow This Format. i.e. "FOLDER/TYPE/". Or buildPF() will produce incorrect results
 PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/","Hooks/Misc/"]
 ManualObflist=BuildConfig.ManualList
 global toggleString
@@ -300,13 +301,16 @@ def BuildPF():
 	CustomPrefList = buildlistdir("./Preferences")
 	Plist = plistlib.readPlist('./BasePreferences.plist')
 	#Sort Modules
-	for key in ModuleDict:
+	for key in ModuleDict.keys():
 		ModuleDict[key].sort()
 	#Start
-	for key in ModuleDict:
+	SortedKeys=ModuleDict.keys()
+	for key in SortedKeys:
+		if len(ModuleDict[key])<=0:
+			continue
 		Dict = {
 		"cell": "PSGroupCell",
-		"footerText": key
+		"label": key
 		}
 		Plist["items"].append(Dict)
 		for x in ModuleDict[key]:

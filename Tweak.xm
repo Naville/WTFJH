@@ -126,3 +126,24 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
 
     [pool drain];
 }
+
+
+
+
+
+%dtor{
+    //This provided by Modern Theos. Theos-Legacy support has been discarded by WTFJH.
+    [[SQLiteStorage sharedManager] dealloc];
+
+
+}
+
+
+
+
+
+
+
+
+
+

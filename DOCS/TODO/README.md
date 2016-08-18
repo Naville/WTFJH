@@ -5,7 +5,7 @@
 4.	~~Remove ASLR~~ Check Hooks/Miscs
 5.	~~Runtime Class-Dump. **Just Reuse ClassRTDumper**~~ Added To ThirdPartyTools
 6.	~~Add Runtime Symbol Dump To 5.~~ Switched to classdumpdyld, solved
-7.	ASM Calculator (>_<)
+7.	~~ASM Calculator (>_<)~~ Solved By Introducing KSE
 8.	Web-based Cycript Support (POST .js to Tweak. We'll execute it locally) **Refactor Based on iSpy**
 9.	Web-Shell
 10.	Real-Time Logging To Server
@@ -15,10 +15,11 @@
 14. SocketLevel/JSBridge/stringByEvaluatingJavaScriptFromString Hook
 15. ~~Replace MSHookFunction with fishhook when *JAILED* Compile Flag is set~~
 16. Codesign the dylib when JAILED is set.
-17.	PROFIT??!!!
+17.	unistd.h Hooks
+18.	PROFIT??!!!
 
 # Third Party Tools TODOs
-- Merge [https://github.com/BishopFox/iSpy][3] into WTFJH
+- ~~Merge [https://github.com/BishopFox/iSpy][3] into WTFJH~~ *Not Needed Anymore*
 - ~~Merge [https://github.com/DavidGoldman/InspectiveC][4] into WTFJH~~ Check ThirdPartyTools/InspectiveC
 - Recognize Obfuscated Class/Func Based On Signatures And|Or Constants in *\_\_DATA*
 

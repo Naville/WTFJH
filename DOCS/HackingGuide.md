@@ -116,3 +116,14 @@ When built with *JAILED* on, ThirdPartyToolsLoader will attempt to dlopen():
 
 Make sure it's correctly signed
 
+
+
+####Limitations
+
+	syscall and its variations are no longer hooked as it's unstable and they are only barely a wrapper for corresponding assembly instruction, which is impossible to hook
+
+	Also, other APIs in */usr/lib/system/libsystem_kernel.dylib* are also not hooked as they are only a wrapper around direct syscalls
+	(Might implement in the future)
+
+	
+

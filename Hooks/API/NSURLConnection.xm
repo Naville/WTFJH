@@ -8,7 +8,7 @@
     WTInit(@"NSURLConnection",@"sendSynchronousRequest:returningResponse:error:");
     WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
     WTAdd([PlistObjectConverter convertNSURLResponse:*response],@"response");
-    WTAdd([*error localizedDescription],@"error");
+
     WTReturn(origResult);
     WTSave;
     WTRelease;
@@ -21,11 +21,12 @@
     NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
     id origResult = %orig(request, delegateProxy);
 
-    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"initWithRequest:delegate:"] autorelease];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"] withKey:@"delegate"];
-    [tracer addReturnValueFromPlistObject: objectTypeNotSupported];
-    [traceStorage saveTracedCall:tracer];
+    WTInit(@"NSURLConnection",@"initWithRequest:delegate:");
+    WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+    WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
+    WTReturn(objectTypeNotSupported);
+    WTSave;
+    WTRelease;
     
     return origResult;
 }
@@ -36,13 +37,13 @@
     NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
     id origResult = %orig(request, delegateProxy, startImmediately);
 
-    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"initWithRequest:delegate:startImmediately:"] autorelease];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"] withKey:@"delegate"];
-    [tracer addArgFromPlistObject:[NSNumber numberWithBool:startImmediately] withKey:@"startImmediately"];
-    [tracer addReturnValueFromPlistObject: objectTypeNotSupported];
-    [traceStorage saveTracedCall:tracer];
-    
+    WTInit(@"NSURLConnection",@"initWithRequest:delegate:startImmediately:");
+    WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+    WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
+    WTAdd([NSNumber numberWithBool:startImmediately] ,@"startImmediately");
+    WTReturn(objectTypeNotSupported);
+    WTSave;
+    WTRelease;
     return origResult;
 }
 
@@ -56,20 +57,21 @@
 // The usual way of disabling SSL cert validation
 - (void)continueWithoutCredentialForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     %orig(challenge);
-    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"continueWithoutCredentialForAuthenticationChallenge:"] autorelease];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLAuthenticationChallenge: challenge] withKey:@"challenge"];
-    [traceStorage saveTracedCall:tracer];
-
+    WTInit(@"NSURLConnection",@"continueWithoutCredentialForAuthenticationChallenge:");
+    WTAdd([PlistObjectConverter convertNSURLAuthenticationChallenge: challenge],@"challenge");
+    WTSave;
+    WTRelease;
     
 }
 
 // Might indicate client certificates or cert pinning. TODO: Investigate
 - (void)useCredential:(NSURLCredential *)credential forAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     %orig(credential, challenge);
-    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"useCredential:forAuthenticationChallenge:"] autorelease];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLCredential:credential] withKey:@"credential"];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLAuthenticationChallenge: challenge] withKey:@"challenge"];
-    [traceStorage saveTracedCall:tracer];
+    WTInit(@"NSURLConnection",@"useCredential:forAuthenticationChallenge:");
+    WTAdd([PlistObjectConverter convertNSURLCredential:credential],@"credential");
+    WTAdd([PlistObjectConverter convertNSURLAuthenticationChallenge: challenge],@"challenge");
+    WTSave;
+    WTRelease;
     
 }
 

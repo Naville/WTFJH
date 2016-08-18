@@ -62,6 +62,8 @@ global AllowedSourceExtension
 AllowedSourceExtension=[".cpp",".xm",".xmi",".mm",".c",".m",".x",".xi"]
 global theospathmid
 theospathmid="//"
+global ModuleDict
+ModuleDict=dict()
 def isSource(FileName):
 	for End in AllowedSourceExtension:
 		if FileName.upper().endswith(End.upper()):
@@ -207,6 +209,8 @@ def FixControlFile(Path):#BuildVersion Stuff
 
 def ModuleIter(Path):#A List of Core Modules
 	List = buildlistdir(Path)
+	ModuleType=Path.split("/")[-2]
+	ModuleDict[ModuleType]=list()
 	for x in List:
 		if (x.endswith(".xm") == True):
 		#Obfuscate C++ Hooks
@@ -237,9 +241,10 @@ def ModuleIter(Path):#A List of Core Modules
 			while i < len(componentList[i]) - 1: #ModuleName
 				componentName += componentList[i]
 				if DEBUG==True:
-					print (Fore.GREEN +"Injecting " + componentName + " into module list...")
+					print (Fore.GREEN +"Injecting " + componentName +" of type: "+ModuleType+" into module list...")
 				global ModuleList
 				ModuleList.append(componentName)
+				ModuleDict[ModuleType].append(componentName)
 				i += 1
 			global toggleString
 			toggleString += "if (getBoolFromPreferences(@\""+componentName+"\") == YES) {\n"
@@ -294,20 +299,31 @@ def id_generator(size=15, chars=string.ascii_uppercase + string.digits):
 def BuildPF():
 	CustomPrefList = buildlistdir("./Preferences")
 	Plist = plistlib.readPlist('./BasePreferences.plist')
-	
-	for x in ModuleList:
-		CustomPrefPath = x + ".plist"
-		if (CustomPrefPath in CustomPrefList):
-			custom = plistlib.readPlist('./Preferences/' + CustomPrefPath)
-			Plist["items"].append(custom)
+	#Sort Modules
+	for key in ModuleDict:
+		ModuleDict[key].sort()
+	#Start
+	for key in ModuleDict:
 		Dict = {
-			"cell": "PSSwitchCell",
-			"label": x,
-			"key": x,
-			"default": False,
-			"defaults": "naville.wtfjh"
+		"cell": "PSGroupCell",
+		"footerText": key
 		}
 		Plist["items"].append(Dict)
+		for x in ModuleDict[key]:
+			CustomPrefPath = x + ".plist"
+			if (CustomPrefPath in CustomPrefList):
+				custom = plistlib.readPlist('./Preferences/' + CustomPrefPath)
+				Plist["items"].append(custom)
+			Dict = {
+				"cell": "PSSwitchCell",
+				"label": x,
+				"key": x,
+				"default": False,
+				"defaults": "naville.wtfjh"
+			}
+			Plist["items"].append(Dict)
+	
+
 	Dict = {
 		"cell": "PSGroupCell",
 		"footerText": "https://github.com/Naville/WTFJH"
@@ -389,7 +405,7 @@ def buildThirdPartyComponents():
 				SubDirectoryPath="./ThirdPartyTools/"+x
 				origCH=os.getcwd()
 				os.chdir(SubDirectoryPath)
-				os.system("unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&&"+buildCommand+"&&"+"mv ./obj/"+theospathmid+x+".dylib ../../")	
+				os.system("unlink theos||true&&rm obj||true&&rm -rf .theos||true&&ln -s $THEOS theos||true&&mkdir .theos ||true&& mkdir .theos/obj||true&&ln -s .theos/obj obj||true&&"+buildCommand+"&&"+"mv ./obj/"+theospathmid+x+".dylib ../../")	
 				os.chdir(origCH)
 			else:
 				Error=None
@@ -397,7 +413,7 @@ def buildThirdPartyComponents():
 					SubDirectoryPath="./ThirdPartyTools/"+x
 					origCH=os.getcwd()
 					os.chdir(SubDirectoryPath)
-					Error=subprocess.check_call(["unlink theos&&rm obj&&rm -rf .theos&&ln -s $THEOS theos&&mkdir .theos && mkdir .theos/obj&&ln -s .theos/obj obj&& "+buildCommand+"&&"+"mv ./obj/"+theospathmid+x+".dylib ../../"], stdout=STDOUT, stderr=STDERR, shell=True)		
+					Error=subprocess.check_call(["unlink theos||true&&rm obj||true&&rm -rf .theos||true&&ln -s $THEOS theos||true&&mkdir .theos ||true&& mkdir .theos/obj||true&&ln -s .theos/obj obj||true&&"+buildCommand+"&&"+"mv ./obj/"+theospathmid+x+".dylib ../../"], stdout=STDOUT, stderr=STDERR, shell=True)		
 					#sys.exit(0)	
 					os.chdir(origCH)						
 				except Exception as inst:

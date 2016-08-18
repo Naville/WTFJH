@@ -5,12 +5,13 @@
 
 + (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
     NSData *origResult = %orig(request, response, error);
-    CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"sendSynchronousRequest:returningResponse:error:"] autorelease];
-    [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLRequest:request] withKey:@"request"];
-    [tracer addArgFromPlistObject:[RuntimeUtils propertyListForObject:*response] withKey:@"response"];
-    [tracer addArgFromPlistObject:[RuntimeUtils propertyListForObject:*error] withKey:@"error"];
-    [tracer addReturnValueFromPlistObject:origResult];
-    [traceStorage saveTracedCall:tracer];
+    WTInit(@"NSURLConnection",@"sendSynchronousRequest:returningResponse:error:");
+    WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+    WTAdd([PlistObjectConverter convertNSURLResponse:*response],@"response");
+    WTAdd([*error localizedDescription],@"error");
+    WTReturn(origResult);
+    WTSave;
+    WTRelease;
     
     return origResult;
 }
@@ -58,6 +59,7 @@
     CallTracer *tracer = [[[CallTracer alloc] initWithClass:@"NSURLConnection" andMethod:@"continueWithoutCredentialForAuthenticationChallenge:"] autorelease];
     [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLAuthenticationChallenge: challenge] withKey:@"challenge"];
     [traceStorage saveTracedCall:tracer];
+
     
 }
 

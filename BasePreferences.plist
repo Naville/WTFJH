@@ -61,6 +61,18 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>naville.wtfjh</string>
+			<key>key</key>
+			<string>RegisterCustomExceptionHandler</string>
+			<key>label</key>
+			<string>RegisterCustomExceptionHandler</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
 			<true/>
 			<key>defaults</key>
 			<string>naville.wtfjh</string>

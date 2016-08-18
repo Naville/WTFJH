@@ -1,6 +1,8 @@
 #import "./Hooks/SharedDefine.pch" 
 #include <unistd.h>
 #include <stdio.h>
+static NSUncaughtExceptionHandler* OriginalExceptionHandler;
+
 static BOOL RedirectLog(){
     NSString* fileName=[NSString stringWithFormat:@"%@/Documents/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
     [@"-----Overture-----\n" writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
@@ -22,7 +24,9 @@ void UncaughtExceptionHandler(NSException *exception) {
      WTAdd(reason,@"reason");
      WTSave;
      WTRelease;
-     //exit(255);
+     if(OriginalExceptionHandler!=NULL){
+        OriginalExceptionHandler(exception);
+     }
 
 }  
 
@@ -104,15 +108,14 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
      }
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
     [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
-    if (traceStorage != nil) {
-        if(NSGetUncaughtExceptionHandler()==nil){
-            NSLog(@"Registering UncaughtExceptionHandler");
-            NSSetUncaughtExceptionHandler (&UncaughtExceptionHandler);  
-        }
-        else{
-            NSLog(@"UncaughtExceptionHandler Exists");
+    if(getBoolFromPreferences(@"RegisterCustomExceptionHandler")){
+        NSLog(@"Registering UncaughtExceptionHandler");
+        OriginalExceptionHandler=NSGetUncaughtExceptionHandler();
+        NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+    }
 
-        }
+    if (traceStorage != nil) {
+
         NSLog(@"WTFJH - Enabling Hooks");
         extern void GlobalInit();
         GlobalInit();

@@ -20,7 +20,7 @@
 #import "Cycript.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"
-#define traceStorage [SQLiteStorage sharedManager] 
+#define traceStorage [SQLiteStorage sharedManager]
 
 #ifdef NonJailbroken
 #define preferenceFilePath [NSString stringWithFormat:@"%@/Library/Preferences/naville.wtfjh.plist",NSHomeDirectory()]
@@ -39,7 +39,7 @@
 #endif
 #define WTAdd(Argument,Name) [tracer addArgFromPlistObject:Argument withKey:Name]
 #define WTReturn(Return) [tracer addReturnValueFromPlistObject:Return]
-#define WTSave [traceStorage saveTracedCall: tracer]
+#define WTSave [traceStorage saveTracedCall:tracer]
 #define WTRelease [tracer release];
 #define WTShouldLog [CallStackInspector wasDirectlyCalledByApp]
 #define WTCallBack(LibraryName,FunctionToCall) static void CallBackFunction(const struct mach_header* mh, intptr_t vmaddr_slide){ \

@@ -1,4 +1,4 @@
-export CFLAGS=-Wp,"-DWTFJHTWEAKNAME=@\"WTFJH\",-DPROTOTYPE,"-DWTFJHHostName=@\"NavRMBP\"
+export CFLAGS=-Wp,"-DWTFJHTWEAKNAME=@\"WTFJH\","-DWTFJHHostName=@\"NavRMBP\"
 include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = WTFJH
 SUBSTRATE ?= yes

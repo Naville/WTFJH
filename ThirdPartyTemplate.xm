@@ -12,6 +12,9 @@ extern void init_TEMPLATENAME_hook(){
         const char * Nam=_dyld_get_image_name(i);
         NSString* curName=[[NSString stringWithUTF8String:Nam] autorelease];
         if([curName containsString:WTFJHTWEAKNAME]){
+#ifdef DEBUG
+            NSLog(@"Found WTFJH At %i th Image",i);
+#endif            
             intptr_t ASLROffset=_dyld_get_image_vmaddr_slide(i);
             //We Found Ourself
 #ifndef __LP64__
@@ -37,15 +40,16 @@ extern void init_TEMPLATENAME_hook(){
             WTHandle();  
             }
             dlclose(handle);  
+            [[NSFileManager defaultManager] removeItemAtPath:randomPath error:nil];
             //Inform Our Logger
-            CallTracer *tracer = [[CallTracer alloc] initWithClass:@"WTFJH" andMethod:@"LoadThirdPartyTools"];
-        	[tracer addArgFromPlistObject:@"dlopen" withKey:@"Type"];
-        	[tracer addArgFromPlistObject:randomPath withKey:@"Path"];
-            [tracer addArgFromPlistObject:@"TEMPLATENAME" withKey:@"ModuleName"];
-        	[traceStorage saveTracedCall: tracer];
-        	[tracer release];
+            WTInit(@"WTFJH",@"LoadThirdPartyTools");
+        	WTAdd(@"dlopen",@"Type");
+        	WTAdd(randomPath,@"Path");
+            WTAdd(@"TEMPLATENAME",@"ModuleName");
+        	WTSave;
+        	WTRelease;
         	//End
-
+            [randomPath release];
             [SDData release];
               break;
         }

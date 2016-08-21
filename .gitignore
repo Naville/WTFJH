@@ -13,7 +13,7 @@ Cycript.framework
 *.zip
 ThirdPartyTools/DeviceIDFake/
 *.a
-./Makefile
+/Makefile
 Reveal.app/
 Reveal.framework
 RevealTMP/

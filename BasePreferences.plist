@@ -35,34 +35,6 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSEditTextCell</string>
-			<key>isURL</key>
-			<true/>
-			<key>noAutoCorrect</key>
-			<true/>
-			<key>placeholder</key>
-			<string>127.0.0.1</string>
-			<key>defaults</key>
-			<string>naville.wtfjh</string>
-			<key>key</key>
-			<string>LogServerIP</string>
-			<key>label</key>
-			<string>RemoteLogServerURL</string>
-		</dict>
-			<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>naville.wtfjh</string>
-			<key>key</key>
-			<string>RemoteSendLog</string>
-			<key>label</key>
-			<string>RemoteSendLog</string>
-		</dict>
-		<dict>
-			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>

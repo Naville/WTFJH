@@ -12,9 +12,7 @@ Current Types:
 3.	ThirdPartyTools
 4.	Utils
 
-For now, it only divides modules into seperate folders to make the modules look tidy.
-
-In the future we'll group settings based on those types.
+~~For now, it only divides modules into seperate folders to make the modules look tidy.In the future we'll group settings based on those types.~~   ***It's live now.***
 
 **Please Make Sure The Types Are Correct**
 

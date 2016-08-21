@@ -12,6 +12,5 @@ extern void WTFJHLog(id Obj1, ... );
 - (SQLiteStorage *)initWithDBFilePath:(NSString *) DBFilePath andLogToConsole: (BOOL) shouldLog;
 - (BOOL)saveTracedCall: (CallTracer*) tracedCall;
 - (void)dealloc;
-@property (atomic) BOOL ShouldRemoteLog;
 @end
 

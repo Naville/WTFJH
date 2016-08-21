@@ -5,48 +5,60 @@
 
 + (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
     NSData *origResult = %orig(request, response, error);
-    WTInit(@"NSURLConnection",@"sendSynchronousRequest:returningResponse:error:");
-    WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
-    if(response!=nil){
-    WTAdd([PlistObjectConverter convertNSURLResponse:*response],@"response");
+    if(WTShouldLog){
+        WTInit(@"NSURLConnection",@"sendSynchronousRequest:returningResponse:error:");
+        WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+        if(response!=nil){
+            WTAdd([PlistObjectConverter convertNSURLResponse:*response],@"response");
+        }
+        if(error!=nil){
+            WTAdd([PlistObjectConverter convertNSError:*error],@"error");
+        }
+        WTReturn(origResult);
+        WTSave;
+        WTRelease;
     }
-    if(error!=nil){
-    WTAdd([PlistObjectConverter convertNSError:*error],@"error");
-    }
-    WTReturn(origResult);
-    WTSave;
-    WTRelease;
     return origResult;
 }
 
 - (id)initWithRequest:(NSURLRequest *)request delegate:(id < NSURLConnectionDelegate >)delegate {
     // Proxy the delegate so we can hook it
-    NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
-    id origResult = %orig(request, delegateProxy);
+    id origResult;
+    if(WTShouldLog){
+        NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
+        origResult = %orig(request, delegateProxy);
 
-    WTInit(@"NSURLConnection",@"initWithRequest:delegate:");
-    WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
-    WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
-    WTReturn(objectTypeNotSupported);
-    WTSave;
-    WTRelease;
-    
+        WTInit(@"NSURLConnection",@"initWithRequest:delegate:");
+        WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+        WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
+        WTReturn(objectTypeNotSupported);
+        WTSave;
+        WTRelease;
+    }
+    else{
+        origResult = %orig;
+    }
     return origResult;
 }
 
 - (id)initWithRequest:(NSURLRequest *)request delegate:(id < NSURLConnectionDelegate >)delegate startImmediately:(BOOL)startImmediately {
-
+    id origResult;
     // Proxy the delegate so we can hook it
-    NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
-    id origResult = %orig(request, delegateProxy, startImmediately);
+    if(WTShouldLog){
+        NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
+        origResult = %orig(request, delegateProxy, startImmediately);
 
-    WTInit(@"NSURLConnection",@"initWithRequest:delegate:startImmediately:");
-    WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
-    WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
-    WTAdd([NSNumber numberWithBool:startImmediately] ,@"startImmediately");
-    WTReturn(objectTypeNotSupported);
-    WTSave;
-    WTRelease;
+        WTInit(@"NSURLConnection",@"initWithRequest:delegate:startImmediately:");
+        WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+        WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
+        WTAdd([NSNumber numberWithBool:startImmediately] ,@"startImmediately");
+        WTReturn(objectTypeNotSupported);
+        WTSave;
+        WTRelease;
+        }
+    else{
+        origResult = %orig;  
+    }
     return origResult;
 }
 

@@ -1,6 +1,5 @@
 #import "SQLiteStorage.h"
 #include <sqlite3.h>
-#import "RemoteLogSender.h"
 @implementation SQLiteStorage
 
 
@@ -58,7 +57,6 @@ static sqlite3 *dbConnection;
 - (SQLiteStorage *)initWithDBFilePath:(NSString *) DBFilePath andLogToConsole: (BOOL) shouldLog {
     self = [super init];
     sqlite3 *dbConn;
-    self.ShouldRemoteLog=NO;
     ApplyCallStack=getBoolFromPreferences(@"AddCallStackToDatabase");
     // Open the DB file if it's already there
     if (sqlite3_open_v2([DBFilePath UTF8String], &dbConn, SQLITE_OPEN_READWRITE, NULL) != SQLITE_OK) {
@@ -118,22 +116,6 @@ static sqlite3 *dbConnection;
         }
 
         queryResult = sqlite3_step(saveTracedCallStmt);
-#ifdef PROTOTYPE
-        if(self.ShouldRemoteLog){
-            NSString* SQLQuery=[saveTracedCallStmtStr stringByReplacingOccurrencesOfString:@"?1" withString:[tracedCall className]];
-            SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?2" withString:[tracedCall methodName]];
-            SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?3" withString:argsAndReturnValueStr];
-            if(ApplyCallStack==YES){
-                SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?4" withString:[[NSThread callStackSymbols] componentsJoinedByString:@"\n"] ];
-            }
-            else{
-                SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?4" withString:@"WTFJH-StackNotEnabled"];
-            }
-            [[RemoteLogSender sharedInstance] sendCommand:SQLQuery];
-
-            [SQLQuery release];
-        }
-#endif
 }
 
     if (logToConsole) {

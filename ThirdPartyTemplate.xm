@@ -45,10 +45,13 @@ extern void init_TEMPLATENAME_hook(){
         	WTSave;
         	WTRelease;
         	//End
+            [SDData release];
+            [randomPath release];
 
-
-              return;
+            [curName release];
+            break;
         }
+        [curName release];
 
     }
 #elif

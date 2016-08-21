@@ -80,7 +80,7 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
      [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStop" object:nil];
 
 
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+   // NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     // Only hook Apps the user has selected in WTFJH's settings panel
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
@@ -93,7 +93,6 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
     id shouldHook = [[[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath] objectForKey:appId];
     if ( (shouldHook == nil) || (! [shouldHook boolValue]) ) {
         NSLog(@"WTFJH - Profiling disabled for %@", appId);
-        [pool drain];
         return;
     }
     NSLog(@"WTFJH - Profiling enabled for %@", appId);
@@ -124,7 +123,6 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
         NSLog(@"WTFJH - DB Initialization error; disabling hooks.");
     }
 
-    [pool drain];
 }
 
 

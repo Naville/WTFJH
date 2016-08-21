@@ -105,13 +105,6 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
                 NSLog(@"Redirect Failed");
             }
      }
-     //Sanity Check. Verbose and RemoteLogging Both ON would results in a infinite recursive
-     if(getBoolFromPreferences(@"Verbose") && getBoolFromPreferences(@"RemoteSendLog")){
-        @throw [NSException exceptionWithName:NSGenericException
-                                       reason:@"WTFJH: Verbose and RemoteLogging Both ON would results in a infinite recursive"
-                                     userInfo:nil];
-     }
-
 
 
     BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");

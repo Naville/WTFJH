@@ -12,7 +12,7 @@ extern void init_TEMPLATENAME_hook(){
         NSString* curName=[NSString stringWithUTF8String:Nam];
         if([curName containsString:WTFJHTWEAKNAME]){
 #ifdef DEBUG
-            NSLog(@"Found WTFJH At %i th Image",i);
+            NSLog(@"Found TEMPLATENAME At %i th Image",i);
 #endif            
             intptr_t ASLROffset=_dyld_get_image_vmaddr_slide(i);
             //We Found Ourself

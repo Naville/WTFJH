@@ -494,7 +494,7 @@ def main():
 		os.system("mkdir -p ./layout/Library/MobileSubstrate/DynamicLibraries; cp ./obj" +theospathmid+randomTweakName + ".dylib" + " ./layout/Library/MobileSubstrate/DynamicLibraries/")
 		os.system("cp ./BundleFilter.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
-		os.system("find . -type f -name .DS_Store -delete && xattr -cr *")
+		os.system("find . -name \".DS_Store\" -delete")
 		os.system("dpkg-deb -Zgzip -b ./layout ./Packages/Build-"+str(currentVersion)+".deb")
 	cleanUp()
 	if buildSuccess==True:

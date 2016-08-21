@@ -1,4 +1,0 @@
-%ctor{
-
-	NSLog(@"ayy lmao");
-}

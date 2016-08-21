@@ -120,7 +120,7 @@ void dumptofile(int argc, const char **argv, const char **envp, const char **app
                 NSLog(@"[-] Unexpected error with filename.\n");
                 return; //_exit(1);
             }
-            /// app caches
+            /// Documents
             NSArray  *paths     = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *cachePath = [paths objectAtIndex:0];
             

@@ -6,11 +6,10 @@ extern NSString* RandomString();
 typedef void (*WTLoaderPrototype)();  
 extern void init_TEMPLATENAME_hook(){
 #ifndef NonJailbroken
-#ifdef PROTOTYPE 
 //Because We Ain't Ready Yet. No Test
 	 for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);
-        NSString* curName=[[NSString stringWithUTF8String:Nam] autorelease];
+        NSString* curName=[NSString stringWithUTF8String:Nam];
         if([curName containsString:WTFJHTWEAKNAME]){
 #ifdef DEBUG
             NSLog(@"Found WTFJH At %i th Image",i);
@@ -29,12 +28,9 @@ extern void init_TEMPLATENAME_hook(){
 #endif
             data=ASLROffset+data;//Add ASLR Offset To Pointer And Fix Address
             NSData* SDData=[NSData dataWithBytes:data length:size];
-            NSString* randomPath=[NSString stringWithFormat:@"%@/Documents/%@",NSHomeDirectory(),RandomString()];
+            NSString* randomPath=[NSString stringWithFormat:@"%@/tmp/%@",NSHomeDirectory(),RandomString()];
             [SDData writeToFile:randomPath atomically:YES];
             void* handle=dlopen(randomPath.UTF8String,RTLD_NOW);//Open Created dylib
-            dlclose(handle);
-
-            handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);  
             WTLoaderPrototype WTHandle =(WTLoaderPrototype) dlsym(handle, "WTFJHInitTEMPLATENAME");  //Call Init Function
             if(WTHandle!=NULL){
             WTHandle();  
@@ -49,15 +45,12 @@ extern void init_TEMPLATENAME_hook(){
         	WTSave;
         	WTRelease;
         	//End
-            [randomPath release];
-            [SDData release];
-              break;
+
+
+              return;
         }
 
-
-
     }
-#endif
 #elif
 
 NSString* BundledDYLIBPath=[NSString stringWithFormat:@"%@/TEMPLATENAME.dylib",[NSBundle mainBundle].bundlePath];
@@ -65,4 +58,5 @@ dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW);
 
 [BundledDYLIBPath release];
 #endif
+
 }

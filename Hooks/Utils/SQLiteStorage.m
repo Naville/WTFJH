@@ -9,7 +9,7 @@ static BOOL logToConsole = TRUE;
 static NSString *appstoreDBFileFormat = @"~/Library/wtfjh-%@-%@.db";
 static NSString *systemDBFileFormat = @"~/Library/Preferences/wtfjh-%@-@.db";
 static const char createTableStmtStr[] = "CREATE TABLE tracedCalls (className TEXT, methodName TEXT, argumentsAndReturnValueDict TEXT,CALLSTACK TEXT)";
-static const char saveTracedCallStmtStr[] = "INSERT INTO tracedCalls VALUES (?1, ?2, ?3,?4)";
+static NSString* saveTracedCallStmtStr = @"INSERT INTO tracedCalls VALUES (?1, ?2, ?3,?4)";
 static BOOL ApplyCallStack=NO;
 static BOOL getBoolFromPreferences(NSString *preferenceValue) {
     NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
@@ -26,7 +26,7 @@ static BOOL getBoolFromPreferences(NSString *preferenceValue) {
 // Internal stuff
 static sqlite3_stmt *saveTracedCallStmt;
 static sqlite3 *dbConnection;
-+(id)sharedManager{
++(SQLiteStorage *)sharedManager{
     static SQLiteStorage *sharedUtils = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -58,6 +58,7 @@ static sqlite3 *dbConnection;
 - (SQLiteStorage *)initWithDBFilePath:(NSString *) DBFilePath andLogToConsole: (BOOL) shouldLog {
     self = [super init];
     sqlite3 *dbConn;
+    self.ShouldRemoteLog=NO;
     ApplyCallStack=getBoolFromPreferences(@"AddCallStackToDatabase");
     // Open the DB file if it's already there
     if (sqlite3_open_v2([DBFilePath UTF8String], &dbConn, SQLITE_OPEN_READWRITE, NULL) != SQLITE_OK) {
@@ -78,7 +79,7 @@ static sqlite3 *dbConnection;
 
     // Prepare the INSERT statement we'll use to store everything
     sqlite3_stmt *statement = nil;
-    if (sqlite3_prepare_v2(dbConn, saveTracedCallStmtStr, -1, &statement, NULL) != SQLITE_OK) {
+    if (sqlite3_prepare_v2(dbConn, saveTracedCallStmtStr.UTF8String, -1, &statement, NULL) != SQLITE_OK) {
         NSLog(@"wtfjhSQLiteStorage - Unable to prepare statement!");
         return nil;
     }
@@ -117,9 +118,23 @@ static sqlite3 *dbConnection;
         }
 
         queryResult = sqlite3_step(saveTracedCallStmt);
-        //NSString* SQLQuery=[NSString stringWithUTF8String:sqlite3_sql(saveTracedCallStmt)];
-        //[[RemoteLogSender sharedInstance] sendCommand:SQLQuery];
-    }
+#ifdef PROTOTYPE
+        if(self.ShouldRemoteLog){
+            NSString* SQLQuery=[saveTracedCallStmtStr stringByReplacingOccurrencesOfString:@"?1" withString:[tracedCall className]];
+            SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?2" withString:[tracedCall methodName]];
+            SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?3" withString:argsAndReturnValueStr];
+            if(ApplyCallStack==YES){
+                SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?4" withString:[[NSThread callStackSymbols] componentsJoinedByString:@"\n"] ];
+            }
+            else{
+                SQLQuery=[SQLQuery stringByReplacingOccurrencesOfString:@"?4" withString:@"WTFJH-StackNotEnabled"];
+            }
+            [[RemoteLogSender sharedInstance] sendCommand:SQLQuery];
+
+            [SQLQuery release];
+        }
+#endif
+}
 
     if (logToConsole) {
         if(ApplyCallStack){

@@ -7,12 +7,15 @@
     NSData *origResult = %orig(request, response, error);
     WTInit(@"NSURLConnection",@"sendSynchronousRequest:returningResponse:error:");
     WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+    if(response!=nil){
     WTAdd([PlistObjectConverter convertNSURLResponse:*response],@"response");
-
+    }
+    if(error!=nil){
+    WTAdd([PlistObjectConverter convertNSError:*error],@"error");
+    }
     WTReturn(origResult);
     WTSave;
     WTRelease;
-    
     return origResult;
 }
 

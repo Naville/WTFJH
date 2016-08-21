@@ -58,7 +58,7 @@ JAILED=False
 global buildCommand
 buildCommand="make debug=0"
 global HostName
-HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")
+HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")+".local"
 global AllowedSourceExtension
 AllowedSourceExtension=[".cpp",".xm",".xmi",".mm",".c",".m",".x",".xi"]
 global theospathmid

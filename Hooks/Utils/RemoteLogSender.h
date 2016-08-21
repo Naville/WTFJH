@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <SharedDefine.pch>
 @interface RemoteLogSender : NSObject
 -(void)sendCommand:(NSString*)Command;
 +(RemoteLogSender*)sharedInstance;

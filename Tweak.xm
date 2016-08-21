@@ -115,14 +115,17 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
 
     if (traceStorage != nil) {
 
+
         NSLog(@"WTFJH - Enabling Hooks");
         extern void GlobalInit();
         GlobalInit();
     }
     else {
         NSLog(@"WTFJH - DB Initialization error; disabling hooks.");
+        return ;
     }
 
+    [SQLiteStorage sharedManager].ShouldRemoteLog=getBoolFromPreferences(@"RemoteSendLog");
 }
 
 

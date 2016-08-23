@@ -29,6 +29,13 @@ What versions of software are you using?
 
 **SDK Version:** …
 
+What versions of source code and modules are you using?
+----------------------------------------
+**Git Commit ID(SHA-1):** …
+
+**Enabled Modules List:** …
+
 If WTFJH crashes for a certain App. Please insert download link to the app here
 ----------------------------------------
 **LINK:** …
+

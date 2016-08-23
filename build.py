@@ -146,7 +146,7 @@ def BuildMakeFile():
 	makeFileString += "\n"
 	makeFileString += "include $(THEOS)/makefiles/common.mk\n"
 	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
-	makeFileString += "TARGET = iphone:latest:9.3\n"
+	#makeFileString += "TARGET = iphone:latest:9.3\n"
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
 	makeFileString += "SUBSTRATE ?= yes\n"
 	if(JAILED==True):

@@ -41,13 +41,21 @@ static sqlite3 *dbConnection;
     // Put application name in the DB's filename to avoid confusion
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
 
+    //Format Date To NSString
+    NSDate *Date=[[NSDate date] dateByAddingTimeInterval:[[NSTimeZone systemTimeZone] secondsFromGMTForDate: [NSDate date]]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
+    NSString *currentDate=[dateFormatter stringFromDate:Date];
+    [dateFormatter release];
+    [Date release];
+
     // Are we monitoring a System app or an App Store app ?
     NSString *appRoot = [@"~/" stringByExpandingTildeInPath];
     if ([appRoot isEqualToString: @"/var/mobile"]) {
-        DBFilePath = [NSString stringWithFormat:systemDBFileFormat, appId,[NSDate date]];
+        DBFilePath = [NSString stringWithFormat:systemDBFileFormat, appId,currentDate];
     }
     else {
-        DBFilePath = [NSString stringWithFormat:appstoreDBFileFormat, appId,[NSDate date]];
+        DBFilePath = [NSString stringWithFormat:appstoreDBFileFormat, appId,currentDate];
     }
 
     return [self initWithDBFilePath: [DBFilePath stringByExpandingTildeInPath] andLogToConsole: shouldLog];

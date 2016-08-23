@@ -42,6 +42,10 @@ extern void init_Reveal_hook(){
         	WTAdd(@"dlopen",@"Type");
         	WTAdd(randomPath,@"Path");
             WTAdd(@"Reveal",@"ModuleName");
+            char* Err=dlerror();
+            if(Err!=NULL){
+                WTAdd([NSString stringWithUTF8String:Err],@"Error");
+            }
         	WTSave;
         	WTRelease;
         	//End

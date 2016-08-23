@@ -41,6 +41,10 @@ extern void init_TEMPLATENAME_hook(){
             WTInit(@"WTFJH",@"LoadThirdPartyTools");
         	WTAdd(@"dlopen",@"Type");
         	WTAdd(randomPath,@"Path");
+            char* Err=dlerror();
+            if(Err!=NULL){
+                WTAdd([NSString stringWithUTF8String:Err],@"Error");
+            }
             WTAdd(@"TEMPLATENAME",@"ModuleName");
         	WTSave;
         	WTRelease;

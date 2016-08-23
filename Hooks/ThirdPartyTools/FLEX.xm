@@ -55,6 +55,10 @@ extern void init_FLEX_hook(){
         	WTAdd(@"dlopen",@"Type");
         	WTAdd(randomPath,@"Path");
             WTAdd(@"FLEX",@"ModuleName");
+            char* Err=dlerror();
+            if(Err!=NULL){
+                WTAdd([NSString stringWithUTF8String:Err],@"Error");
+            }
         	WTSave;
         	WTRelease;
         	//End
@@ -75,6 +79,9 @@ dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW);
 [BundledDYLIBPath release];
 #endif
 Class FM=objc_getClass("FLEXManager");
+#ifdef DEBUG
+    NSLog(@"WTFJH---FLEXManager:%@",[FM sharedManager]);
+#endif
 [(FLEXManager*)[FM sharedManager] showExplorer];
 
 }

@@ -114,6 +114,7 @@ When built with *JAILED* on, ThirdPartyToolsLoader will attempt to dlopen():
 
 Make sure it's correctly signed
 
+Everything in BuildConfig should be pretty self-explainary. Except *CreateExtraSegs* , which is a dict, used to inject file-on-disk into the tweak. Key is SegmentName and Value is path to the file
 
 
 ####Limitations

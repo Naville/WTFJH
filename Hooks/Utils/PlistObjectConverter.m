@@ -641,37 +641,21 @@ if([response respondsToSelector:@selector(allHeaderFields)]){
 			state_str = @"NSURLSessionTaskStateUnknown";
 			break;
 	}
-	NSDictionary *taskDict;
-	taskDict = [NSDictionary dictionaryWithObjects:
-		[NSArray arrayWithObjects:
-			[NSNumber numberWithUnsignedInteger:[task taskIdentifier]],
-			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSURLRequest:[task originalRequest]]],
-			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSURLRequest:[task currentRequest]]],
-			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSURLResponse:[task response]]],
-			[NSNumber numberWithInt:[task countOfBytesReceived]],
-			[NSNumber numberWithInt:[task countOfBytesSent]],
-			[NSNumber numberWithInt:[task countOfBytesExpectedToSend]],
-			[NSNumber numberWithInt:[task countOfBytesExpectedToReceive]],
-			[task taskDescription],
-			state_str,
-			[PlistObjectConverter autoConvertNil:[PlistObjectConverter convertNSError:[task error]]],
-			[NSNumber numberWithFloat:[task priority]],
-			nil]
-		forKeys:
-		[NSArray arrayWithObjects:
-			@"taskIdentifier",
-			@"originalRequest",
-			@"currentRequest",
-			@"response",
-			@"countOfBytesReceived",
-			@"countOfBytesSent",
-			@"countOfBytesExpectedToSend",
-			@"countOfBytesExpectedToReceive",
-			@"taskDescription",
-			@"state",
-			@"error",
-			@"priority",
-			nil]];
+	NSMutableDictionary *taskDict=[NSMutableDictionary dictionary];
+	[taskDict setObject:[NSNumber numberWithUnsignedInteger:[task taskIdentifier]] forKey:@"taskIdentifier"];
+	[taskDict setObject:[PlistObjectConverter convertNSURLRequest:[task originalRequest]]  forKey:@"originalRequest"];
+	[taskDict setObject:[PlistObjectConverter convertNSURLRequest:[task currentRequest]]  forKey:@"currentRequest"];		
+	[taskDict setObject:[PlistObjectConverter convertNSURLResponse:[task response]] forKey:@"response"];	
+	[taskDict setObject:[NSNumber numberWithInt:[task countOfBytesReceived]] forKey:@"countOfBytesReceived"];	
+	[taskDict setObject:[NSNumber numberWithInt:[task countOfBytesSent]] forKey:@"countOfBytesSent"];	
+	[taskDict setObject:[NSNumber numberWithInt:[task countOfBytesExpectedToSend]] forKey:@"countOfBytesExpectedToSend"];	
+	[taskDict setObject:[NSNumber numberWithInt:[task countOfBytesExpectedToReceive]] forKey:@"countOfBytesExpectedToReceive"];	
+	if([task taskDescription]!=nil){
+	[taskDict setObject:[task taskDescription] forKey:@"taskDescription"];	
+	}
+	[taskDict setObject:state_str forKey:@"state"];	
+	[taskDict setObject:[PlistObjectConverter convertNSError:[task error]] forKey:@"error"];		
+	[taskDict setObject:[NSNumber numberWithFloat:[task priority]] forKey:@"priority"];	
 	return taskDict;
 }
 

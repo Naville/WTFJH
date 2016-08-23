@@ -65,6 +65,8 @@ global theospathmid
 theospathmid="//"
 global ModuleDict
 ModuleDict=dict()
+global ThirdPartList
+ThirdPartList=list()
 def isSource(FileName):
 	for End in AllowedSourceExtension:
 		if FileName.upper().endswith(End.upper()):
@@ -106,7 +108,9 @@ def cleanUp():
 	Exec("rm ./layout/Library/PreferenceLoader/Preferences/WTFJHPreferences.plist")
 	Exec("rm ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 	Exec("rm ./" + randomTweakName + ".plist")
-	Exec("rm ./*.dylib")
+	global ThirdPartList
+	for item in ThirdPartList:
+		Exec("rm ./"+item)
 	Exec("rm ./*.pyc")
 	print "Unlinking TheOS..."
 	Exec("unlink ./theos")
@@ -142,7 +146,7 @@ def BuildMakeFile():
 	makeFileString += "\n"
 	makeFileString += "include $(THEOS)/makefiles/common.mk\n"
 	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
-	#makeFileString += "export TARGET = iphone:clang:7.0:7.0\n"
+	makeFileString += "TARGET = iphone:latest:9.3\n"
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
 	makeFileString += "SUBSTRATE ?= yes\n"
 	if(JAILED==True):
@@ -389,6 +393,7 @@ def BuildLoader(ModuleName):
 def buildThirdPartyComponents():
 	global theospathmid
 	global buildCommand
+	global LinkerString
 	Exec("find . -type f -name .DS_Store -delete && xattr -cr *")
 	for x in Thirdbuildlistdir("ThirdPartyTools"):
 		os.chdir(InitialCWD)#Make Sure CWD We've changed in buildThirdPartyComponents() is set back
@@ -427,8 +432,11 @@ def buildThirdPartyComponents():
 						print  (Fore.RED +"Build "+x+"Went Wrong. Rerun With DEBUG to see output")
 						cleanUp()
 						sys.exit(255)
-			global LinkerString
+			global ThirdPartList
 			LinkerString += ",-sectcreate,WTFJH,"+x+",./"+x+".dylib"
+			ThirdPartList.append(x+".dylib")
+	for key in BuildConfig.CreateExtraSegs.keys():
+		LinkerString += ",-sectcreate,WTFJH,"+key+","+BuildConfig.CreateExtraSegs[key]
 def main():
 	#os.system("unset THEOS")#Latest Theos Brings Shit
 	ParseArgs()

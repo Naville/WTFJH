@@ -45,7 +45,7 @@ void * new_dlopen(const char * __path, int __mode) {
             WTAdd([NSString stringWithUTF8String:__path],@"Path");
         }
         else{
-            WTAdd(objectTypeNotSupported,@"Path");
+            WTAdd(@"NULL",@"Path");
         }
         WTAdd([NSNumber numberWithInt:__mode],@"Mode");
         WTSave;

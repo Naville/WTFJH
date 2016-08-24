@@ -1,12 +1,4 @@
-/*
-We're directly including this file into Tweak.xmi at build time.
-Tweak.xmi includes/defines the following things:
-
-#import "CallTracer.h"
-#import "IntrospySQLiteStorage.h"
-IntrospySQLiteStorage *traceStorage;
-*/
-
+%config(generator=internal)
 #import "../SharedDefine.pch"
 %group NSData
 %hook NSData
@@ -14,171 +6,172 @@ IntrospySQLiteStorage *traceStorage;
 - (BOOL)writeToFile:(NSString *)path atomically:(BOOL)flag {
 	BOOL origResult = %orig(path, flag);
 	// NSData methods are called a lot by other iOS APIs and we don't want to log that so we use the CallStackInspector
-    if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"writeToFile:atomically:"];
-		[tracer addArgFromPlistObject:path withKey:@"path"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithBool: flag] withKey:@"flag"];
-		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+    if (WTShouldLog) {
+		WTInit(@"NSData",@"writeToFile:atomically:");
+		WTAdd(path,@"path");
+		WTAdd([NSNumber numberWithBool: flag],@"flag");
+		WTReturn([NSNumber numberWithBool: origResult]);
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (BOOL)writeToFile:(NSString *)path options:(NSDataWritingOptions)mask error:(NSError **)errorPtr {
 	BOOL origResult = %orig(path, mask, errorPtr);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"writeToFile:options:error:"];
-		[tracer addArgFromPlistObject:path withKey:@"path"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithInteger: mask] withKey:@"mask"];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"writeToFile:options:error:");
+		WTAdd(path,@"path");
+		WTAdd([NSNumber numberWithInteger: mask],@"mask");
 		// For now let's just store the pointer value of the errorPtr parameter
-		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
-		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
+		WTAdd(objectTypeNotSupported,@"errorPtr");
+		WTReturn([NSNumber numberWithBool: origResult]);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (BOOL)writeToURL:(NSURL *)aURL atomically:(BOOL)flag {
 	BOOL origResult = %orig(aURL, flag);
-    if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"writeToURL:atomically:"];
-		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithBool: flag] withKey:@"flag"];
-		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
+    if (WTShouldLog) {
+		WTInit(@"NSData",@"writeToURL:atomically:");
+		WTAdd([PlistObjectConverter convertURL: aURL],@"aURL");
+		WTAdd([NSNumber numberWithBool: flag],@"flag");
+		WTReturn([NSNumber numberWithBool: origResult]);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (BOOL)writeToURL:(NSURL *)aURL options:(NSDataWritingOptions)mask error:(NSError **)errorPtr {
 	BOOL origResult = %orig(aURL, mask, errorPtr);
-    if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"writeToURL:options:error:"];
-		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
-		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
-		[tracer addReturnValueFromPlistObject:[NSNumber numberWithBool: origResult]];
+    if (WTShouldLog) {
+		WTInit(@"NSData",@"writeToURL:options:error:");
+		WTAdd([PlistObjectConverter convertURL: aURL],@"aURL");
+		WTAdd([NSNumber numberWithInteger:mask],@"mask");
+		WTAdd(objectTypeNotSupported,@"errorPtr");
+		WTReturn([NSNumber numberWithBool: origResult]);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 + (id)dataWithContentsOfFile:(NSString *)path {
 	id origResult = %orig(path);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"dataWithContentsOfFile:"];
-		[tracer addArgFromPlistObject:path withKey:@"path"];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"dataWithContentsOfFile:");
+		WTAdd(path,@"path");
 		// origResult should be NSData* ?
-		[tracer addReturnValueFromPlistObject: origResult];
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 + (id)dataWithContentsOfFile:(NSString *)path options:(NSDataReadingOptions)mask error:(NSError **)errorPtr {
 	id origResult = %orig(path, mask, errorPtr);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"dataWithContentsOfFile:options:error:"];
-		[tracer addArgFromPlistObject:path withKey:@"path"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
-		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"dataWithContentsOfFile:options:error:");
+		WTAdd(path,@"path");
+		WTAdd([NSNumber numberWithInteger:mask],@"mask");
+		WTAdd(objectTypeNotSupported,@"errorPtr");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 + (id)dataWithContentsOfURL:(NSURL *)aURL {
 	id origResult = %orig(aURL);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"dataWithContentsOfURL:"];
-		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"dataWithContentsOfURL:");
+		WTAdd([PlistObjectConverter convertURL: aURL],@"aURL");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 + (id)dataWithContentsOfURL:(NSURL *)aURL options:(NSDataReadingOptions)mask error:(NSError **)errorPtr {
 	id origResult = %orig(aURL, mask, errorPtr);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"dataWithContentsOfURL:options:error:"];
-		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
-		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"dataWithContentsOfURL:options:error:");
+		WTAdd([PlistObjectConverter convertURL: aURL],@"aURL");
+		WTAdd([NSNumber numberWithInteger:mask],@"mask");
+		WTAdd(objectTypeNotSupported,@"errorPtr");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (id)initWithContentsOfFile:(NSString *)path {
 	id origResult = %orig(path);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"initWithContentsOfFile:"];
-		[tracer addArgFromPlistObject:path withKey:@"path"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"initWithContentsOfFile:");
+		WTAdd(path,@"path");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (id)initWithContentsOfFile:(NSString *)path options:(NSDataReadingOptions)mask error:(NSError **)errorPtr {
-	id origResult = %orig(path, mask, errorPtr);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"initWithContentsOfFile:options:error:"];
-		[tracer addArgFromPlistObject:path withKey:@"path"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
-		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	NSLog(@"UIEWHKWEHRKLEWR");
+	id origResult = %orig;
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"initWithContentsOfFile:options:error:");
+		WTAdd(path,@"path");
+		WTAdd([NSNumber numberWithInteger:mask],@"mask");
+		WTAdd(objectTypeNotSupported,@"errorPtr");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (id)initWithContentsOfURL:(NSURL *)aURL {
 	id origResult = %orig(aURL);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"initWithContentsOfURL:"];
-		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"initWithContentsOfURL:");
+		WTAdd([PlistObjectConverter convertURL: aURL],@"aURL");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
 
 - (id)initWithContentsOfURL:(NSURL *)aURL options:(NSDataReadingOptions)mask error:(NSError **)errorPtr {
 	id origResult = %orig(aURL, mask, errorPtr);
-	if ([CallStackInspector wasDirectlyCalledByApp]) {
-		CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSData" andMethod:@"initWithContentsOfURL:options:error:"];
-		[tracer addArgFromPlistObject:[PlistObjectConverter convertURL: aURL] withKey:@"aURL"];
-		[tracer addArgFromPlistObject:[NSNumber numberWithInteger:mask] withKey:@"mask"];
-		[tracer addArgFromPlistObject:objectTypeNotSupported withKey:@"errorPtr"];
-		[tracer addReturnValueFromPlistObject: origResult];
+	if (WTShouldLog) {
+		WTInit(@"NSData",@"initWithContentsOfURL:options:error:");
+		WTAdd([PlistObjectConverter convertURL: aURL],@"aURL");
+		WTAdd([NSNumber numberWithInteger:mask],@"mask");
+		WTAdd(objectTypeNotSupported,@"errorPtr");
+		WTReturn( origResult);
 		 
-		[traceStorage saveTracedCall: tracer];
-		[tracer release];
+		WTSave;
+		WTRelease;
 	}
 	return origResult;
 }
@@ -187,7 +180,7 @@ IntrospySQLiteStorage *traceStorage;
 %end
 %end
 extern void init_NSData_hook(){
-%init(NSData);
+	%init(NSData);
 }
 
 

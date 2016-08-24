@@ -20,6 +20,25 @@
     }
     return origResult;
 }
++ (id)connectionWithRequest:(NSURLRequest *)request delegate:(id < NSURLConnectionDelegate >)delegate{
+    id origResult;
+    if(WTShouldLog){
+        NSURLConnectionDelegateProx *delegateProxy = [[NSURLConnectionDelegateProx alloc] initWithOriginalDelegate:delegate];
+        origResult = %orig(request, delegateProxy);
+
+        WTInit(@"NSURLConnection",@"connectionWithRequest:delegate:");
+        WTAdd([PlistObjectConverter convertNSURLRequest:request],@"request");
+        WTAdd([PlistObjectConverter convertDelegate:delegate followingProtocol:@"NSURLConnectionDelegate"],@"delegate");
+        WTReturn(objectTypeNotSupported);
+        WTSave;
+        WTRelease;
+    }
+    else{
+        origResult = %orig;
+    }
+    return origResult;
+
+}
 
 - (id)initWithRequest:(NSURLRequest *)request delegate:(id < NSURLConnectionDelegate >)delegate {
     // Proxy the delegate so we can hook it

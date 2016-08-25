@@ -49,10 +49,13 @@ rm -rf ./Cycript.framework>> /dev/null 2>&1
 rm -rf ./ExtraFWs/Cycript.framework >> /dev/null 2>&1  
 rm -rf ./Reveal.framework >> /dev/null 2>&1  
 rm -rf ./ExtraFWs/Reveal.framework>> /dev/null 2>&1  
+
+#Cycript's static library hasn't been updated for years and ages
+
 echo "Extracting Cycript"
 mkdir CYTMP
 unzip Cycript.zip -d ./CYTMP >> /dev/null 2>&1  
-cp -avR ./CYTMP/Cycript.ios/*.framework ./ExtraFWs/  >> /dev/null 2>&1  
+cp -avR ./CYTMP/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1  
 rm -rf ./CYTMP
 rm -rf ./Cycript.zip
 echo "Downloading Reveal"

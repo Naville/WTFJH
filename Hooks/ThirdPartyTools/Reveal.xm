@@ -58,7 +58,7 @@ extern void init_Reveal_hook(){
         [curName release];
 
     }
-#elif
+#else
 
 NSString* BundledDYLIBPath=[NSString stringWithFormat:@"%@/libReveal.dylib",[NSBundle mainBundle].bundlePath];
 dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW);

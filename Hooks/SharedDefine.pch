@@ -17,7 +17,6 @@
 #import "./Misc/fishhook.h"
 #import "./Obfuscation.h"
 #import "./capstone/capstone.h"
-#import "Cycript.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"
 #define traceStorage [SQLiteStorage sharedManager]

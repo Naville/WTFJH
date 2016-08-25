@@ -7,4 +7,4 @@ LDFLAGS=["-lz","-L.","-v","-force_load ./ExtraFWs/libcapstone.a","-force_load ./
 ExtraCFlags=["-I"+os.getcwd()+"/Hooks/"]
 ExtraOBJFiles=[]
 ExtraCCFlags=["-std=c++11"]
-CreateExtraSegs={"Reveal":"./libReveal.dylib","FLEX":"./ExtraFWs/FLEX.framework/FLEX","Cycript":"./libcycript.dylib"}
+CreateExtraSegs={"Reveal":"./libReveal.dylib","FLEX":"./ExtraFWs/FLEX.framework/FLEX"}

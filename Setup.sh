@@ -50,14 +50,14 @@ rm -rf ./ExtraFWs/Cycript.framework >> /dev/null 2>&1
 rm -rf ./Reveal.framework >> /dev/null 2>&1  
 rm -rf ./ExtraFWs/Reveal.framework>> /dev/null 2>&1  
 
-#Cycript's static library hasn't been updated for years and ages
+#Cycript's static library hasn't been updated for years and ages. Use system dylib instead
 
-echo "Extracting Cycript"
-mkdir CYTMP
-unzip Cycript.zip -d ./CYTMP >> /dev/null 2>&1  
-cp -avR ./CYTMP/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1  
-rm -rf ./CYTMP
-rm -rf ./Cycript.zip
+#echo "Extracting Cycript"
+#rm -rf ./Cycript
+#mkdir Cycript
+#unzip Cycript.zip -d ./Cycript >> /dev/null 2>&1  
+#cp -avR ./Cycript/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1  
+#rm -rf ./Cycript.zip
 echo "Downloading Reveal"
 wget http://download.revealapp.com/Reveal.app.zip
 unzip Reveal.app.zip -d ./RevealTMP >> /dev/null 2>&1  

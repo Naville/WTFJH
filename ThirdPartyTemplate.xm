@@ -30,7 +30,7 @@ extern void init_TEMPLATENAME_hook(){
             NSData* SDData=[NSData dataWithBytes:data length:size];
             NSString* randomPath=[NSString stringWithFormat:@"%@/tmp/%@",NSHomeDirectory(),RandomString()];
             [SDData writeToFile:randomPath atomically:YES];
-            void* handle=dlopen(randomPath.UTF8String,RTLD_NOW);//Open Created dylib
+            void* handle=dlopen(randomPath.UTF8String,RTLD_NOW|RTLD_GLOBAL);//Open Created dylib
             WTLoaderPrototype WTHandle =(WTLoaderPrototype) dlsym(handle, "WTFJHInitTEMPLATENAME");  //Call Init Function
             if(WTHandle!=NULL){
             WTHandle();  
@@ -61,7 +61,7 @@ extern void init_TEMPLATENAME_hook(){
 #else
 
 NSString* BundledDYLIBPath=[NSString stringWithFormat:@"%@/TEMPLATENAME.dylib",[NSBundle mainBundle].bundlePath];
-dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW);
+dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW|RTLD_GLOBAL);
 
 [BundledDYLIBPath release];
 #endif

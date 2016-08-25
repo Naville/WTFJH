@@ -42,9 +42,10 @@ static sqlite3 *dbConnection;
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
 
     //Format Date To NSString
-    NSDate *Date=[[NSDate date] dateByAddingTimeInterval:[[NSTimeZone systemTimeZone] secondsFromGMTForDate: [NSDate date]]];
+    NSDate *Date=[NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     NSString *currentDate=[dateFormatter stringFromDate:Date];
     [dateFormatter release];
     [Date release];

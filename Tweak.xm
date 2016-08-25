@@ -2,9 +2,17 @@
 #include <unistd.h>
 #include <stdio.h>
 static NSUncaughtExceptionHandler* OriginalExceptionHandler;
-
+int RedirectedSTDOUT=0;
+int RedirectedSTDERR=0;
 static BOOL RedirectLog(){
-    NSString* fileName=[NSString stringWithFormat:@"%@/Documents/%@-%@.txt",NSHomeDirectory(),[NSDate date],[[NSProcessInfo processInfo] processName]];
+    NSDate *Date=[NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString *currentDate=[dateFormatter stringFromDate:Date];
+    [dateFormatter release];
+    [Date release];
+    NSString* fileName=[NSString stringWithFormat:@"%@/Library/%@-%@.txt",NSHomeDirectory(),currentDate,[[NSProcessInfo processInfo] processName]];
     [@"-----Overture-----\n" writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
     FILE *stdoutHandle=freopen(fileName.UTF8String,"w",stdout);
     FILE *stderrHandle=freopen(fileName.UTF8String,"w",stderr);

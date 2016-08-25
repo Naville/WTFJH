@@ -17,8 +17,8 @@ rm ./ExtraFWs/Reveal.framework >> /dev/null 2>&1
 rm ./Reveal.app.zip >> /dev/null 2>&1  
 rm -rf ./RevealTMP >> /dev/null 2>&1  
 rm -rf ./CYTMP >> /dev/null 2>&1 
-rm ./ExtraFWs/libLiberation.a
-rm ./Hooks/Liberation.h
+rm ./ExtraFWs/libLiberation.a >> /dev/null 2>&1 
+rm ./Hooks/Liberation.h >> /dev/null 2>&1  
 mkdir ExtraFWs >> /dev/null 2>&1 
 mkdir Packages >> /dev/null 2>&1 
 echo "Pulling Latest Trunk"
@@ -52,12 +52,12 @@ rm -rf ./ExtraFWs/Reveal.framework>> /dev/null 2>&1
 
 #Cycript's static library hasn't been updated for years and ages. Use system dylib instead
 
-#echo "Extracting Cycript"
-#rm -rf ./Cycript
-#mkdir Cycript
-#unzip Cycript.zip -d ./Cycript >> /dev/null 2>&1  
-#cp -avR ./Cycript/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1  
-#rm -rf ./Cycript.zip
+echo "Extracting Cycript"
+rm -rf ./Cycript
+mkdir Cycript
+unzip Cycript.zip -d ./Cycript >> /dev/null 2>&1  
+cp -avR ./Cycript/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1  
+rm -rf ./Cycript.zip
 echo "Downloading Reveal"
 wget http://download.revealapp.com/Reveal.app.zip
 unzip Reveal.app.zip -d ./RevealTMP >> /dev/null 2>&1  

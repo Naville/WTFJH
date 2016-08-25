@@ -28,7 +28,7 @@
 # Usage
 >Standard User:
 
-1.	./Setup.sh
+1.	./Setup.sh **This should be executed everytime after you pull from the repo**
 2.	./build.py
 3.	PROFIT??!!
 

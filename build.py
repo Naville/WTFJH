@@ -25,6 +25,8 @@ def Exec(Command):
 		pass
 
 # Global config
+global JailedHostIP
+JailedHostIP = "192.168.1.107"
 makeFileString = ""
 #When Adding Path To The List. Please Strictly Follow This Format. i.e. "FOLDER/TYPE/". Or buildPF() will produce incorrect results
 PathList = ["Hooks/API/", "Hooks/SDK/", "Hooks/Utils/","Hooks/ThirdPartyTools/","Hooks/Misc/"]
@@ -95,9 +97,9 @@ def Thirdbuildlistdir(path):#So We Can Intercept And Remove Unwanted Modules
 	fileList=listdir(path)
 	for x in SkippedList:
 		for y in fileList:
-			if (x == y):#Only Remove Module Files
-				fileList.remove(y)
-				print (Fore.RED+y+" Removed From Third Party Modules")
+				if (x == y):#Only Remove Module Files
+					fileList.remove(y)
+					print (Fore.RED+y+" Removed From Third Party Modules")
 	return fileList
 #Clean-Up
 def cleanUp():
@@ -145,6 +147,7 @@ def BuildMakeFile():
 	makeFileString+=",\"-DWTFJHHostName="+"@\\\""+HostName+"\\\""
 	makeFileString += "\n"
 	makeFileString += "include $(THEOS)/makefiles/common.mk\n"
+	makeFileString += "export ARCHS = arm64\n"
 	#makeFileString += "export ARCHS = armv7 armv7s arm64\n"
 	#makeFileString += "TARGET = iphone:latest:9.3\n"
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
@@ -504,6 +507,14 @@ def main():
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -name \".DS_Store\" -delete")
 		os.system("dpkg-deb -Zgzip -b ./layout ./Packages/Build-"+str(currentVersion)+".deb")
+		debPath = "./Packages/Build-"+str(currentVersion)+".deb "
+		scpCommand = "scp "+debPath+"root@"+JailedHostIP+":/"
+		print scpCommand
+		os.system(scpCommand)
+		installCmd = "dpkg -i /" + "Build-"+ str(currentVersion)+".deb"
+		print installCmd
+		os.system("ssh "+"root@"+JailedHostIP +" " +installCmd)
+		#os.system("scp "+debPath+" root@ "+JailedHostIP+":"）
 	cleanUp()
 	if buildSuccess==True:
 		print (Fore.YELLOW +"Built with components: \n")

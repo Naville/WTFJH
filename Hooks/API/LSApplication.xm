@@ -1,4 +1,5 @@
 #import "../SharedDefine.pch"
+#import <dlfcn.h>
 %group LSApplication
 %hook LSApplicationProxy
 + (id)applicationProxyForBundleURL:(id)arg1{
@@ -279,12 +280,9 @@
 
 
 %end
-static void Loader(){
-%init(LSApplication);
-
-}
-WTCallBack(@"MobileCoreServices",Loader)
 extern void init_LSApplication_hook() {
-WTAddCallBack(Loader);
+dlopen("/System/Library/Frameworks/MobileCoreServices.framework/MobileCoreServices",RTLD_GLOBAL|RTLD_NOW);
+%init(LSApplication);
+  
   
 }

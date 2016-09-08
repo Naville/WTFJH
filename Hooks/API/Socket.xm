@@ -98,11 +98,11 @@ int new_socket(int domain, int type, int protocol){
 		WTRelease;
 
 	}
-return descriptor;
+	return descriptor;
 
 }
 int	new_accept(int newFileDesc, struct sockaddr * addr, socklen_t * addrlength){
-	int retVal=0;
+	int retVal=old_accept(newFileDesc,addr,addrlength);
 	if(WTShouldLog){
 		WTInit(@"Socket",@"accept");
 		WTAdd([NSNumber numberWithInt:newFileDesc],@"NewFileDescriptor");
@@ -110,43 +110,33 @@ int	new_accept(int newFileDesc, struct sockaddr * addr, socklen_t * addrlength){
 		WTAdd([NSNumber numberWithUnsignedShort:addr->sa_family],@"SocketAddressAddressFamily");
 		WTAdd(get_ip_str(addr),@"Address");
 		WTAdd([NSNumber numberWithUnsignedShort:*addrlength],@"SocketAddressLength");
-
-		retVal=old_accept(newFileDesc,addr,addrlength);
 		WTReturn([NSNumber numberWithInt:retVal]);
 		WTSave;
 		WTRelease;
 
 	}
-	else{
-	retVal=old_accept(newFileDesc,addr,addrlength);
-	}
 	return retVal;
 }
 int	new_bind(int A, struct sockaddr * addr, socklen_t addrlength){
-	int retVal=0;
+	int retVal=old_bind(A,addr,addrlength);
 	if(WTShouldLog){
 		WTInit(@"Socket",@"bind");
 		WTAdd([NSNumber numberWithUnsignedInt:addr->sa_len],@"SocketAddressTotalLength");
 		WTAdd([NSNumber numberWithUnsignedShort:addr->sa_family],@"SocketAddressAddressFamily");
 		WTAdd(get_ip_str(addr),@"Address");
 		WTAdd([NSNumber numberWithUnsignedShort:addrlength],@"SocketAddressLength");
-		retVal=old_bind(A,addr,addrlength);
 		WTReturn([NSNumber numberWithInt:retVal]);
 		WTSave;
 		WTRelease;
 
-	}
-	else{
-		retVal=old_bind(A,addr,addrlength);
 	}
 	return retVal;
 
 }
 int	new_connect(int sockfd, const struct sockaddr *addr,
                    socklen_t addrlen){
-	int retVal=0;
+	int retVal=old_connect(sockfd,addr,addrlen);
 	if(WTShouldLog){
-		retVal=old_connect(sockfd,addr,addrlen);
 		WTInit(@"Socket",@"connect");
 		WTAdd([NSNumber numberWithUnsignedShort:sockfd],@"SocketFileDescriptor");
 		WTAdd([NSNumber numberWithUnsignedInt:addr->sa_len],@"SocketAddressTotalLength");
@@ -158,17 +148,13 @@ int	new_connect(int sockfd, const struct sockaddr *addr,
 		WTRelease;
 
 	}
-	else{
-		retVal=old_connect(sockfd,addr,addrlen);
-	}
 	return retVal;
 
 
 }
 int	new_listen(int sockfd, int backlog){
-	int retVal=0;
+	int retVal=old_listen(sockfd,backlog);
 	if(WTShouldLog){
-		retVal=old_listen(sockfd,backlog);
 		WTInit(@"Socket",@"listen");
 		WTAdd([NSNumber numberWithUnsignedInt:sockfd],@"SocketFileDescriptor");
 		WTAdd([NSNumber numberWithUnsignedInt:backlog],@"BackLog");
@@ -177,15 +163,11 @@ int	new_listen(int sockfd, int backlog){
 		WTRelease;
 
 	}
-	else{
-		retVal=old_listen(sockfd,backlog);
-	}
 	return retVal;
 }
 ssize_t new_recv(int socket, void *buffer, size_t length, int flags){
-	ssize_t retVal=0;
+	ssize_t retVal=old_recv(socket,buffer,length,flags);
 	if(WTShouldLog){
-		retVal=old_recv(socket,buffer,length,flags);
 		WTInit(@"Socket",@"recv");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 		WTAdd([NSData dataWithBytes:buffer length:length],@"Data");
@@ -195,27 +177,20 @@ ssize_t new_recv(int socket, void *buffer, size_t length, int flags){
 		WTRelease;
 
 	}
-	else{
-		retVal=old_recv(socket,buffer,length,flags);
-	}
 	return retVal;
 }
 ssize_t new_recvfrom(int socket, void *buffer, size_t length, int flags,struct sockaddr *address, socklen_t *address_len){
-	ssize_t retVal=0;
+	ssize_t retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
 	if(WTShouldLog){
 		WTInit(@"Socket",@"recvfrom");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 		WTAdd([NSData dataWithBytes:buffer length:length],@"Data");
 		WTAdd([NSNumber numberWithInt:flags],@"Flags");
 		WTAdd(get_ip_str(address),@"Address");
-		retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
 		WTReturn([NSNumber numberWithLong:retVal]);
 		WTSave;
 		WTRelease;
 
-	}
-	else{
-		retVal=old_recvfrom(socket,buffer,length,flags,address,address_len);
 	}
 	return retVal;
 
@@ -223,9 +198,8 @@ ssize_t new_recvfrom(int socket, void *buffer, size_t length, int flags,struct s
 
 }
 ssize_t new_recvmsg(int socket, struct msghdr *message, int flags){
-	ssize_t retVal=0;
+	ssize_t retVal=old_recvmsg(socket,message,flags);
 	if(WTShouldLog){
-		retVal=old_recvmsg(socket,message,flags);
 		WTInit(@"Socket",@"recvmsg");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 
@@ -236,16 +210,12 @@ ssize_t new_recvmsg(int socket, struct msghdr *message, int flags){
 		WTRelease;
 
 	}
-	else{
-		retVal=old_recvmsg(socket,message,flags);
-	}
 	return retVal;
 
 }
 ssize_t new_send(int socket, const void *buffer, size_t length, int flags){
-	ssize_t retVal=0;
+	ssize_t retVal=old_send(socket,buffer,length,flags);
 	if(WTShouldLog){
-		retVal=old_send(socket,buffer,length,flags);
 		WTInit(@"Socket",@"send");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 		WTAdd([NSData dataWithBytes:buffer length:length],@"Data");
@@ -255,17 +225,13 @@ ssize_t new_send(int socket, const void *buffer, size_t length, int flags){
 		WTRelease;
 
 	}
-	else{
-		retVal=old_send(socket,buffer,length,flags);
-	}
 	return retVal;
 
 
 }
 ssize_t new_sendmsg(int socket, struct msghdr *message, int flags){
-	ssize_t retVal=0;
+	ssize_t retVal=old_sendmsg(socket,message,flags);
 	if(WTShouldLog){
-		retVal=old_sendmsg(socket,message,flags);
 		WTInit(@"Socket",@"sendmsg");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 		WTAdd(GetInfoFormsghdr(message),@"Message");
@@ -275,18 +241,14 @@ ssize_t new_sendmsg(int socket, struct msghdr *message, int flags){
 		WTRelease;
 
 	}
-	else{
-		retVal=old_sendmsg(socket,message,flags);
-	}
 	return retVal;
 
 
 }
 ssize_t new_sendto(int socket, const void *buffer, size_t length, int flags,
          struct sockaddr *dest_addr, socklen_t dest_len){
-	ssize_t retVal=0;
+	ssize_t retVal=old_sendto(socket,buffer,length,flags,dest_addr,dest_len);
 	if(WTShouldLog){
-		retVal=old_sendto(socket,buffer,length,flags,dest_addr,dest_len);
 		WTInit(@"Socket",@"sendto");
 		WTAdd([NSNumber numberWithUnsignedInt:socket],@"SocketFileDescriptor");
 		WTAdd([NSData dataWithBytes:buffer length:length],@"Data");
@@ -298,9 +260,6 @@ ssize_t new_sendto(int socket, const void *buffer, size_t length, int flags,
 		WTRelease;
 
 	}
-	else{
-		retVal=old_sendto(socket,buffer,length,flags,dest_addr,dest_len);
-	}
 	return retVal;
 
 
@@ -310,7 +269,7 @@ extern void init_Socket_hook() {
    WTFishHookSymbols("recv",(void*)new_recv, (void**)&old_recv);
    WTFishHookSymbols("recvfrom",(void*)new_recvfrom, (void**)&old_recvfrom);
    WTFishHookSymbols("recvmsg",(void*)new_recvmsg, (void**)&old_recvmsg);
-   WTFishHookSymbols("socket",(void*)new_socket, (void**)&old_socket);
+   //WTFishHookSymbols("socket",(void*)new_socket, (void**)&old_socket);
    WTFishHookSymbols("accept",(void*)new_accept, (void**)&old_accept);
    WTFishHookSymbols("bind",(void*)new_bind, (void**)&old_bind);
    WTFishHookSymbols("connect",(void*)new_connect, (void**)&old_connect);

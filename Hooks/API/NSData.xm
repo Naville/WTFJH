@@ -1,4 +1,3 @@
-%config(generator=internal)
 #import "../SharedDefine.pch"
 %group NSData
 %hook NSData

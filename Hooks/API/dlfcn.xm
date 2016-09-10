@@ -3,22 +3,23 @@
 int (*old_dladdr)(const void *, Dl_info *);
 void * (*old_dlsym)(void * __handle, const char * __symbol);
 void * (*old_dlopen)(const char * __path, int __mode);
+NSMutableDictionary* InfoFromDlInfo(Dl_info* info){
+#ifdef DEBUG
+    NSLog(@"dlfcn---InfoFromDlInfo");
+#endif
+
+    NSMutableDictionary* RetDict=[NSMutableDictionary dictionary];
+    [RetDict setObject:[NSString stringWithFormat:@"%s",info->dli_fname] forKey:@"PathOfObject"];
+    [RetDict setObject:[NSString stringWithFormat:@"%s",info->dli_sname] forKey:@"NameOfNearestSymbol"];
+    [RetDict setObject:[NSString stringWithFormat:@"%p",info->dli_fbase] forKey:@"BaseAddressOfSharedObject"];
+    [RetDict setObject:[NSString stringWithFormat:@"%p",info->dli_saddr] forKey:@"AddressOfNearestSymbol"];
+    return RetDict;
+}
 int new_dladdr(const void * addr, Dl_info * info){
     int ret = old_dladdr(addr, info);
     if (WTShouldLog) {
         WTInit(@"dlfcn",@"dladdr");
-        if(info->dli_fname!=NULL){
-             WTAdd([NSString stringWithUTF8String:info->dli_fname],@"PathOfObject");
-        }
-        else{
-            WTAdd(@"NULL",@"PathOfObject");
-        }
-        if(info->dli_sname!=NULL){
-             WTAdd([NSString stringWithUTF8String:info->dli_sname],@"NameOfNearestSymbol");
-        }
-        else{
-            WTAdd(@"NULL",@"NameOfNearestSymbol");
-        }
+        WTAdd(InfoFromDlInfo(info),@"Info");
         WTSave;
         WTRelease;
     }

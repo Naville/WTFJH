@@ -71,7 +71,7 @@ extern void init_FLEX_hook(){
         [curName release];
 
     }
-#elif
+#else
 
 NSString* BundledDYLIBPath=[NSString stringWithFormat:@"%@/libFLEX.dylib",[NSBundle mainBundle].bundlePath];
 dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW|RTLD_GLOBAL);

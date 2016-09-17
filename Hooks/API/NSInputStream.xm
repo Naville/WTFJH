@@ -1,7 +1,7 @@
 #import "../Utils/SQLiteStorage.h"
 #import "../Utils/PlistObjectConverter.h"
 #import "../Utils/CallStackInspector.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 
 
 // NSInputStream ends up calling NSData methods that we hook as well. Is it useful to hook NSInputStream then ?

@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 # define SHA_LONG unsigned int
 
 # define SHA_LBLOCK      16

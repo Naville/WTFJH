@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import "../Utils/NSURLSessionDelegateProxy.h"
 %group NSURLSession
 %hook NSURLSession

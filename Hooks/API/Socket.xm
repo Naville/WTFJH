@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <sys/socket.h>
 #import <arpa/inet.h>
 /*

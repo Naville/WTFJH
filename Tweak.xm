@@ -1,4 +1,4 @@
-#import "./Hooks/SharedDefine.pch" 
+#import "./Hooks/Global.h" 
 #include <unistd.h>
 #include <stdio.h>
 static NSUncaughtExceptionHandler* OriginalExceptionHandler;

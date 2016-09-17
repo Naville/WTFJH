@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <sys/sysctl.h>
 static NSArray* HWArgs=@[
 @"WTFJH-Undefined",

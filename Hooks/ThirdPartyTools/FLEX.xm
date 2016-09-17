@@ -1,5 +1,5 @@
 //Shall We Use Marcos instead of this shit?
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <mach-o/getsect.h>
 #import <dlfcn.h>
 
@@ -19,7 +19,6 @@ extern NSString* RandomString();
 typedef void (*WTLoaderPrototype)();  
 extern void init_FLEX_hook(){
 #ifndef NonJailbroken
-//Because We Ain't Ready Yet. No Test
 	 for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);
         NSString* curName=[NSString stringWithUTF8String:Nam];

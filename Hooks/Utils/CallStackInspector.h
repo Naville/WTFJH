@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 @interface CallStackInspector: NSObject {
 
 }

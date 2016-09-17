@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <dlfcn.h>
 %group LSApplication
 %hook LSApplicationProxy

@@ -1,7 +1,7 @@
 #import "../Utils/SQLiteStorage.h"
 #import "../Utils/PlistObjectConverter.h"
 #import "../Utils/CallStackInspector.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group NSUserDefaults
 %hook NSUserDefaults
 

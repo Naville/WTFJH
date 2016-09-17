@@ -1,5 +1,5 @@
 #import "RuntimeUtils.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 @interface Utils : NSObject {
 }
 +(id)sharedManager;

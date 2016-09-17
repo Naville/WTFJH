@@ -1,6 +1,6 @@
 
 #import "NSURLConnectionDelegateProx.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 
 
 @implementation NSURLConnectionDelegateProx

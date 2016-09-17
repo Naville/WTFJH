@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group NSKeyedArchiver
 %hook NSKeyedArchiver
 + (NSData *)archivedDataWithRootObject:(id)rootObject{

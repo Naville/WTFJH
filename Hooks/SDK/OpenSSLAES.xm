@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import "string.h"
 
 # define AES_ENCRYPT     1

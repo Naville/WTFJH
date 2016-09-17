@@ -4,7 +4,7 @@
 #import "../Utils/SQLiteStorage.h"
 #import "../Utils/PlistObjectConverter.h"
 #import "../Utils/CallStackInspector.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 
 // No need to hook the CC_MDX_Init() functions as they don't do anything interesting
 

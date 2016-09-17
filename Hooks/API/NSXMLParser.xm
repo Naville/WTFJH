@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group NSXMLParser
 /*
 We're directly including this file into Tweak.xmi at build time.

@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group NSFileManager
 %hook NSFileManager
 

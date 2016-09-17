@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <objc/runtime.h>
 #import <Foundation/Foundation.h>
 

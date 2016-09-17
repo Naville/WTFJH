@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group NSKeyedUnarchiver
 %hook NSKeyedUnarchiver
 + (id)unarchiveObjectWithData:(NSData *)data {

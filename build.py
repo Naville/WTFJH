@@ -127,7 +127,7 @@ def cleanUp():
 		print (Fore.YELLOW +"Cleaning:"+x+"Loader")
 		Exec("rm ./Hooks/ThirdPartyTools/"+x+".xm")
 	if (DEBUG):
-		print (Fore.YELLOW +'Debugging mode, without removing Inter-compile files.')
+		print (Fore.YELLOW +'Debugging mode,Keeping Temporary files.')
 		if OBFUSCATION==False:
 			Exec("rm ./Hooks/Obfuscation.h")
 	else:
@@ -204,9 +204,12 @@ def FixControlFile(Path):#BuildVersion Stuff
 	file = open(Path,"a")
 	version = open('./VERSION', "r")
 	currentVersion = int(version.read())
-	file.write("\nVersion: " + str(currentVersion) + "\n")
+	file.write("Version: " + str(currentVersion) + "\n")
 	version.close()
 	file.close()
+	x=open(Path,'r').read()
+	print x
+
 	version = open('./VERSION', "w")
 	version.write(str(currentVersion+1))
 	version.close()

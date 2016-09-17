@@ -1,6 +1,6 @@
 
 #import "DelegateProxies.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 
 
 

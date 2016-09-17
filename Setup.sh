@@ -66,5 +66,9 @@ rm -rf ./RevealTMP >> /dev/null 2>&1
 rm -rf ./Reveal.app.zip >> /dev/null 2>&1  
 echo "Building FLEX"
 cd ./FLEX && xcodebuild -workspace FLEX.xcworkspace -scheme FLEX CONFIGURATION_BUILD_DIR=./&& mv ./FLEX.framework ../ExtraFWs&&cd ../
-
-
+echo "Downloading Reveal2"
+wget -O Reveal2.zip https://dl.devmate.com/com.ittybittyapps.Reveal2/Reveal.zip
+unzip Reveal2.zip -d ./Reveal2TMP >> /dev/null 2>&1  
+cp -rf ./Reveal2TMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/RevealServer.framework/RevealServer ./Reveal2Server >> /dev/null 2>&1  
+rm ./Reveal2.zip
+rm -rf ./Reveal2TMP >>/dev/null 2>&1

@@ -5,7 +5,7 @@
 #import "../Utils/SQLiteStorage.h"
 #import "../Utils/PlistObjectConverter.h"
 #import "../Utils/CallStackInspector.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 size_t length;
 //typedef struct CCHmacContext * CCHmacContextRef;
 

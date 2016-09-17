@@ -8,7 +8,7 @@ From https://github.com/iosre/Notificatcher With Modifications
 
 
 
-#import "../SharedDefine.pch"
+#import "../Global.h"
 
 #include <notify.h>
 

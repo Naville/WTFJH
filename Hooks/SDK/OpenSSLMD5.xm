@@ -1,5 +1,5 @@
 #import <substrate.h>
-#import "../SharedDefine.pch"
+#import "../Global.h"
 # define MD5_LONG unsigned int
 
 # define MD5_CBLOCK      64

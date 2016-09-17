@@ -4,7 +4,7 @@
 #import "../Utils/SQLiteStorage.h"
 #import "../Utils/PlistObjectConverter.h"
 #import "../Utils/CallStackInspector.h"
-#import "../SharedDefine.pch"
+#import "../Global.h"
 // Hook SecItemAdd()
 static OSStatus (*original_SecItemAdd)(CFDictionaryRef attributes, CFTypeRef *result);
 

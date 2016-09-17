@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <Security/SecureTransport.h>
 // Hook SSLSetSessionOption()
 static OSStatus (*original_SSLSetSessionOption)(

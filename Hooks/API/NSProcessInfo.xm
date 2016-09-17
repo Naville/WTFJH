@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group NSProcessInfo
 %hook NSProcessInfo
 + (id)processInfo{

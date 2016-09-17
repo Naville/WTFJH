@@ -1,6 +1,6 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 //Shall We Use Marcos instead of this shit?
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <mach-o/getsect.h>
 #import <dlfcn.h>
 extern NSString* RandomString();

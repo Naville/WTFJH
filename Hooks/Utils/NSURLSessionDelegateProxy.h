@@ -1,5 +1,5 @@
 #import <UIKit/UIApplication.h>
-#import "../SharedDefine.pch"
+#import "../Global.h"
 @interface NSURLSessionDelegateProxy : NSObject {
     id originalDelegate;        // The delegate object we're going to proxy
 }

@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <mach-o/getsect.h>
 
 char * (*old_getsectdata)(const char *segname,const char *sectname,unsigned long *size);

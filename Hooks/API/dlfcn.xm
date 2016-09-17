@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <dlfcn.h>
 int (*old_dladdr)(const void *, Dl_info *);
 void * (*old_dlsym)(void * __handle, const char * __symbol);

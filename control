@@ -1,8 +1,8 @@
 Package: naville.wtfjh
 Name: What The Fuck Just Happened
-Depends: mobilesubstrate, applist, cycript
+Depends: mobilesubstrate, applist
 Architecture: iphoneos-arm
-Description: Replacement For Introspy \n https://github.com/Naville/WTFJH
+Description: Replacement For Introspy https://github.com/Naville/WTFJH
 Maintainer: Naville
 Author: Naville
 Section: Tweaks

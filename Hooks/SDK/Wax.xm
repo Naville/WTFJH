@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 //Maybe Pointless hooking these
 /*
 void wax_startWithNil();

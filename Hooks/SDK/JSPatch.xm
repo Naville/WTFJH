@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 %group JSPatch
 %hook JPEngine
 + (id)evaluateScript:(NSString *)script{

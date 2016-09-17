@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 #import <CoreFoundation/CoreFoundation.h>
  CFTypeRef (*old_MGCopyAnswer)(CFStringRef property);
  CFTypeRef (*old_MGCopyMultipleAnswers)(CFArrayRef questions, int __unknown0);

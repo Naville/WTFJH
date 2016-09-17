@@ -1,5 +1,5 @@
 #import "CallTracer.h"
-#import <SharedDefine.pch>
+#import <Global.h>
 #if 0
 #define NSLog WTFJHLog
 #endif

@@ -1,4 +1,4 @@
-#import "../SharedDefine.pch"
+#import "../Global.h"
 typedef enum FclBlowfishMode
 {
     modeEBC,    // electronic-code-book

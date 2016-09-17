@@ -81,11 +81,22 @@ static void traceURISchemes() {
     }
 }
 static void runSanityFix(){
+    WTInit(@"WTFJH",@"SanityChecks");
+    BOOL Passed=YES;
     if(getBoolFromPreferences(@"Reveal")&&getBoolFromPreferences(@"Reveal2")){
         [GlobalConfig setObject:[NSNumber numberWithBool:NO] forKey:@"Reveal"];
         [GlobalConfig writeToFile:preferenceFilePath atomically:YES];
-        NSLog(@"Turn on both Reveal and Reveal2 with results in an instant crash. Disabled Reveal");
+        Passed=NO;
+        WTAdd(@"Reveal&Reveal2 are conflicting.Disabled Reveal",@"Reveal");
     }
+    if(Passed){
+        WTReturn(@"SanityCheck Passed");
+    }
+    else{
+        WTReturn(@"SanityCheck Failed. Configs have been edited accordingly");
+    }
+    WTSave;
+    WTRelease;
 }
 %ctor {
     //Stop Reveal

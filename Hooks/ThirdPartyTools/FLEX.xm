@@ -81,6 +81,5 @@ Class FM=objc_getClass("FLEXManager");
 #ifdef DEBUG
     NSLog(@"WTFJH---FLEXManager:%@",[FM sharedManager]);
 #endif
-[(FLEXManager*)[FM sharedManager] showExplorer];
 
 }

@@ -78,7 +78,13 @@ static void traceURISchemes() {
         }
     }
 }
-
+static NSString* runSanityCheck(){
+    NSString* isValid=nil;
+    if(getBoolFromPreferences(@"Reveal")&&getBoolFromPreferences(@"Reveal2")){
+        isValid=@"Reveal and Reveal2 Can NOT be both on";
+    }
+    return isValid;
+}
 %ctor {
     //Stop Reveal
 #ifndef NonJailbroken   
@@ -86,10 +92,17 @@ static void traceURISchemes() {
 dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
 #endif
      [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStop" object:nil];
+     NSString* SanityCheckResult=runSanityCheck();
+     if(SanityCheckResult!=nil){
+        WTInit(@"WTFJH",@"SanityCheck");
+        WTReturn(SanityCheckResult);
+        WTSave;
+        WTRelease;
 
 
-   // NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
+        //Don't Do Anything if SanityCheck Failed
+        return;
+     }
     // Only hook Apps the user has selected in WTFJH's settings panel
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
     if (appId == nil) {

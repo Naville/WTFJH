@@ -207,9 +207,6 @@ def FixControlFile(Path):#BuildVersion Stuff
 	file.write("Version: " + str(currentVersion) + "\n")
 	version.close()
 	file.close()
-	x=open(Path,'r').read()
-	print x
-
 	version = open('./VERSION', "w")
 	version.write(str(currentVersion+1))
 	version.close()

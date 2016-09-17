@@ -92,17 +92,6 @@ static NSString* runSanityCheck(){
 dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
 #endif
      [[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStop" object:nil];
-     NSString* SanityCheckResult=runSanityCheck();
-     if(SanityCheckResult!=nil){
-        WTInit(@"WTFJH",@"SanityCheck");
-        WTReturn(SanityCheckResult);
-        WTSave;
-        WTRelease;
-
-
-        //Don't Do Anything if SanityCheck Failed
-        return;
-     }
     // Only hook Apps the user has selected in WTFJH's settings panel
     NSString *appId = [[NSBundle mainBundle] bundleIdentifier];
     if (appId == nil) {
@@ -116,6 +105,29 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
         NSLog(@"WTFJH - Profiling disabled for %@", appId);
         return;
     }
+    //Don't run sanity check for unselected apps
+    NSString* SanityCheckResult=runSanityCheck();
+     if(SanityCheckResult!=nil){
+        WTInit(@"WTFJH",@"SanityCheck");
+        WTReturn(SanityCheckResult);
+        WTSave;
+        WTRelease;
+        //Setup Local Notification
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
+        localNotification.alertBody = SanityCheckResult;
+        localNotification.applicationIconBadgeNumber = 0;
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        NSLog(@"UIApplication:%@",NSClassFromString(@"UIApplication"));
+        NSException* myException = [NSException exceptionWithName:@"WTFJHInternalException" reason:SanityCheckResult userInfo:nil];
+        @throw myException;
+
+        //
+        //Don't Do Anything if SanityCheck Failed
+        return;//Won't Actually Got Executed as the app is crashed already
+     }
+
+
     NSLog(@"WTFJH - Profiling enabled for %@", appId);
     if (getBoolFromPreferences(@"URLSchemesHooks")) {
             traceURISchemes();

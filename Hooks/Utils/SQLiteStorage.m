@@ -140,7 +140,7 @@ static sqlite3 *dbConnection;
     [argsAndReturnValueStr release];
 
     if (queryResult != SQLITE_DONE) {
-        NSLog(@"WTFJH SQLiteStorage - Commit Failed: %x!", queryResult);
+        NSLog(@"WTFJH SQLiteStorage - Commit Failed: %x:%s!", queryResult,sqlite3_errstr(queryResult));
     	return NO;
     }
     return YES;

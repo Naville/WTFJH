@@ -4,6 +4,7 @@
 static NSUncaughtExceptionHandler* OriginalExceptionHandler;
 int RedirectedSTDOUT=0;
 int RedirectedSTDERR=0;
+static NSMutableDictionary* GlobalConfig=nil;
 static BOOL RedirectLog(){
     NSDate *Date=[NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -41,12 +42,13 @@ void UncaughtExceptionHandler(NSException *exception) {
 
 
 extern BOOL getBoolFromPreferences(NSString *preferenceValue) {
-    NSMutableDictionary *preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
-    id value = [preferences objectForKey:preferenceValue];
+    if(GlobalConfig==nil){
+        GlobalConfig = [[NSMutableDictionary alloc] initWithContentsOfFile:preferenceFilePath];
+    }
+    id value = [GlobalConfig objectForKey:preferenceValue];
     if (value == nil) {
         return NO; // default to YES
     }
-    [preferences release];
     BOOL retVal=[value boolValue];
     [value release];
     return retVal;
@@ -78,12 +80,12 @@ static void traceURISchemes() {
         }
     }
 }
-static NSString* runSanityCheck(){
-    NSString* isValid=nil;
+static void runSanityFix(){
     if(getBoolFromPreferences(@"Reveal")&&getBoolFromPreferences(@"Reveal2")){
-        isValid=@"Reveal and Reveal2 Can NOT be both on";
+        [GlobalConfig setObject:[NSNumber numberWithBool:NO] forKey:@"Reveal"];
+        [GlobalConfig writeToFile:preferenceFilePath atomically:YES];
+        NSLog(@"Turn on both Reveal and Reveal2 with results in an instant crash. Disabled Reveal");
     }
-    return isValid;
 }
 %ctor {
     //Stop Reveal
@@ -106,27 +108,7 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
         return;
     }
     //Don't run sanity check for unselected apps
-    NSString* SanityCheckResult=runSanityCheck();
-     if(SanityCheckResult!=nil){
-        WTInit(@"WTFJH",@"SanityCheck");
-        WTReturn(SanityCheckResult);
-        WTSave;
-        WTRelease;
-        //Setup Local Notification
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
-        localNotification.alertBody = SanityCheckResult;
-        localNotification.applicationIconBadgeNumber = 0;
-        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-        NSLog(@"UIApplication:%@",NSClassFromString(@"UIApplication"));
-        NSException* myException = [NSException exceptionWithName:@"WTFJHInternalException" reason:SanityCheckResult userInfo:nil];
-        @throw myException;
-
-        //
-        //Don't Do Anything if SanityCheck Failed
-        return;//Won't Actually Got Executed as the app is crashed already
-     }
-
+    runSanityFix();
 
     NSLog(@"WTFJH - Profiling enabled for %@", appId);
     if (getBoolFromPreferences(@"URLSchemesHooks")) {

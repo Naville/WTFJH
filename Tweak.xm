@@ -118,6 +118,8 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
         NSLog(@"WTFJH - Profiling disabled for %@", appId);
         return;
     }
+    BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
+    [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
     //Don't run sanity check for unselected apps
     runSanityFix();
 
@@ -131,10 +133,6 @@ dlopen("/usr/lib/libsubstrate.dylib",RTLD_NOW|RTLD_GLOBAL);
                 NSLog(@"Redirect Failed");
             }
      }
-
-
-    BOOL shouldLog = getBoolFromPreferences(@"LogToTheConsole");
-    [[SQLiteStorage sharedManager] initWithDefaultDBFilePathAndLogToConsole: shouldLog];
     if(getBoolFromPreferences(@"RegisterCustomExceptionHandler")){
         NSLog(@"Registering UncaughtExceptionHandler");
         OriginalExceptionHandler=NSGetUncaughtExceptionHandler();

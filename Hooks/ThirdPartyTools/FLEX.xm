@@ -77,9 +77,4 @@ dlopen(BundledDYLIBPath.UTF8String,RTLD_NOW|RTLD_GLOBAL);
 
 [BundledDYLIBPath release];
 #endif
-Class FM=objc_getClass("FLEXManager");
-#ifdef DEBUG
-    NSLog(@"WTFJH---FLEXManager:%@",[FM sharedManager]);
-#endif
-
 }

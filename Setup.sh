@@ -35,8 +35,8 @@ cd "${OrigDIR}"
 echo "Building Liberation"
 cd ./Liberation
 cd keystone&&git pull origin master &&cd ../
-./liberation setup
-./liberation build
+./liberation setup > /dev/null
+./liberation build > /dev/null
 cd "${OrigDIR}"
 echo "Moving Liberation"
 mv ./Liberation/lib/libLiberation.a ./ExtraFWs/
@@ -65,7 +65,7 @@ cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dyl
 rm -rf ./RevealTMP >> /dev/null 2>&1  
 rm -rf ./Reveal.app.zip >> /dev/null 2>&1  
 echo "Building FLEX"
-cd ./FLEX && xcodebuild -workspace FLEX.xcworkspace -scheme FLEX CONFIGURATION_BUILD_DIR=./&& mv ./FLEX.framework ../ExtraFWs&&cd ../
+cd ./FLEX && xcodebuild -workspace FLEX.xcworkspace -scheme FLEX CONFIGURATION_BUILD_DIR=./&& mv ./FLEX.framework ../ExtraFWs&&cd ../ > /dev/null
 echo "Downloading Reveal2"
 wget -O Reveal2.zip https://dl.devmate.com/com.ittybittyapps.Reveal2/Reveal.zip
 unzip Reveal2.zip -d ./Reveal2TMP >> /dev/null 2>&1  

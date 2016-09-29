@@ -25,3 +25,5 @@ libReveal.dylib
 libcycript.dylib
 Cycript/
 Reveal2Server
+Hooks/capstone/*.*
+Hooks/keystone/*.*

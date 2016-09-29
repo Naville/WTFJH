@@ -1,19 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import os
-import sys
-import subprocess
-import string
-import random
-import plistlib
-import argparse
-import re
-import signal
+import os,sys,subprocess,string,random,plistlib,argparse,re,time,signal,BuildConfig
 from os import listdir
-from colorama import init
-from colorama import Fore, Back, Style
-import BuildConfig
+from colorama import init,Fore, Back, Style
 init(autoreset=True)
 STDOUT=open("STDOUT.log", 'a')
 STDERR=open("STDERR.log", 'a')
@@ -56,7 +46,7 @@ InitialCWD=os.getcwd()
 global JAILED
 JAILED=False
 global buildCommand
-buildCommand="make debug=0"
+buildCommand="make package debug=0"
 global HostName
 HostName=subprocess.check_output("hostname -s", shell=True).replace("\n","")+".local"
 global AllowedSourceExtension
@@ -494,7 +484,6 @@ def main():
 			buildSuccess=False
 			print inst
 			print (Fore.RED +"Error During Compile,Rerun With DEBUG as Argument to See Output")
-#Packaging
 	if buildSuccess==True:
 		os.system("mkdir -p ./layout/DEBIAN; cp ./control ./layout/DEBIAN/control")
 		FixControlFile("./layout/DEBIAN/control")
@@ -503,7 +492,9 @@ def main():
 		os.system("cp ./BundleFilter.plist" + " ./layout/Library/MobileSubstrate/DynamicLibraries/" + randomTweakName + ".plist")
 		# Cleaning finder caches, thanks to http://stackoverflow.com/questions/2016844/bash-recursively-remove-files
 		os.system("find . -name \".DS_Store\" -delete")
+		time.sleep(5)#Stupid dpkg racing conditions here
 		os.system("dpkg-deb -Zgzip -b ./layout ./Packages/Build-"+str(currentVersion)+".deb")
+
 	cleanUp()
 	if buildSuccess==True:
 		print (Fore.YELLOW +"Built with components: \n")

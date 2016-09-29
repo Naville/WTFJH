@@ -4,7 +4,7 @@
 #import <dlfcn.h>
 extern NSString* RandomString();
 typedef void (*WTLoaderPrototype)();  
-extern void init_FLEX_hook(){
+extern void init_Frida_hook(){
 #ifndef NonJailbroken
 	 for(int i=0;i<_dyld_image_count();i++){
         const char * Nam=_dyld_get_image_name(i);

@@ -72,3 +72,15 @@ unzip Reveal2.zip -d ./Reveal2TMP >> /dev/null 2>&1
 cp -rf ./Reveal2TMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/RevealServer.framework/RevealServer ./Reveal2Server >> /dev/null 2>&1  
 rm ./Reveal2.zip
 rm -rf ./Reveal2TMP >>/dev/null 2>&1
+echo 'Downloading Frida'
+python ./CIScripts/DownloadFrida.py
+echo 'Cleaning useless archs'
+for meh in ./ExtraFWs/frida-gadget.dylib ./ExtraFWs/FLEX.framework/FLEX ./Reveal2Server ./libReveal.dylib ./libcycript.dylib
+do
+ echo "Cleaning $meh"
+ lipo -remove i386 $meh -output $meh  >> /dev/null 2>&1  ||true 
+ lipo -remove x86_64 $meh -output $meh >> /dev/null 2>&1 ||true
+done
+
+
+

@@ -66,7 +66,6 @@
 	if (WTShouldLog) {
 		WTInit(@"NSData",@"dataWithContentsOfFile:");
 		WTAdd(path,@"path");
-		// origResult should be NSData* ?
 		WTReturn( origResult);
 		 
 		WTSave;
@@ -132,7 +131,6 @@
 }
 
 - (id)initWithContentsOfFile:(NSString *)path options:(NSDataReadingOptions)mask error:(NSError **)errorPtr {
-	NSLog(@"UIEWHKWEHRKLEWR");
 	id origResult = %orig;
 	if (WTShouldLog) {
 		WTInit(@"NSData",@"initWithContentsOfFile:options:error:");

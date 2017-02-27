@@ -58,13 +58,6 @@ unzip Cycript.zip -d ./Cycript >> /dev/null 2>&1
 cp -avR ./Cycript/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1
 rm -rf ./Cycript.zip
 cd "${OrigDIR}"
-echo "Downloading Reveal"
-wget http://download.revealapp.com/Reveal.app.zip
-unzip Reveal.app.zip -d ./RevealTMP >> /dev/null 2>&1
-cp -rf ./RevealTMP/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib ./ >> /dev/null 2>&1
-rm -rf ./RevealTMP >> /dev/null 2>&1
-rm -rf ./Reveal.app.zip >> /dev/null 2>&1
-cd "${OrigDIR}"
 echo "Building FLEX"
 cd ./FLEX && xcodebuild -workspace FLEX.xcworkspace -scheme FLEX CONFIGURATION_BUILD_DIR=./&& mv ./FLEX.framework ../ExtraFWs&&cd ../ > /dev/null
 cd "${OrigDIR}"

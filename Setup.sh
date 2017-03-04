@@ -41,22 +41,10 @@ echo "Moving Liberation"
 mv ./Liberation/lib/libLiberation.a ./ExtraFWs/
 mv ./Liberation/include/Liberation.h ./Hooks/
 cd "${OrigDIR}"
-echo "Downloading Cycript"
-wget https://cydia.saurik.com/api/latest/3 -O Cycript.zip
 echo "Cleaning old framework"
-rm -rf ./Cycript.framework>> /dev/null 2>&1
 rm -rf ./ExtraFWs/Cycript.framework >> /dev/null 2>&1
 rm -rf ./Reveal.framework >> /dev/null 2>&1
 rm -rf ./ExtraFWs/Reveal.framework>> /dev/null 2>&1
-cd "${OrigDIR}"
-#Cycript's static library hasn't been updated for years and ages. Use system dylib instead
-
-echo "Extracting Cycript"
-rm -rf ./Cycript
-mkdir Cycript
-unzip Cycript.zip -d ./Cycript >> /dev/null 2>&1
-cp -avR ./Cycript/Cycript.lib/libcycript.dylib ./  >> /dev/null 2>&1
-rm -rf ./Cycript.zip
 cd "${OrigDIR}"
 echo "Building FLEX"
 cd ./FLEX && xcodebuild -workspace FLEX.xcworkspace -scheme FLEX CONFIGURATION_BUILD_DIR=./&& mv ./FLEX.framework ../ExtraFWs&&cd ../ > /dev/null

@@ -3,7 +3,6 @@
 #import <mach-o/getsect.h>
 #import <dlfcn.h>
 extern NSString* RandomString();
-typedef void (*WTLoaderPrototype)();  
 extern void init_Frida_hook(){
 #ifndef NonJailbroken
 	 for(int i=0;i<_dyld_image_count();i++){
@@ -12,7 +11,7 @@ extern void init_Frida_hook(){
         if([curName containsString:WTFJHTWEAKNAME]){
 #ifdef DEBUG
             NSLog(@"Found Frida At %i th Image",i);
-#endif            
+#endif
             intptr_t ASLROffset=_dyld_get_image_vmaddr_slide(i);
             //We Found Ourself
 #ifndef __LP64__
@@ -30,11 +29,7 @@ extern void init_Frida_hook(){
             NSString* randomPath=[NSString stringWithFormat:@"%@/tmp/%@",NSHomeDirectory(),RandomString()];
             [SDData writeToFile:randomPath atomically:YES];
             void* handle=dlopen(randomPath.UTF8String,RTLD_NOW|RTLD_GLOBAL);//Open Created dylib
-            WTLoaderPrototype WTHandle =(WTLoaderPrototype) dlsym(handle, "WTFJHInitFrida");  //Call Init Function
-            if(WTHandle!=NULL){
-            WTHandle();  
-            }
-            dlclose(handle);  
+            dlclose(handle);
             [[NSFileManager defaultManager] removeItemAtPath:randomPath error:nil];
             //Inform Our Logger
             WTInit(@"WTFJH",@"LoadThirdPartyTools");

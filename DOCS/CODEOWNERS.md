@@ -1,5 +1,5 @@
-#Alban Diquet@iSEC Partners
-##Hooks/APIHooks/
+# Alban Diquet@iSEC Partners
+## Hooks/APIHooks/
 
 - SSLKillSwitch.xm
 - CommonCryptor.xm
@@ -19,28 +19,24 @@
 - libC.xm
 - NSData.xm              
 - NSURLCredential.xm     
-- NSFileHandle.xm 
+- NSFileHandle.xm
 
-##/Hooks/Utils/
+## /Hooks/Utils/
 Most. But Heavily Modified
 
-#HanSheng Zhang(Naville)
+# HanSheng Zhang(Naville)
 Everything Left. Unless Otherwise Specified
 
-#Zheng Wu(i_82)
+# Zheng Wu(i_82)
 - NSURLSession.xm
-- NSKeyedArchiver.xm 
-- NSKeyedUnarchiver.xm 
+- NSKeyedArchiver.xm
+- NSKeyedUnarchiver.xm
 
-##DavidGoldman
-#ThirdPartyTools/InspectiveC
+## Elias Limneos
+# ThirdPartyTools/classdumpdyld
 
-##Elias Limneos
-#ThirdPartyTools/classdumpdyld
+## Carina
+# ThirdPartyTools/dumpdecrypted
 
-##Carina
-#ThirdPartyTools/dumpdecrypted
-
-##Submodules
-#All Submodules Belong To Their Respective Owner
-
+## Submodules
+# All Submodules Belong To Their Respective Owner

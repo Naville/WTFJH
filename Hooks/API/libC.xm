@@ -44,10 +44,24 @@ static long replaced_random() {
 }
 
 
+static int (*original_system)(char* command);
+int replaced_system(const char *command){
+  int ret=original_system(command);
+	if (WTShouldLog) {
+		WTInit(@"C",@"system");
+		WTAdd([NSString stringWithUTF8String:command],@"Command");
+		WTReturn([NSNumber numberWithInt:ret]);
+		WTSave;
+		WTRelease;
+	}
+  return ret;
+
+}
+
 
 
 extern void init_libC_hook(){
     WTHookFunction((void *)random, (void *)replaced_random, (void **) &original_random);
     WTHookFunction((void *)rand, (void *)replaced_rand, (void **) &original_rand);
+    WTHookFunction((void *)system, (void *)replaced_system, (void **) &original_system);
 }
-

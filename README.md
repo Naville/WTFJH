@@ -1,14 +1,12 @@
 # What The Fuck Just Happened
 
-*DO NOT USE PRE-BUILT BINARY*
-
 *Theos-Legacy is no longer Supported. Run ./CIScripts/InstallTheos.sh To Install The Latest Version of Theos*
 
 **You Must Be THIS TALL To Ride**
 
 > A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]
 
-> Feel Free To Send Us Pull Requests. 
+> Feel Free To Send Us Pull Requests.
 
 > It's a project too big for two part-time developers
 
@@ -29,7 +27,7 @@
 >Standard User:
 
 1.	./Setup.sh **This should be executed everytime after you pull from the repo**
-2.	./build.py
+2.	./build.py DEBUG
 3.	PROFIT??!!
 
 >Tools/ Contains Important Tools

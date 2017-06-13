@@ -3,7 +3,10 @@
 #import "../Global.h"
 
 
-@implementation NSURLConnectionDelegateProx
+@implementation NSURLConnectionDelegateProx{
+  NSMutableData* responseData;
+  NSString* originalDelegateName;
+}
 
 
 @synthesize originalDelegate;
@@ -14,6 +17,7 @@
 
     if (self) { // Store original delegate
         [self setOriginalDelegate:(origDeleg)];
+        self->originalDelegateName=NSStringFromClass([origDeleg class]);
     }
     return self;
 }
@@ -58,5 +62,40 @@
     [tracer release];
     return origResult;
 }
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+  self->responseData=[NSMutableData new];
+  [originalDelegate connection:connection didReceiveResponse:response];
+  CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnectionDelegate" andMethod:@"connection:didReceiveResponse:"];
+  [tracer addArgFromPlistObject:[NSNumber numberWithUnsignedInt: (unsigned int) connection] withKey:@"connection"];
+  [tracer addArgFromPlistObject:[PlistObjectConverter convertNSURLResponse:response] withKey:@"response"];
+  [traceStorage saveTracedCall:tracer];
+  [tracer release];
+  return;
+
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+  [self->responseData appendData:data];
+  [originalDelegate connection:connection didReceiveData:data];
+}
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection{
+  [originalDelegate connectionDidFinishLoading:connection];
+  CallTracer *tracer = [[CallTracer alloc] initWithClass:@"NSURLConnectionDelegate" andMethod:@"connectionDidFinishLoading:"];
+  [tracer addArgFromPlistObject:[NSNumber numberWithUnsignedInt: (unsigned int) connection] withKey:@"connection"];
+  [tracer addArgFromPlistObject:[self->responseData copy] withKey:@"Data"];
+  [traceStorage saveTracedCall:tracer];
+  [tracer release];
+  [self->responseData release];
+  return ;
+
+}
+
+/*- (nullable NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request;
+- (void)connection:(NSURLConnection *)connection   didSendBodyData:(NSInteger)bytesWritten
+                                                 totalBytesWritten:(NSInteger)totalBytesWritten
+                                         totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
+- (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long) expectedTotalBytes;
+- (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long) expectedTotalBytes;
+- (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *) destinationURL;*/
 
 @end

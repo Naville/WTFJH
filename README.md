@@ -2,6 +2,8 @@
 
 *Theos-Legacy is no longer Supported. Run ./CIScripts/InstallTheos.sh To Install The Latest Version of Theos*
 
+*Pre-built versions are available on the Releases page. Signed with my GPG Key*
+
 **You Must Be THIS TALL To Ride**
 
 > A Modern Replacement For IntroSpy [iSECPartners/Introspy-iOS][1]

@@ -66,11 +66,24 @@ int replaced_system(char *command){
 
 
 }
-
+static char* (*original_getenv)(char* name);
+char* replaced_getenv(char *command){
+  char* ret=original_getenv(command);
+  if (WTShouldLog) {
+          WTInit(@"C",@"getenv");
+          WTAdd([NSString stringWithUTF8String:command],@"name");
+          WTReturn([NSString stringWithUTF8String:ret]);
+          WTSave;
+          WTRelease;
+          return ret;
+  }
+  return ret;
+}
 
 
 extern void init_libC_hook(){
         WTHookFunction((void *)random, (void *)replaced_random, (void **) &original_random);
         WTHookFunction((void *)rand, (void *)replaced_rand, (void **) &original_rand);
         WTHookFunction((void *)system, (void *)replaced_system, (void **) &original_system);
+        WTHookFunction((void *)system, (void *)replaced_getenv, (void **) &original_getenv);
 }

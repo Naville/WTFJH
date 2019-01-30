@@ -140,7 +140,9 @@ def BuildMakeFile():
 	makeFileString += "TWEAK_NAME = " + randomTweakName + "\n"
 	makeFileString += "SUBSTRATE ?= yes\n"
 	if(JAILED==True):
-		makeFileString += randomTweakName+"_USE_SUBSTRATE = $(SUBSTRATE)\n"
+		makeFileString += "ifneq ($(call __theos_bool,$(SUBSTRATE)),$(_THEOS_TRUE))\n"
+		makeFileString += randomTweakName+"_LOGOS_DEFAULT_GENERATOR = internal\n"
+		makeFileString += "endif\n"
 	makeFileString += randomTweakName + MakeFileListString + "\n"
 	makeFileString += randomTweakName +"_CCFLAGS  = -Qunused-arguments"
 	for CCFlag in BuildConfig.ExtraCCFlags:

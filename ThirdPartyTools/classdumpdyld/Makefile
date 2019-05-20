@@ -1,4 +1,3 @@
-include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = classdumpdyld
 classdumpdyld_FILES = classdumpdyldlib.xm
 classdumpdyld_LDFLAGS = -lsubstrate

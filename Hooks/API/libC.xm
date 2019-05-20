@@ -84,6 +84,6 @@ char* replaced_getenv(char *command){
 extern void init_libC_hook(){
         WTHookFunction((void *)random, (void *)replaced_random, (void **) &original_random);
         WTHookFunction((void *)rand, (void *)replaced_rand, (void **) &original_rand);
-        WTHookFunction((void *)system, (void *)replaced_system, (void **) &original_system);
-        WTHookFunction((void *)system, (void *)replaced_getenv, (void **) &original_getenv);
+        WTHookFunction((void*)WTFindSymbol(NULL, "_system"), (void *)replaced_system, (void **) &original_system);
+        WTHookFunction((void *)getenv, (void *)replaced_getenv, (void **) &original_getenv);
 }

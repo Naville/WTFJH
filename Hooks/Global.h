@@ -1,22 +1,22 @@
-#import "./Utils/CallStackInspector.h"
-#import "./Utils/CallTracer.h"
-#import "./Utils/PlistObjectConverter.h"
-#import "./Utils/RuntimeUtils.h"
-#import "./Utils/SQLiteStorage.h"
-#import "./Utils/Utils.h"
-#import "./Utils/DelegateProxies.h"
-#import "./Utils/NSURLConnectionDelegateProx.h"
+#import "Utils/CallStackInspector.h"
+#import "Utils/CallTracer.h"
+#import "Utils/PlistObjectConverter.h"
+#import "Utils/RuntimeUtils.h"
+#import "Utils/SQLiteStorage.h"
+#import "Utils/Utils.h"
+#import "Utils/DelegateProxies.h"
+#import "Utils/NSURLConnectionDelegateProx.h"
 
 #import <substrate.h>
 
-#import "./Misc/WTSubstrate.h"
+#import "Misc/WTSubstrate.h"
 #import <objc/runtime.h>
 #import <mach-o/getsect.h>
 #import <mach-o/dyld.h>
 #import <dlfcn.h>
-#import "./Misc/fishhook.h"
-#import "./Obfuscation.h"
-#import "./capstone/capstone.h"
+#import "Misc/fishhook.h"
+#import "Obfuscation.h"
+#import "capstone/capstone.h"
 
 #define objectTypeNotSupported @"objectTypeNotSupported"
 #define traceStorage [SQLiteStorage sharedManager]
@@ -60,5 +60,3 @@
 #define RMASLRCenter @"com.naville.wtfjh.rmaslr"
 
 #define CyPort 2588
-
-

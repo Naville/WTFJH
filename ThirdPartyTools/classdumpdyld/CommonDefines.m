@@ -13,7 +13,7 @@
 #include <objc/runtime.h>
 #include <mach-o/nlist.h>
 #include <mach-o/dyld_images.h>
-#define exit(x) 
+
 static BOOL addHeadersFolder=NO;
 static BOOL shouldImportStructs=0;
 static NSMutableArray *allStructsFound=nil;
@@ -27,8 +27,9 @@ NSString *onlyOneClass=nil;
 -(id)reversedArray;
 @end
 
+
 const struct dyld_all_image_infos *dyld_all_image_infos;
-extern "C" struct dyld_all_image_infos* _dyld_get_all_image_infos();
+//extern "C" struct dyld_all_image_infos* _dyld_get_all_image_infos();
 NSString * propertyLineGenerator(NSString *attributes,NSString *name);
 NSString * commonTypes(NSString *atype,NSString **inName,BOOL inIvarList);
 
